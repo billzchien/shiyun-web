@@ -41,7 +41,12 @@ document.getElementById('getAppPill')!.addEventListener('click', (e) => {
 // ─── Doc content ─────────────────────────────────────────────────────────────
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-const set = (s: string) => esc(noWidow(s));
+// The contact email is the one island of selectable text on the site.
+const set = (s: string) =>
+  esc(noWidow(s)).replace(
+    /hello@myshiyun\.com/g,
+    '<span class="selectable">hello@myshiyun.com</span>'
+  );
 const paras = (list: string[]) => list.map((p) => `<p>${set(p)}</p>`).join('');
 const bullets = (list: string[]) => `<ul>${list.map((b) => `<li>${set(b)}</li>`).join('')}</ul>`;
 
@@ -282,6 +287,11 @@ document.getElementById('brandHome')!.addEventListener('click', (e) => {
 });
 
 window.addEventListener('popstate', () => navigate(routeFromLocation(), false));
+
+// No "Save image as…" on the artwork (a deterrent; the files still ship).
+document.addEventListener('contextmenu', (e) => {
+  if ((e.target as HTMLElement).closest?.('img, svg')) e.preventDefault();
+});
 
 window.addEventListener('resize', () => placeCaret(current));
 
