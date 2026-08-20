@@ -1,0 +1,862 @@
+/* ─── Tokens (light mode; mirrored from the app's theme/tokens.ts) ─────────── */
+:root {
+  --bg: #fffcf9;
+  --text: #120a01;
+  --text-secondary: #6c655f;
+  --text-inverse: #fffcf9;
+  --shape-low: #e2d8cc;
+  --shape-lowest: #f2ebdd;
+  --accent: #001f90; /* set per current hour's element by JS */
+
+  --expressive: cubic-bezier(0.4, 0, 0, 1);
+  --travel: 400ms;
+  --fade: 300ms;
+
+  --header-h: 100px;
+  /* Home links row: 40 + 16 + 40. Subnav: pt 40 pb 20 (desktop). */
+  --links-home-h: 96px;
+  --subnav-top: 79px;
+  --subnav-bottom: 155px;
+}
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('./fonts/bricolage-vf.woff2') format('woff2');
+  font-weight: 200 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'OPPO Sans';
+  src: url('./fonts/oppo-sans-vf.woff2') format('woff2');
+  font-weight: 100 700;
+  font-display: swap;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* The canvas itself is cream: html carries the color too, so overscroll
+   rubber-banding and any area beyond the body never flashes another color. */
+html { height: 100%; background: var(--bg); }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'OPPO Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+}
+/* English text rides Bricolage at the app's optical settings. */
+.en {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' 14, 'wdth' 100;
+}
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; }
+
+/* While a doc page is up the document scrolls; home never does. */
+body.at-home { overflow: hidden; }
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  pointer-events: none;
+}
+.site-header .brand { pointer-events: auto; position: relative; display: grid; place-items: center; }
+.site-header .brand > * { grid-area: 1 / 1; }
+.logotype { width: 191px; height: 40px; }
+.mark { width: 48px; height: 48px; }
+/* Logotype ⇄ mark is a HANDOFF, not a crossfade: the outgoing form clears in
+   the first half of the fade window, the incoming one arrives in the second —
+   the two never share the stage. Each rule below states its own delay for the
+   direction it animates in. */
+.logotype, .mark {
+  transition: opacity calc(var(--fade) / 2) var(--expressive), scale calc(var(--fade) / 2) var(--expressive),
+    filter var(--fade) var(--expressive);
+}
+/* Over the Get app circle the logotype stays, in inverse. */
+body.qr-open .logotype { filter: brightness(0) invert(1); }
+.logotype { transition-delay: calc(var(--fade) / 2); } /* returning: in after mark leaves */
+.mark { opacity: 0; scale: 0.8; transition-delay: 0s; }
+body.veiled .logotype { opacity: 0; scale: 0.8; transition-delay: 0s; }
+body.veiled .mark { opacity: 1; scale: 1; transition-delay: calc(var(--fade) / 2); }
+
+.pill {
+  pointer-events: auto;
+  position: absolute;
+  right: 48px;
+  top: 26px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-radius: 100px;
+  background: var(--accent);
+  color: var(--text-inverse);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  opacity: 0;
+  scale: 0.9;
+  visibility: hidden;
+  transition: opacity var(--fade) var(--expressive), scale var(--fade) var(--expressive),
+    visibility 0s var(--fade), transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+body.veiled .pill { opacity: 1; scale: 1; visibility: visible; transition-delay: 0s; }
+@media (hover: hover) { .pill:hover { transform: scale(1.1); } }
+.pill:active { transform: scale(0.92); transition-duration: 150ms; }
+
+/* Chrome backdrop + subnav hairline + caret — arrive after the links snap up. */
+.chrome-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--subnav-bottom);
+  background: var(--bg);
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fade) var(--expressive);
+}
+.subnav-rule {
+  position: fixed;
+  top: var(--subnav-bottom);
+  left: 0; right: 0;
+  border-top: 1px solid var(--shape-low);
+  z-index: 25;
+  opacity: 0;
+  transition: opacity var(--fade) var(--expressive);
+}
+.caret {
+  position: fixed;
+  top: calc(var(--subnav-bottom) - 4px);
+  z-index: 26;
+  color: var(--text);
+  opacity: 0;
+  transition: opacity var(--fade) var(--expressive), left var(--fade) var(--expressive);
+}
+body.chrome-in .chrome-bg,
+body.chrome-in .subnav-rule,
+body.chrome-in .caret { opacity: 1; }
+
+/* ─── Home ─────────────────────────────────────────────────────────────────── */
+.home {
+  position: fixed;
+  top: var(--header-h);
+  bottom: var(--links-home-h);
+  left: 0; right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.home .wheel, .home .ctas {
+  transition: opacity var(--fade) var(--expressive), scale var(--fade) var(--expressive),
+    translate var(--fade) var(--expressive);
+}
+body.veiled .home { pointer-events: none; }
+/* Veiling for a doc page: an 80px drift upward rides the fade, a quiet
+   parallax under the links' full travel. Half the fade window, so the stage
+   is CLEAR before anything arrives — handoff, not crossfade. */
+body.veiled .home .wheel, body.veiled .home .ctas {
+  opacity: 0;
+  translate: 0 -80px;
+  transition-duration: calc(var(--fade) / 2);
+}
+/* The Preview peek — a HANDOFF like the header logos, never a crossfade:
+   going in, the wheel clears in the first half of the fade window and the
+   circle arrives in the second; coming back, the circle clears first and the
+   wheel waits (body.unpeeking) for its half. */
+body.peeking .home .wheel,
+body.qr-peeking .home .wheel {
+  opacity: 0;
+  scale: 0.97;
+  transition-duration: calc(var(--fade) / 2);
+  transition-delay: 0s;
+}
+body.unpeeking .home .wheel {
+  transition-duration: calc(var(--fade) / 2);
+  transition-delay: calc(var(--fade) / 2);
+}
+/* Each peek clears the stage beyond the wheel too: the bottom links and the
+   OTHER circle step aside while a peek is up. */
+body.peeking .links,
+body.peeking .cta.getapp,
+body.qr-peeking .links,
+body.qr-peeking .cta.preview {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── Hour wheel ───────────────────────────────────────────────────────────── */
+/* 400–600px wide, but never taller than the window leaves room for
+   (header 100 + links 96 + breathing) — a short window shrinks the wheel
+   rather than letting it ride under the chrome. */
+.wheel {
+  position: relative;
+  width: min(clamp(400px, 40vw, 600px), max(200px, calc(100svh - 296px)));
+  aspect-ratio: 1;
+}
+.wheel .ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wheel .arc { stroke: var(--shape-low); }
+.wheel .arc.lit { stroke: var(--accent); }
+
+.wheel .sign {
+  position: absolute;
+  left: 50%;
+  top: 43.6%;
+  width: 58.2%;
+  transform: translate(-50%, -50%);
+  color: var(--accent);
+  pointer-events: none;
+}
+.wheel .sign svg { width: 100%; height: auto; }
+
+.hchar {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text-secondary);
+}
+.hchar.active { background: var(--accent); color: var(--text-inverse); }
+
+.wheel .clock {
+  position: absolute;
+  left: 50%;
+  top: 70.3%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  color: var(--text);
+  white-space: nowrap;
+}
+.clock .time { font-weight: 600; font-size: 28px; line-height: 1.2; letter-spacing: -0.4px; }
+.clock .city { font-weight: 600; font-size: 16px; line-height: 16px; letter-spacing: -0.2px; }
+
+/* ─── CTAs ─────────────────────────────────────────────────────────────────── */
+.ctas { position: absolute; inset: 0; pointer-events: none; }
+.cta {
+  pointer-events: auto;
+  position: absolute;
+  top: 50%;
+  width: clamp(140px, 12.5vw, 220px);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+  transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1), background var(--fade) var(--expressive),
+    opacity var(--fade) var(--expressive);
+}
+/* Centred in the gap between the wheel's edge and the browser's. */
+.cta.preview {
+  left: calc((50vw - clamp(400px, 40vw, 600px) / 2) / 2);
+  transform: translate(-50%, -50%);
+  background: var(--shape-lowest);
+  color: var(--text);
+}
+.cta.getapp {
+  right: calc((50vw - clamp(400px, 40vw, 600px) / 2) / 2);
+  transform: translate(50%, -50%);
+  background: var(--accent);
+  color: var(--text-inverse);
+}
+.cta .cn { font-weight: 600; font-size: 21px; line-height: 25px; }
+.cta .en {
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 26px;
+  letter-spacing: -0.4px;
+}
+/* Hover grows, press shrinks and lets go with a little spring. The big side
+   buttons grow gently (the app's scaleLarge idea) — full 1.2 reads huge at
+   this size; the small stacked buttons keep the livelier 1.2 below. */
+@media (hover: hover) {
+  .cta.preview:hover { transform: translate(-50%, -50%) scale(1.05); }
+  .cta.getapp:hover { transform: translate(50%, -50%) scale(1.05); }
+}
+.cta.preview:active,
+.cta.getapp:active {
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+.cta.preview:active { transform: translate(-50%, -50%) scale(0.9); }
+.cta.getapp:active { transform: translate(50%, -50%) scale(0.9); }
+
+/* ─── Preview flow (hover peek → fullscreen video) ─────────────────────────── */
+.preview-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: none;
+}
+.preview-layer.expanded { pointer-events: auto; }
+.preview-circle {
+  position: absolute;
+  border-radius: 99999px;
+  overflow: hidden;
+  /* The POSTER's ground — sampled off the user's thumbnail corners
+     (rgb(18,9,0); JPEG shifts it a hair from #120a01). Matching it exactly is
+     what makes the square image's edges invisible inside the circle. */
+  background: rgb(18 9 0);
+  opacity: 0;
+  scale: 0.97;
+  transition:
+    opacity calc(var(--fade) / 2) var(--expressive),
+    scale calc(var(--fade) / 2) var(--expressive),
+    background-color var(--travel) var(--expressive),
+    left var(--travel) var(--expressive),
+    top var(--travel) var(--expressive),
+    width var(--travel) var(--expressive),
+    height var(--travel) var(--expressive);
+}
+.preview-layer.peek .preview-circle {
+  opacity: 1;
+  scale: 1;
+  /* Arrive only after the wheel's half of the window (opacity, scale). */
+  transition-delay: calc(var(--fade) / 2), calc(var(--fade) / 2), 0s, 0s, 0s, 0s, 0s;
+}
+.preview-layer.expanded .preview-circle { background: rgb(18 9 0); }
+/* The poster is square on the circle's own ground, so no image edge ever
+   shows. In the peek it renders at 140% — the mockup reads larger inside the
+   circle — and eases back to a clean cover as the circle expands, with the
+   video fading in over the same dark once loaded. */
+.preview-thumb {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 140%;
+  height: 140%;
+  object-fit: cover;
+  transition: opacity var(--fade) var(--expressive);
+}
+/* The poster clears DURING the expansion, not after it, and does NOT ride the
+   circle's growth — expand() pins its px size, so the circle opens around a
+   stationary, fading still. */
+.preview-layer.expanded .preview-thumb { opacity: 0; }
+.preview-layer.playing .preview-thumb { opacity: 0; }
+/* Fit follows the screen's shape: squarer than 3:2 (portrait phone/tablet)
+   CONTAINS the 16:9 frame — cover there would gut its width and crop the
+   type. Wide screens COVER full-bleed, where the trim is a few percent.
+   The thumb (above/below) mirrors whichever rect applies. */
+.preview-video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(100vw, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  opacity: 0;
+  transition:
+    opacity var(--fade) var(--expressive),
+    width 150ms var(--expressive),
+    transform 150ms var(--expressive);
+}
+@media (min-aspect-ratio: 3/2) {
+  .preview-video { width: max(100vw, calc(100svh * 16 / 9)); }
+}
+/* The control stage — carries tap surface + all buttons. Centre-anchored
+   with explicit dimensions so rotating it is a pure width/height/transform
+   change, which the 150ms spin below can animate. */
+.preview-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 100vw;
+  height: 100svh;
+  transition:
+    width 150ms var(--expressive),
+    height 150ms var(--expressive),
+    transform 150ms var(--expressive);
+}
+/* Rotate-to-fill (portrait only): the video spins 90° over 150ms to use the
+   screen's long side; the stage spins with it, so the controls ride the
+   video's bottom edge. */
+.preview-layer.rotated .preview-video {
+  width: min(100svh, calc(100vw * 16 / 9));
+  transform: rotate(90deg);
+}
+.preview-layer.rotated .preview-stage {
+  width: 100svh;
+  height: 100vw;
+  transform: rotate(90deg);
+}
+.preview-layer.playing .preview-video { opacity: 1; }
+/* Closing: the video dissolves while the circle shrinks around it. */
+.preview-layer.closing .preview-video { opacity: 0; transition-duration: var(--travel); }
+.preview-video iframe { width: 100%; height: 100%; border: 0; display: block; }
+/* Overlay chrome — one bottom rank: Get app + close hold the right corner,
+   the playback pair (below) holds the left. */
+.preview-chrome {
+  position: absolute;
+  right: 40px;
+  bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fade) var(--expressive);
+}
+.preview-layer.playing .preview-chrome { opacity: 1; pointer-events: auto; }
+.preview-pill {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-radius: 100px;
+  background: rgb(18 10 1 / 0.4);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  color: #fffcf9;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+}
+.preview-close {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(18 10 1 / 0.4);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  color: #fffcf9;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.preview-pill, .preview-close { transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+@media (hover: hover) { .preview-pill:hover, .preview-close:hover { transform: scale(1.1); } }
+.preview-pill:active, .preview-close:active { transform: scale(0.92); transition-duration: 150ms; }
+/* Our own control surface over the chromeless background-mode player:
+   tap anywhere toggles; one play/pause button carries the state. */
+.preview-tap {
+  position: absolute;
+  inset: 0;
+  display: none;
+  cursor: pointer;
+}
+.preview-controls {
+  position: absolute;
+  left: 40px;
+  bottom: 40px;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transition: opacity var(--fade) var(--expressive);
+}
+@media (max-width: 767px) {
+  .preview-controls { left: 20px; bottom: 20px; }
+  .preview-chrome { right: 20px; bottom: 20px; }
+}
+.preview-play, .preview-mute, .preview-fs {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(18 10 1 / 0.4);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  color: #fffcf9;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@media (hover: hover) { .preview-play:hover, .preview-mute:hover, .preview-fs:hover { transform: scale(1.1); } }
+.preview-play:active, .preview-mute:active, .preview-fs:active { transform: scale(0.92); transition-duration: 150ms; }
+/* Rotate-to-fill is for PORTRAIT devices only — any landscape window,
+   however square, plays wide already and hides the button. */
+.preview-fs { display: none; }
+@media (orientation: portrait) { .preview-fs { display: grid; } }
+.preview-fs .ic-fs-close { display: none; }
+.preview-layer.rotated .preview-fs .ic-fs-open { display: none; }
+.preview-layer.rotated .preview-fs .ic-fs-close { display: block; }
+.preview-layer.playing .preview-tap { display: block; }
+.preview-layer.playing .preview-controls { display: flex; opacity: 1; }
+.preview-play .ic-pause { display: none; }
+.preview-layer.is-playing .preview-play .ic-play { display: none; }
+.preview-layer.is-playing .preview-play .ic-pause { display: block; }
+.preview-mute .ic-muted { display: none; }
+.preview-layer.is-muted .preview-mute .ic-vol { display: none; }
+.preview-layer.is-muted .preview-mute .ic-muted { display: block; }
+/* Playing and quiet: the whole overlay steps back until the pointer stirs. */
+.preview-layer.controls-idle .preview-chrome,
+.preview-layer.controls-idle .preview-controls { opacity: 0; }
+/* Mid-spin: the controls sit the rotation out and return once it lands. */
+.preview-layer.rotating .preview-chrome,
+.preview-layer.rotating .preview-controls {
+  opacity: 0;
+  transition-duration: 150ms;
+}
+/* Closing: the controls go down with the video rather than outliving it. */
+.preview-layer.closing .preview-chrome,
+.preview-layer.closing .preview-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── Get app flow (hover QR peek → fullscreen QR) ─────────────────────────── */
+/* Below the header (z 30) so the logotype rides above the expanded circle,
+   above the links (z 28), which every peek hides anyway. */
+.qr-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+  overflow: hidden;
+  pointer-events: none;
+}
+.qr-layer.expanded { pointer-events: auto; }
+.qr-circle {
+  position: absolute;
+  border-radius: 99999px;
+  overflow: hidden;
+  background: var(--accent);
+  opacity: 0;
+  scale: 0.97;
+  transition:
+    opacity calc(var(--fade) / 2) var(--expressive),
+    scale calc(var(--fade) / 2) var(--expressive),
+    left var(--travel) var(--expressive),
+    top var(--travel) var(--expressive),
+    width var(--travel) var(--expressive),
+    height var(--travel) var(--expressive);
+}
+.qr-layer.peek .qr-circle {
+  opacity: 1;
+  scale: 1;
+  transition-delay: calc(var(--fade) / 2), calc(var(--fade) / 2), 0s, 0s, 0s, 0s;
+}
+/* The card holds its 205px through both states — the circle moves around it. */
+.qr-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 205px;
+  height: 205px;
+  border-radius: 40px;
+  background: #fffcf9;
+  display: grid;
+  place-items: center;
+}
+.qr-card img { width: 182px; height: 182px; }
+/* Bottom rank of the expanded state: badge centre, glass close right. */
+.qr-badge, .qr-close {
+  position: absolute;
+  bottom: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fade) var(--expressive), transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.qr-layer.ready .qr-badge, .qr-layer.ready .qr-close { opacity: 1; pointer-events: auto; }
+/* The badge is Apple's mark — it holds still, no hover theatrics. */
+.qr-badge {
+  left: 50%;
+  translate: -50% 0;
+  transition: opacity var(--fade) var(--expressive);
+}
+.qr-badge img { width: 205px; height: 68px; }
+@media (max-width: 1023px) {
+  .qr-badge img { width: 140px; height: auto; }
+}
+.qr-close {
+  right: 40px;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(18 9 0 / 0.4);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  color: #fffcf9;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+@media (hover: hover) { .qr-close:hover { transform: scale(1.1); } }
+.qr-close:active { transform: scale(0.92); transition-duration: 150ms; }
+@media (max-width: 767px) {
+  .qr-badge, .qr-close { bottom: 20px; }
+  .qr-close { right: 20px; }
+}
+
+/* ─── Links row (footer ⇄ subnav) ──────────────────────────────────────────── */
+.links {
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  bottom: 0;
+  width: min(360px, 100%);
+  transition: opacity var(--fade) var(--expressive);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 20px;
+  z-index: 28;
+}
+.links a {
+  flex: 1;
+  min-width: 1px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 16px;
+  color: var(--text);
+  /* Variable font: the weight itself animates — quieter than a scale. */
+  transition: font-weight 200ms var(--expressive);
+}
+@media (hover: hover) { .links a:hover { font-weight: 500; } }
+.links a:active, .links a.active { font-weight: 500; }
+body.at-doc .links {
+  bottom: auto;
+  top: var(--subnav-top);
+  padding-bottom: 20px;
+}
+
+/* ─── Doc pages ────────────────────────────────────────────────────────────── */
+.doc {
+  position: relative;
+  z-index: 15;
+  padding-top: var(--subnav-bottom);
+  min-height: 100svh;
+}
+.doc-body {
+  transition: opacity 150ms var(--expressive);
+  /* 640 box − 20px side pads = a full 600px text measure at max width. */
+  width: min(640px, 100%);
+  margin-inline: auto;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.doc-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 20px;
+  font-size: 26px;
+  line-height: 32px;
+}
+.doc-title .cn { font-weight: 600; }
+.doc-title .en { font-weight: 600; letter-spacing: -0.4px; }
+.doc-en {
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.2px;
+}
+.doc-cn {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+}
+.doc-en p, .doc-cn p, .doc-en ul, .doc-cn ul { margin-bottom: 16px; }
+.doc-en p:last-child, .doc-cn p:last-child { margin-bottom: 0; }
+.doc-en ul { padding-left: 24px; }
+.doc-cn ul { padding-left: 21px; }
+/* Same voice as the EN body, one step back in color. */
+.doc-updated {
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.2px;
+  color: var(--text-secondary);
+}
+/* Desktop/tablet read larger; mobile keeps the base sizes above. */
+@media (min-width: 768px) {
+  .doc-title { font-size: 2rem; line-height: 2.4rem; }
+  .doc-en, .doc-updated { font-size: 1.15rem; line-height: 1.75rem; letter-spacing: -0.01rem; }
+  .doc-cn { font-size: 1rem; line-height: 1.6rem; letter-spacing: 0.01rem; }
+  .doc-body { padding-bottom: 120px; }
+}
+.doc-soon {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 24px;
+}
+/* About: inline 小标题 within the body flows; sections carry the anchor
+   clearance for the sticky chrome above them. */
+.doc-sub { font-weight: 500; }
+.doc-cn .doc-sub { font-weight: 600; }
+/* Hand-drawn underline: the native one hugs the glyphs; a hairline border
+   with a little padding gives the ink room to breathe. (Inline padding
+   doesn't grow the line box, so the text rhythm is untouched.) At rest the
+   line is the nav hairline's color; hovering inks it and mediums the name. */
+.doc-link {
+  text-decoration: none;
+  border-bottom: 1px solid var(--shape-low);
+  padding-bottom: 1px;
+  transition: border-color 200ms var(--expressive), font-weight 200ms var(--expressive);
+}
+@media (hover: hover) {
+  .doc-link:hover {
+    font-weight: 500;
+    border-color: var(--text);
+  }
+}
+.doc-section {
+  scroll-margin-top: var(--subnav-bottom);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+/* Between sections the design breathes 80: the body's 40 gap plus this. */
+.doc-section + .doc-section { margin-top: 40px; }
+
+/* ─── About's section nav: left rail wide, sticky bar below 1200 ───────────── */
+.section-nav {
+  position: fixed;
+  left: 80px;
+  top: 236px;
+  z-index: 27;
+}
+.section-nav-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.section-nav a {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' 14, 'wdth' 100;
+  font-size: 16px;
+  line-height: 16px;
+  color: var(--text);
+  transition: font-weight 200ms var(--expressive);
+}
+@media (hover: hover) { .section-nav a:hover { font-weight: 500; } }
+.section-nav a.active { font-weight: 700; }
+@media (max-width: 1199px) {
+  .section-nav {
+    position: sticky;
+    left: auto;
+    top: var(--subnav-bottom);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border-bottom: 1px solid var(--shape-low);
+    overflow-x: auto;
+    scrollbar-width: none;
+    transition: top var(--fade) var(--expressive);
+  }
+  .section-nav::-webkit-scrollbar { display: none; }
+  .section-nav-inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    margin-inline: auto;
+    padding: 0 20px;
+  }
+  .section-nav a { white-space: nowrap; }
+  .doc-section { scroll-margin-top: calc(var(--subnav-bottom) + 60px); }
+}
+/* Mobile: reading on slides the whole main chrome away; the section bar takes
+   the top edge. Scrolling up brings the chrome back down over it. */
+@media (max-width: 767px) {
+  .site-header { transition: translate var(--fade) var(--expressive); }
+  .chrome-bg, .subnav-rule {
+    transition: opacity var(--fade) var(--expressive), translate var(--fade) var(--expressive);
+  }
+  .caret {
+    transition: opacity var(--fade) var(--expressive), left var(--fade) var(--expressive),
+      translate var(--fade) var(--expressive);
+  }
+  body.at-doc .links {
+    transition: opacity var(--fade) var(--expressive), translate var(--fade) var(--expressive);
+  }
+  body.chrome-away .site-header,
+  body.chrome-away .chrome-bg,
+  body.chrome-away .subnav-rule,
+  body.chrome-away .caret,
+  body.chrome-away.at-doc .links {
+    translate: 0 calc(-1 * var(--subnav-bottom));
+  }
+  body.chrome-away .section-nav { top: 0; }
+}
+
+/* Everything that travels during the home ⇄ doc handoff shares one clock. */
+.links.traveling, .doc.traveling { transition: transform var(--travel) var(--expressive); }
+
+/* Deep links and breakpoint jumps render their state without motion. */
+body.no-anim *, body.no-anim { transition: none !important; }
+
+/* ─── Stacked CTAs: phones always, tablets in portrait ─────────────────────── */
+/* A landscape tablet-width window is too short to stack 400px of wheel plus
+   the button group — it keeps the side-by-side layout instead. */
+@media (max-width: 767px), (max-width: 1023px) and (orientation: portrait) {
+  .home { flex-direction: column; }
+  /* Stacked layouts share the mobile rule: near-full width up to 600px.
+     The stack adds 60 + 120 below the wheel — its height budget shrinks too. */
+  .wheel { width: min(91vw, 600px, max(200px, calc(100svh - 476px))); }
+  .ctas {
+    position: static;
+    display: flex;
+    gap: 40px;
+    margin-top: 60px;
+  }
+  .cta { position: static; width: 120px; }
+  .cta.preview, .cta.getapp { transform: none; }
+  @media (hover: hover) {
+    .cta.preview:hover, .cta.getapp:hover { transform: scale(1.2); }
+  }
+  .cta.preview:active, .cta.getapp:active { transform: scale(0.9); }
+  .cta .cn { font-size: 16px; line-height: 19px; }
+  .cta .en { font-size: 16px; line-height: 16px; letter-spacing: -0.2px; }
+}
+
+/* Tablet has the room to let the pair breathe wider than the phone's 40. */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .ctas { gap: 80px; }
+}
+
+/* ─── Mobile ───────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  :root {
+    --subnav-top: 100px;
+    --subnav-bottom: 156px;
+  }
+  .logotype { width: 152px; height: 32px; }
+  .pill { right: 20px; }
+
+  .wheel .sign { width: 64%; top: 41.7%; }
+  .hchar { font-size: 12px; }
+  /* Tighter clock lock-up, sitting higher — the desktop proportions read
+     roomy; at phone size the same percentages crowd the lower characters. */
+  .wheel .clock { top: 68%; gap: 2px; }
+  .clock .time { font-size: 22px; }
+
+  body.at-doc .links { padding-top: 20px; }
+}

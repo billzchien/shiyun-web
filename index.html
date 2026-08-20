@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fffcf9" />
+    <title>时运 Shiyun</title>
+    <meta name="description" content="时运 Shiyun — Four Pillars daily guidance, entirely on your device." />
+    <link rel="icon" href="./assets/logo/mark.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <!-- Fixed chrome: header (logotype ⇄ mark + small Get app), and the subnav
+         rule + caret that appear once the Links row has snapped up under it. -->
+    <div class="chrome-bg" id="chromeBg"></div>
+    <header class="site-header">
+      <a class="brand" id="brandHome" href="./" aria-label="时运 Shiyun home">
+        <img class="logotype" src="./assets/logo/shiyun-logotype.svg" alt="时运 Shiyun" />
+        <img class="mark" src="./assets/logo/mark.svg" alt="" />
+      </a>
+      <a class="pill en" id="getAppPill" href="#" aria-hidden="true" tabindex="-1">Get app</a>
+    </header>
+    <div class="subnav-rule" id="subnavRule"></div>
+    <svg class="caret" id="caret" width="8" height="4" viewBox="0 0 8 4" aria-hidden="true">
+      <path d="M4 0L8 4H0L4 0Z" fill="currentColor" />
+    </svg>
+
+    <!-- Home: the hour wheel and the two circle CTAs. -->
+    <main class="home" id="home">
+      <div class="wheel" id="wheel" role="img" aria-label="十二时辰"></div>
+      <div class="ctas" id="ctas">
+        <a class="cta preview" href="#">
+          <span class="cn">浏览</span>
+          <span class="en">Preview</span>
+        </a>
+        <a class="cta getapp" href="#">
+          <span class="cn">下载</span>
+          <span class="en">Get app</span>
+        </a>
+      </div>
+    </main>
+
+    <!-- Doc pages slide up with the Links row. The section nav is About's:
+         a fixed left rail on wide screens, a sticky swipeable bar below. -->
+    <section class="doc" id="doc" hidden>
+      <nav class="section-nav" id="sectionNav" aria-label="Sections" hidden>
+        <div class="section-nav-inner"></div>
+      </nav>
+      <article class="doc-body" id="docBody"></article>
+    </section>
+
+    <!-- The Links row: footer links on home, subnav on doc pages — one element
+         that travels between the two slots. -->
+    <nav class="links" id="links" aria-label="Site">
+      <a class="en" href="./about" data-route="about">About</a>
+      <a class="en" href="./learn" data-route="learn">Learn</a>
+      <a class="en" href="./privacy" data-route="privacy">Privacy</a>
+    </nav>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
