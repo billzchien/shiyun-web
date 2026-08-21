@@ -36,11 +36,12 @@ const FADE = 300;
 type State = 'idle' | 'peek' | 'expanded';
 
 /**
- * Toolbar colour is NOT set from here — the page carries no `theme-color`, so
- * iOS Safari auto-detects the document's own background, and `video-open`
- * (below) flips that in one shot. Frame-sampling a recording showed the
- * meta-tag route landing on one toolbar or the other at random.
+ * One of the three signals Safari needs IN THE SAME GESTURE (with the
+ * `video-open` background flip beside it) — see the recipe note in style.css.
  */
+function setThemeColor(color: string) {
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
+}
 
 export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: () => void) {
   const layer = document.createElement('div');
@@ -174,8 +175,9 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
 
   function expand() {
     if (state === 'expanded') return;
-    // The document goes dark immediately; the veil keeps the view cream.
+    // The full recipe, synchronously in the press (see style.css note).
     document.documentElement.classList.add('video-open');
+    setThemeColor('#120900');
     /**
      * A TOUCH TAP HAS NO HOVER STAGE, so the circle would be born and told to
      * cover the screen in one frame — the browser has no start box to animate
@@ -247,6 +249,7 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     layer.classList.remove('controls-idle', 'rotated', 'rotating', 'expanded');
     boxAtWheel();
     document.documentElement.classList.remove('video-open');
+    setThemeColor('#fffcf9');
     window.setTimeout(() => {
       if (state !== 'peek') return;
       unpeek();

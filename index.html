@@ -3,19 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- No theme-color on purpose: with one present Safari uses it and stops
-         auto-detecting, and applying a runtime change lands on one toolbar or
-         the other at random. Without it, Safari follows the document's own
-         background colour, which the preview flow flips deterministically. -->
+    <meta name="theme-color" content="#fffcf9" />
     <title>时运 Shiyun</title>
     <meta name="description" content="时运 Shiyun — Four Pillars daily guidance, entirely on your device." />
     <link rel="icon" href="./assets/logo/mark.svg" type="image/svg+xml" />
   </head>
   <body>
-    <!-- Stands in for the cream page while the DOCUMENT itself is dark (see
-         .page-veil): it sits under every layer, so the expansion still reads
-         against cream without the body having to lie about its colour. -->
-    <div class="page-veil"></div>
     <!-- Fixed chrome: header (logotype ⇄ mark + small Get app), and the subnav
          rule + caret that appear once the Links row has snapped up under it. -->
     <div class="chrome-bg" id="chromeBg"></div>

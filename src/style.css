@@ -37,20 +37,13 @@
 /* The canvas itself is cream: html carries the color too, so overscroll
    rubber-banding and any area beyond the body never flashes another color. */
 html { height: 100%; background: var(--bg); }
-/* THE document colour is what Safari auto-detects for its toolbars, so the
-   preview flips it the moment the press lands — no timers, nothing for the
-   two toolbars to disagree about. The veil below keeps the page LOOKING
-   cream through the ride, since Safari reads the CSS colour, not pixels. */
+/* THE PROVEN RECIPE (do not decompose — every variation of it failed):
+   Safari's two toolbars settle dark only when the theme-color meta AND the
+   document background AND the actually rendered pixels all go dark in the
+   same press gesture. Delaying any one of them, or hiding the dark body
+   behind a cream veil, left one or both bars white at random. The expansion
+   therefore rides on a dark field, poster visible, circle edge not. */
 html.video-open, html.video-open body { background: rgb(18 9 0); }
-.page-veil {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background: var(--bg);
-  display: none;
-  pointer-events: none;
-}
-html.video-open .page-veil { display: block; }
 body {
   background: var(--bg);
   color: var(--text);
