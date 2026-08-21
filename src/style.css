@@ -350,6 +350,12 @@ body.qr-peeking .cta.preview {
   /* Arrive only after the wheel's half of the window (opacity, scale). */
   transition-delay: calc(var(--fade) / 2), calc(var(--fade) / 2), 0s, 0s, 0s, 0s, 0s;
 }
+/* Touch's instant open: no box ride — the circle appears at fullscreen and
+   only fades; the page is already dark, so there is nothing to ride across. */
+.preview-layer.instant .preview-circle {
+  transition: opacity calc(var(--fade) / 2) var(--expressive), scale calc(var(--fade) / 2) var(--expressive);
+  transition-delay: 0s;
+}
 .preview-layer.expanded .preview-circle { background: rgb(18 9 0); }
 /* The poster is square on the circle's own ground, so no image edge ever
    shows. In the peek it renders at 140% — the mockup reads larger inside the

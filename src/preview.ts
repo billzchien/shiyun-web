@@ -179,11 +179,22 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     document.documentElement.classList.add('video-open');
     setThemeColor('#120900');
     /**
-     * A TOUCH TAP HAS NO HOVER STAGE, so the circle would be born and told to
-     * cover the screen in one frame — the browser has no start box to animate
-     * FROM and simply cuts to fullscreen. Seed the peek, let it paint at the
-     * wheel's size, and only then ride out.
+     * TOUCH (no hover stage): the page just went dark, so the circle's ride
+     * would be dark-on-dark — barely visible and janky on phone GPUs (user
+     * call: drop it). Open in place at fullscreen and let the content fade.
+     * Pointer devices keep the full peek → ride choreography.
      */
+    if (state === 'idle' && !hoverable.matches) {
+      state = 'expanded';
+      layer.classList.add('instant');
+      layer.hidden = false;
+      boxFullscreen();
+      circle.getBoundingClientRect();
+      layer.classList.add('peek', 'expanded');
+      document.body.classList.add('peeking');
+      mountPlayer();
+      return;
+    }
     if (state === 'idle') {
       peek();
       state = 'expanded';
@@ -209,6 +220,10 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     // Mount the player NOW, not after the travel: it loads at its final rect
     // behind the growing circle, which unmasks it — by touchdown the video is
     // usually already painted exactly where the still sits.
+    mountPlayer();
+  }
+
+  function mountPlayer() {
     {
       const iframe = document.createElement('iframe');
       iframe.src = PLAYER_URL;
@@ -247,9 +262,22 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     window.clearTimeout(idleTimer);
     layer.classList.add('closing'); // the video dissolves as the circle shrinks
     layer.classList.remove('controls-idle', 'rotated', 'rotating', 'expanded');
-    boxAtWheel();
     document.documentElement.classList.remove('video-open');
     setThemeColor('#fffcf9');
+    // Instant mode leaves the way it came: a fade in place, no shrink ride.
+    if (layer.classList.contains('instant')) {
+      unpeek();
+      window.setTimeout(() => {
+        player?.destroy();
+        player = null;
+        videoBox.innerHTML = '';
+        layer.classList.remove('playing', 'is-playing', 'is-muted', 'closing', 'instant');
+        thumb.style.width = '';
+        thumb.style.height = '';
+      }, FADE);
+      return;
+    }
+    boxAtWheel();
     window.setTimeout(() => {
       if (state !== 'peek') return;
       unpeek();
