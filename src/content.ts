@@ -127,6 +127,12 @@ export const aboutSections: {
   },
 ];
 
+/** Learn tab placeholder, centred on screen until the guides land. */
+export const learnSoon = {
+  cn: '中国历法内容制作中',
+  en: 'Guides to the Chinese calendar coming soon',
+};
+
 /** The credit section's underlined names — targets to fill in when decided. */
 export const creditLinks: Record<string, string> = {
   'Bill Chien': 'https://www.billchien.net',

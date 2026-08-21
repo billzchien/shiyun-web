@@ -11,7 +11,7 @@ import './style.css';
 import { HourWheel } from './wheel';
 import { initPreview } from './preview';
 import { initGetApp } from './getapp';
-import { aboutSections, creditLinks, privacyCn, privacyEn, privacyUpdated, type AboutBlock } from './content';
+import { aboutSections, creditLinks, learnSoon, privacyCn, privacyEn, privacyUpdated, type AboutBlock } from './content';
 import { noWidow } from './typeset';
 
 type Route = 'home' | 'about' | 'learn' | 'privacy';
@@ -86,7 +86,10 @@ const DOC_HTML: Record<Exclude<Route, 'home'>, string> = {
     </div>
     <p class="doc-updated en">${set(privacyUpdated)}</p>`,
   about: ABOUT_HTML,
-  learn: `<p class="doc-soon">即将上线 · Coming soon</p>`,
+  learn: `<div class="doc-soon">
+      <p class="cn">${esc(learnSoon.cn)}</p>
+      <p class="en">${esc(learnSoon.en)}</p>
+    </div>`,
 };
 
 const TITLES: Record<Route, string> = {
@@ -244,9 +247,9 @@ function spySections() {
 }
 
 /**
- * Mobile: reading on (scrolling down) sends the logo header and main nav
- * away, leaving only the section bar stuck to the top; any scroll up brings
- * them back down. Desktop chrome never moves.
+ * Mobile, any doc page: reading on (scrolling down) sends the logo header and
+ * main nav away — on About the section bar stays stuck to the top; any scroll
+ * up brings the chrome back down. Desktop chrome never moves.
  */
 let lastScrollY = 0;
 function chromeOnScroll() {
@@ -254,7 +257,7 @@ function chromeOnScroll() {
   const y = window.scrollY;
   const delta = y - lastScrollY;
   lastScrollY = y;
-  if (!mobile || current !== 'about') {
+  if (!mobile || current === 'home') {
     body.classList.remove('chrome-away');
     return;
   }

@@ -709,12 +709,21 @@ body.at-doc .links {
   .doc-cn { font-size: 1rem; line-height: 1.6rem; letter-spacing: 0.01rem; }
   .doc-body { padding-bottom: 120px; }
 }
+/* Centred in the viewport's remaining height (below the subnav, inside the
+   doc body's 80px pads). */
 .doc-soon {
+  min-height: calc(100svh - var(--subnav-bottom) - 160px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   text-align: center;
   color: var(--text-secondary);
   font-size: 16px;
   line-height: 24px;
 }
+.doc-soon .en { line-height: 16px; }
 /* About: inline 小标题 within the body flows; sections carry the anchor
    clearance for the sticky chrome above them. */
 .doc-sub { font-weight: 500; }
@@ -831,7 +840,10 @@ body.no-anim *, body.no-anim { transition: none !important; }
   .home { flex-direction: column; }
   /* Stacked layouts share the mobile rule: near-full width up to 600px.
      The stack adds 60 + 120 below the wheel — its height budget shrinks too. */
-  .wheel { width: min(91vw, 600px, max(200px, calc(100svh - 476px))); }
+  /* Width rules on phones: 20px margins each side (design), even when a
+     short viewport means the stack breathes into the header/links padding —
+     those zones are blank at the collision edges. */
+  .wheel { width: min(calc(100vw - 40px), 600px); }
   .ctas {
     position: static;
     display: flex;
@@ -858,7 +870,10 @@ body.no-anim *, body.no-anim { transition: none !important; }
   :root {
     --subnav-top: 100px;
     --subnav-bottom: 156px;
+    /* Footer links ride closer to the phone's bottom edge: pb 20, not 40. */
+    --links-home-h: 76px;
   }
+  .links { padding-bottom: 20px; }
   .logotype { width: 152px; height: 32px; }
   .pill { right: 20px; }
 
