@@ -35,6 +35,19 @@ const FADE = 300;
 
 type State = 'idle' | 'peek' | 'expanded';
 
+/**
+ * Repaint iOS Safari's toolbars. Mutating the existing meta's `content` is
+ * unreliable there — the bar keeps its old tint (that is what left the cream
+ * strip under the playing video). Replacing the NODE forces a re-read.
+ */
+function setThemeColor(color: string) {
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.remove());
+  const meta = document.createElement('meta');
+  meta.name = 'theme-color';
+  meta.content = color;
+  document.head.appendChild(meta);
+}
+
 export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: () => void) {
   const layer = document.createElement('div');
   layer.className = 'preview-layer';
@@ -167,17 +180,31 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
 
   function expand() {
     if (state === 'expanded') return;
-    if (state === 'idle') peek(); // touch taps skip the hover stage
-    state = 'expanded';
+    /**
+     * A TOUCH TAP HAS NO HOVER STAGE, so the circle would be born and told to
+     * cover the screen in one frame — the browser has no start box to animate
+     * FROM and simply cuts to fullscreen. Seed the peek, let it paint at the
+     * wheel's size, and only then ride out.
+     */
+    if (state === 'idle') {
+      peek();
+      state = 'expanded';
+      window.setTimeout(runExpand, FADE / 2);
+    } else {
+      state = 'expanded';
+      runExpand();
+    }
+  }
+
+  function runExpand() {
+    if (state !== 'expanded') return;
     // The browser chrome joins the takeover — but only AFTER the circle has
     // covered the screen: darkening the canvas during the ride would swallow
     // the expansion (dark circle on a darkening page reads as a hard cut).
     window.setTimeout(() => {
       if (state !== 'expanded') return;
       document.documentElement.classList.add('video-open');
-      document
-        .querySelector('meta[name="theme-color"]')
-        ?.setAttribute('content', '#120900');
+      setThemeColor('#120900');
     }, TRAVEL);
     // Pin the poster at its current size — the circle expands around it.
     const tr = thumb.getBoundingClientRect();
@@ -230,9 +257,7 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     layer.classList.remove('controls-idle', 'rotated', 'rotating', 'expanded');
     boxAtWheel();
     document.documentElement.classList.remove('video-open');
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', '#fffcf9');
+    setThemeColor('#fffcf9');
     window.setTimeout(() => {
       if (state !== 'peek') return;
       unpeek();
