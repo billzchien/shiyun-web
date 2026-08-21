@@ -37,16 +37,20 @@
 /* The canvas itself is cream: html carries the color too, so overscroll
    rubber-banding and any area beyond the body never flashes another color. */
 html { height: 100%; background: var(--bg); }
-/* While the video takes the screen the whole canvas goes to its dark ground —
-   iOS tints its toolbars and overscroll from here. The class lands in the
-   press gesture (one moment for every signal Safari reads), but the colour
-   FLIPS only once the circle has covered the screen: darkening the field
-   during the ride would swallow the expansion. Leaving is immediate. */
-html, body { transition: background-color 0s; }
-html.video-open, html.video-open body {
-  background: rgb(18 9 0);
-  transition: background-color 0s linear var(--travel);
+/* THE document colour is what Safari auto-detects for its toolbars, so the
+   preview flips it the moment the press lands — no timers, nothing for the
+   two toolbars to disagree about. The veil below keeps the page LOOKING
+   cream through the ride, since Safari reads the CSS colour, not pixels. */
+html.video-open, html.video-open body { background: rgb(18 9 0); }
+.page-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--bg);
+  display: none;
+  pointer-events: none;
 }
+html.video-open .page-veil { display: block; }
 body {
   background: var(--bg);
   color: var(--text);

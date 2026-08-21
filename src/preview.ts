@@ -36,14 +36,11 @@ const FADE = 300;
 type State = 'idle' | 'peek' | 'expanded';
 
 /**
- * iOS Safari tints its toolbars from `theme-color`, but only applies a change
- * reliably from INSIDE a user gesture — set from a later timer it arrives
- * late or not at all. So this is called synchronously on the press, while the
- * page canvas (which would swallow the circle's ride) waits for touchdown.
+ * Toolbar colour is NOT set from here — the page carries no `theme-color`, so
+ * iOS Safari auto-detects the document's own background, and `video-open`
+ * (below) flips that in one shot. Frame-sampling a recording showed the
+ * meta-tag route landing on one toolbar or the other at random.
  */
-function setThemeColor(color: string) {
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
-}
 
 export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: () => void) {
   const layer = document.createElement('div');
@@ -177,10 +174,7 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
 
   function expand() {
     if (state === 'expanded') return;
-    // Both signals Safari reads leave in the SAME gesture — split across two
-    // moments, its two toolbars sampled different ones and disagreed. The
-    // canvas's colour still waits for touchdown, via CSS delay.
-    setThemeColor('#120900');
+    // The document goes dark immediately; the veil keeps the view cream.
     document.documentElement.classList.add('video-open');
     /**
      * A TOUCH TAP HAS NO HOVER STAGE, so the circle would be born and told to
@@ -253,7 +247,6 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     layer.classList.remove('controls-idle', 'rotated', 'rotating', 'expanded');
     boxAtWheel();
     document.documentElement.classList.remove('video-open');
-    setThemeColor('#fffcf9');
     window.setTimeout(() => {
       if (state !== 'peek') return;
       unpeek();
