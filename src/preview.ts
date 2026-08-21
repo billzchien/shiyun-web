@@ -169,11 +169,16 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     if (state === 'expanded') return;
     if (state === 'idle') peek(); // touch taps skip the hover stage
     state = 'expanded';
-    // The browser chrome joins the takeover: canvas + theme-color go dark.
-    document.documentElement.classList.add('video-open');
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', '#120900');
+    // The browser chrome joins the takeover — but only AFTER the circle has
+    // covered the screen: darkening the canvas during the ride would swallow
+    // the expansion (dark circle on a darkening page reads as a hard cut).
+    window.setTimeout(() => {
+      if (state !== 'expanded') return;
+      document.documentElement.classList.add('video-open');
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', '#120900');
+    }, TRAVEL);
     // Pin the poster at its current size — the circle expands around it.
     const tr = thumb.getBoundingClientRect();
     thumb.style.width = `${tr.width}px`;
