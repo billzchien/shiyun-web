@@ -36,17 +36,12 @@ const FADE = 300;
 type State = 'idle' | 'peek' | 'expanded';
 
 /**
- * Repaint iOS Safari's toolbars. Mutating the existing meta's `content` is
- * unreliable there — the bar keeps its old tint (that is what left the cream
- * strip under the playing video). Replacing the NODE forces a re-read.
+ * NOTE — iOS Safari's toolbars are NOT ours to recolor mid-session. Both
+ * mutating `theme-color` and replacing the meta node were tried and behaved
+ * inconsistently (sometimes no change, sometimes the bottom bar only, late).
+ * The page canvas below still goes dark, which is deterministic; the browser
+ * chrome keeps the site's tint, which is Safari's call, not a bug here.
  */
-function setThemeColor(color: string) {
-  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.remove());
-  const meta = document.createElement('meta');
-  meta.name = 'theme-color';
-  meta.content = color;
-  document.head.appendChild(meta);
-}
 
 export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: () => void) {
   const layer = document.createElement('div');
@@ -204,16 +199,17 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     window.setTimeout(() => {
       if (state !== 'expanded') return;
       document.documentElement.classList.add('video-open');
-      setThemeColor('#120900');
     }, TRAVEL);
     // Pin the poster at its current size — the circle expands around it.
     const tr = thumb.getBoundingClientRect();
     thumb.style.width = `${tr.width}px`;
     thumb.style.height = `${tr.height}px`;
-    requestAnimationFrame(() => {
-      boxFullscreen();
-      layer.classList.add('expanded');
-    });
+    // Commit the start box with a layout READ, then set the end box — the
+    // transition needs the two in separate style resolutions. A reflow does
+    // that deterministically; rAF would stall while the tab is hidden.
+    circle.getBoundingClientRect();
+    boxFullscreen();
+    layer.classList.add('expanded');
     // Mount the player NOW, not after the travel: it loads at its final rect
     // behind the growing circle, which unmasks it — by touchdown the video is
     // usually already painted exactly where the still sits.
@@ -257,7 +253,6 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     layer.classList.remove('controls-idle', 'rotated', 'rotating', 'expanded');
     boxAtWheel();
     document.documentElement.classList.remove('video-open');
-    setThemeColor('#fffcf9');
     window.setTimeout(() => {
       if (state !== 'peek') return;
       unpeek();
