@@ -36,12 +36,14 @@ const FADE = 300;
 type State = 'idle' | 'peek' | 'expanded';
 
 /**
- * NOTE — iOS Safari's toolbars are NOT ours to recolor mid-session. Both
- * mutating `theme-color` and replacing the meta node were tried and behaved
- * inconsistently (sometimes no change, sometimes the bottom bar only, late).
- * The page canvas below still goes dark, which is deterministic; the browser
- * chrome keeps the site's tint, which is Safari's call, not a bug here.
+ * iOS Safari tints its toolbars from `theme-color`, but only applies a change
+ * reliably from INSIDE a user gesture — set from a later timer it arrives
+ * late or not at all. So this is called synchronously on the press, while the
+ * page canvas (which would swallow the circle's ride) waits for touchdown.
  */
+function setThemeColor(color: string) {
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
+}
 
 export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: () => void) {
   const layer = document.createElement('div');
@@ -175,6 +177,9 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
 
   function expand() {
     if (state === 'expanded') return;
+    // Inside the gesture — see setThemeColor. Chrome-only, so it cannot
+    // interfere with the expansion the way the dark canvas would.
+    setThemeColor('#120900');
     /**
      * A TOUCH TAP HAS NO HOVER STAGE, so the circle would be born and told to
      * cover the screen in one frame — the browser has no start box to animate
@@ -253,6 +258,7 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     layer.classList.remove('controls-idle', 'rotated', 'rotating', 'expanded');
     boxAtWheel();
     document.documentElement.classList.remove('video-open');
+    setThemeColor('#fffcf9');
     window.setTimeout(() => {
       if (state !== 'peek') return;
       unpeek();
