@@ -874,6 +874,7 @@ body.no-anim *, body.no-anim { transition: none !important; }
     --links-home-h: 76px;
   }
   .links { padding-bottom: 20px; }
+  .ctas { margin-top: 40px; }
   .logotype { width: 152px; height: 32px; }
   .pill { right: 20px; }
 
