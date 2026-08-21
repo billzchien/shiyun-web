@@ -36,10 +36,17 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 /* The canvas itself is cream: html carries the color too, so overscroll
    rubber-banding and any area beyond the body never flashes another color. */
-html { height: 100%; background: var(--bg); transition: background-color var(--fade) var(--expressive); }
-/* While the video takes the screen, the whole canvas goes to its dark ground —
-   iOS tints its toolbars and overscroll from here, so no cream edges. */
-html.video-open, html.video-open body { background: rgb(18 9 0); }
+html { height: 100%; background: var(--bg); }
+/* While the video takes the screen the whole canvas goes to its dark ground —
+   iOS tints its toolbars and overscroll from here. The class lands in the
+   press gesture (one moment for every signal Safari reads), but the colour
+   FLIPS only once the circle has covered the screen: darkening the field
+   during the ride would swallow the expansion. Leaving is immediate. */
+html, body { transition: background-color 0s; }
+html.video-open, html.video-open body {
+  background: rgb(18 9 0);
+  transition: background-color 0s linear var(--travel);
+}
 body {
   background: var(--bg);
   color: var(--text);

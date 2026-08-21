@@ -177,9 +177,11 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
 
   function expand() {
     if (state === 'expanded') return;
-    // Inside the gesture — see setThemeColor. Chrome-only, so it cannot
-    // interfere with the expansion the way the dark canvas would.
+    // Both signals Safari reads leave in the SAME gesture — split across two
+    // moments, its two toolbars sampled different ones and disagreed. The
+    // canvas's colour still waits for touchdown, via CSS delay.
     setThemeColor('#120900');
+    document.documentElement.classList.add('video-open');
     /**
      * A TOUCH TAP HAS NO HOVER STAGE, so the circle would be born and told to
      * cover the screen in one frame — the browser has no start box to animate
@@ -198,13 +200,6 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
 
   function runExpand() {
     if (state !== 'expanded') return;
-    // The browser chrome joins the takeover — but only AFTER the circle has
-    // covered the screen: darkening the canvas during the ride would swallow
-    // the expansion (dark circle on a darkening page reads as a hard cut).
-    window.setTimeout(() => {
-      if (state !== 'expanded') return;
-      document.documentElement.classList.add('video-open');
-    }, TRAVEL);
     // Pin the poster at its current size — the circle expands around it.
     const tr = thumb.getBoundingClientRect();
     thumb.style.width = `${tr.width}px`;
