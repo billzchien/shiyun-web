@@ -169,6 +169,11 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     if (state === 'expanded') return;
     if (state === 'idle') peek(); // touch taps skip the hover stage
     state = 'expanded';
+    // The browser chrome joins the takeover: canvas + theme-color go dark.
+    document.documentElement.classList.add('video-open');
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', '#120900');
     // Pin the poster at its current size — the circle expands around it.
     const tr = thumb.getBoundingClientRect();
     thumb.style.width = `${tr.width}px`;
@@ -219,6 +224,10 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
     layer.classList.add('closing'); // the video dissolves as the circle shrinks
     layer.classList.remove('controls-idle', 'rotated', 'rotating', 'expanded');
     boxAtWheel();
+    document.documentElement.classList.remove('video-open');
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', '#fffcf9');
     window.setTimeout(() => {
       if (state !== 'peek') return;
       unpeek();

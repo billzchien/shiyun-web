@@ -36,7 +36,10 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 /* The canvas itself is cream: html carries the color too, so overscroll
    rubber-banding and any area beyond the body never flashes another color. */
-html { height: 100%; background: var(--bg); }
+html { height: 100%; background: var(--bg); transition: background-color var(--fade) var(--expressive); }
+/* While the video takes the screen, the whole canvas goes to its dark ground —
+   iOS tints its toolbars and overscroll from here, so no cream edges. */
+html.video-open, html.video-open body { background: rgb(18 9 0); }
 body {
   background: var(--bg);
   color: var(--text);
@@ -742,6 +745,8 @@ body.at-doc .links {
 .doc-section + .doc-section { margin-top: 40px; }
 
 /* ─── About's section nav: left rail wide, sticky bar below 1200 ───────────── */
+/* The bar mode's display:flex would defeat the hidden attribute without this. */
+.section-nav[hidden] { display: none !important; }
 .section-nav {
   position: fixed;
   left: 80px;
