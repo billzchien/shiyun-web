@@ -768,7 +768,7 @@ body.at-doc .links {
 .section-nav[hidden] { display: none !important; }
 .section-nav {
   position: fixed;
-  left: 80px;
+  left: 48px; /* flush with the mark in the corner */
   /* Aligns with the first section title (subnav + the body's 80 top pad),
      whichever chrome height the breakpoint uses. */
   top: calc(var(--subnav-bottom) + 80px);
