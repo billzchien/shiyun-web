@@ -889,6 +889,9 @@ body.no-anim *, body.no-anim { transition: none !important; }
   }
   .site-header .brand { position: static; }
   .mark { position: absolute; left: 48px; top: 26px; }
+  /* Link text bottoms out level with the pill (26 + 48 = 74): pt 35 / pb 25
+     keeps the row's 76 and the hairline at 99. */
+  body.at-doc .links { padding-top: 35px; padding-bottom: 25px; }
 }
 
 /* ─── Mobile ───────────────────────────────────────────────────────────────── */
