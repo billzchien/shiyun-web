@@ -175,16 +175,16 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
 
   function expand() {
     if (state === 'expanded') return;
-    // The full recipe, synchronously in the press (see style.css note).
-    document.documentElement.classList.add('video-open');
-    setThemeColor('#120900');
     /**
-     * TOUCH (no hover stage): the page just went dark, so the circle's ride
-     * would be dark-on-dark — barely visible and janky on phone GPUs (user
-     * call: drop it). Open in place at fullscreen and let the content fade.
-     * Pointer devices keep the full peek → ride choreography.
+     * TOUCH (no hover stage): the iOS toolbar recipe needs the page dark IN
+     * THE PRESS, which would make the circle's ride dark-on-dark — so there is
+     * no ride: open in place at fullscreen and let the content fade.
+     * Pointer devices have no toolbars to tint: they keep the full peek → ride
+     * on the cream page, and the canvas goes dark only after touchdown.
      */
     if (state === 'idle' && !hoverable.matches) {
+      document.documentElement.classList.add('video-open');
+      setThemeColor('#120900');
       state = 'expanded';
       layer.classList.add('instant');
       layer.hidden = false;
@@ -207,6 +207,12 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
 
   function runExpand() {
     if (state !== 'expanded') return;
+    // Pointer path: darken the canvas once the circle has covered the screen.
+    window.setTimeout(() => {
+      if (state !== 'expanded') return;
+      document.documentElement.classList.add('video-open');
+      setThemeColor('#120900');
+    }, TRAVEL);
     // Pin the poster at its current size — the circle expands around it.
     const tr = thumb.getBoundingClientRect();
     thumb.style.width = `${tr.width}px`;
