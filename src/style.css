@@ -904,10 +904,10 @@ body.no-anim *, body.no-anim { transition: none !important; }
   :root {
     --subnav-top: 100px;
     --subnav-bottom: 156px;
-    /* Footer links ride closer to the phone's bottom edge: pb 20, not 40. */
-    --links-home-h: 76px;
+    /* Footer links ride closer to the phone's bottom edge: pb 12, not 40. */
+    --links-home-h: 68px;
   }
-  .links { padding-bottom: 20px; }
+  .links { padding-bottom: 12px; }
   .ctas { margin-top: 40px; }
   .logotype { width: 152px; height: 32px; }
   .pill { right: 20px; }
