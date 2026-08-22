@@ -98,6 +98,11 @@ body.qr-open .logotype { filter: brightness(0) invert(1); }
 .mark { opacity: 0; scale: 0.8; transition-delay: 0s; }
 body.veiled .logotype { opacity: 0; scale: 0.8; transition-delay: 0s; }
 body.veiled .mark { opacity: 1; scale: 1; transition-delay: calc(var(--fade) / 2); }
+/* On doc pages the hidden logotype must not keep catching clicks — on desktop
+   the subnav rides into the header band and "Learn" sits right under it.
+   Only the visible mark stays a target (its click still bubbles to the link). */
+body.veiled .brand { pointer-events: none; }
+body.veiled .mark { pointer-events: auto; }
 
 .pill {
   pointer-events: auto;
