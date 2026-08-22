@@ -769,7 +769,9 @@ body.at-doc .links {
 .section-nav {
   position: fixed;
   left: 80px;
-  top: 236px;
+  /* Aligns with the first section title (subnav + the body's 80 top pad),
+     whichever chrome height the breakpoint uses. */
+  top: calc(var(--subnav-bottom) + 80px);
   z-index: 27;
 }
 .section-nav-inner {
@@ -873,6 +875,20 @@ body.no-anim *, body.no-anim { transition: none !important; }
 /* Tablet has the room to let the pair breathe wider than the phone's 40. */
 @media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
   .ctas { gap: 80px; }
+}
+
+/* ─── Desktop doc chrome: one row, not two tiers (Figma 1075:1483) ───────── */
+/* The subnav rides up INTO the header band: links text lands at 63–79, the
+   hairline at 99, the mark steps to the left corner, the pill keeps the right.
+   Every dependent (chrome-bg, rule, caret, doc top, section rail) reads the
+   vars, so only the numbers and the mark's position change here. */
+@media (min-width: 1024px) {
+  :root {
+    --subnav-top: 23px;
+    --subnav-bottom: 99px;
+  }
+  .site-header .brand { position: static; }
+  .mark { position: absolute; left: 48px; top: 26px; }
 }
 
 /* ─── Mobile ───────────────────────────────────────────────────────────────── */
