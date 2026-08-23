@@ -11,6 +11,7 @@ import './style.css';
 import { HourWheel } from './wheel';
 import { initPreview } from './preview';
 import { initGetApp } from './getapp';
+import { initCylinder } from './cylinder';
 import { aboutSections, creditLinks, learnSoon, privacyCn, privacyEn, privacyUpdated, type AboutBlock } from './content';
 import { noWidow } from './typeset';
 
@@ -270,11 +271,17 @@ window.addEventListener('scroll', () => {
   chromeOnScroll();
 }, { passive: true });
 
+/** Cylinder focus for the long-form reads (About, Privacy). */
+const cylinder = initCylinder(docBody);
+
 /** Route-driven visibility for the section nav. */
 function syncSectionNav(route: Route) {
   sectionNav.hidden = route !== 'about';
   body.classList.remove('chrome-away');
   if (route === 'about') requestAnimationFrame(spySections);
+  // The cylinder belongs to the long reads; Learn is a single centred line.
+  if (route === 'about' || route === 'privacy') cylinder.enable();
+  else cylinder.disable();
 }
 
 links.addEventListener('click', (e) => {

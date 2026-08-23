@@ -768,6 +768,79 @@ body.at-doc .links {
 /* Between sections the design breathes 80: the body's 40 gap plus this. */
 .doc-section + .doc-section { margin-top: 40px; }
 
+/* ─── Cylinder focus (see cylinder.ts) ────────────────────────────────────── */
+/* Blocks tip on their own axis; the origin is their middle so a block flares
+   from the line you are reading, not from the page edge. */
+body.cyl .doc-body .doc-title,
+body.cyl .doc-body .doc-en > *,
+body.cyl .doc-body .doc-cn > *,
+body.cyl .doc-body .doc-updated {
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+}
+/* Depth of field: three ramps per edge — heavier blur under a tighter mask —
+   which together read as one continuous falloff. Sits above the content and
+   below every piece of chrome, so the header and rails stay sharp. */
+/* Only as wide as the column it belongs to (plus room for the flare), so the
+   left rail and the margins stay untouched — a full-width strip read as a
+   film laid over the page instead of the text falling out of focus. */
+.dof {
+  position: fixed;
+  left: 50%;
+  translate: -50% 0;
+  width: min(760px, 100%);
+  z-index: 18;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+/* Each edge's strength is driven by the scroll headroom on that side, so the
+   first and last lines are never veiled (see cylinder.ts). */
+/* TRYING IT WITHOUT BLUR: the curl alone carries the cylinder. Flip these two
+   back on to restore the depth of field. */
+body.cyl .dof-top { opacity: 0; }
+body.cyl .dof-bottom { opacity: 0; }
+.dof span { position: absolute; inset: 0; display: block; }
+.dof-top { top: var(--subnav-bottom); height: 150px; }
+.dof-bottom { bottom: 0; height: 170px; }
+
+.dof-top span:nth-child(1) {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  mask-image: linear-gradient(to top, transparent 45%, #000 80%);
+  -webkit-mask-image: linear-gradient(to top, transparent 45%, #000 80%);
+}
+.dof-top span:nth-child(2) {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  mask-image: linear-gradient(to top, transparent 65%, #000 95%);
+  -webkit-mask-image: linear-gradient(to top, transparent 65%, #000 95%);
+}
+.dof-top span:nth-child(3) {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to top, transparent 82%, #000 100%);
+  -webkit-mask-image: linear-gradient(to top, transparent 82%, #000 100%);
+}
+.dof-bottom span:nth-child(1) {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  mask-image: linear-gradient(to bottom, transparent 45%, #000 80%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 45%, #000 80%);
+}
+.dof-bottom span:nth-child(2) {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  mask-image: linear-gradient(to bottom, transparent 65%, #000 95%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 65%, #000 95%);
+}
+.dof-bottom span:nth-child(3) {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to bottom, transparent 82%, #000 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 82%, #000 100%);
+}
+
 /* ─── About's section nav: left rail wide, sticky bar below 1200 ───────────── */
 /* The bar mode's display:flex would defeat the hidden attribute without this. */
 .section-nav[hidden] { display: none !important; }
