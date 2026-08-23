@@ -32,6 +32,12 @@ type Block = { el: HTMLElement; top: number; half: number; applied: boolean };
 
 export function initCylinder(docBody: HTMLElement) {
   const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  /**
+   * Phones sit this one out. Their viewport is short enough that the curl
+   * eats the reading band it is meant to frame, and the transform work is
+   * the least welcome there.
+   */
+  const phone = window.matchMedia('(max-width: 767px)');
 
   const dofTop = document.createElement('div');
   dofTop.className = 'dof dof-top';
@@ -47,6 +53,8 @@ export function initCylinder(docBody: HTMLElement) {
   let blocks: Block[] = [];
   let active = false;
   let queued = false;
+  /** What the route asked for, independent of whether it is currently allowed. */
+  let wanted = false;
 
   function measure() {
     if (!active) return;
@@ -126,12 +134,17 @@ export function initCylinder(docBody: HTMLElement) {
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', measure);
+  phone.addEventListener('change', () => {
+    if (phone.matches) disable(true);
+    else if (wanted) enable();
+  });
   still.addEventListener('change', () => (still.matches ? disable() : void 0));
 
   /** Idempotent on purpose: a doc→doc swap re-enters here with new markup, so
    *  every call re-measures rather than trusting blocks that no longer exist. */
   function enable() {
-    if (still.matches) return;
+    wanted = true;
+    if (still.matches || phone.matches) return;
     active = true;
     document.body.classList.add('cyl');
     /**
@@ -144,7 +157,8 @@ export function initCylinder(docBody: HTMLElement) {
     document.fonts?.ready.then(measure);
   }
 
-  function disable() {
+  function disable(keepIntent = false) {
+    if (!keepIntent) wanted = false;
     if (!active) return;
     active = false;
     document.body.classList.remove('cyl');

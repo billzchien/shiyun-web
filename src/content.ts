@@ -13,7 +13,7 @@ export const privacyEn = {
     'Your birth information stays on your device and is fully removed when you delete the app',
   ],
   paras2: [
-    "Shiyun doesn’t share data with third parties, because there's no data to share.",
+    'Shiyun doesn’t share data with third parties, because there’s no data to share.',
     'If you have questions about this policy, you can reach us at hello@myshiyun.com',
   ],
 };
@@ -80,7 +80,7 @@ export const aboutSections: {
     titleEn: 'Our Story',
     en: [
       { text: 'For over a thousand years, the Chinese almanac has given time its texture. When to build, when to marry, when to begin a journey.' },
-      { text: "But for centuries, the almanac on the wall came in one version. One book, one verdict, written for everyone and no one in particular. In the original system, a day's character was never absolute. It always depended on who was asking." },
+      { text: 'But for centuries, the almanac on the wall came in one version. One book, one verdict, written for everyone and no one in particular. In the original system, a day’s character was never absolute. It always depended on who was asking.' },
       { text: 'Shiyun restores that lost half of the tradition. Enter your birth moment once, and the almanac recalculates around you. The same date can read Clear for one person and Turbulent for another. This is how it was always meant to work.' },
       { text: 'Whether you grew up with an almanac in the house or are just now discovering the system, Shiyun reads it for you, in both languages, side by side.' },
     ],
@@ -101,7 +101,7 @@ export const aboutSections: {
       { text: 'When you set up your profile, you enter your birth date and hour. From these, Shiyun derives your Four Pillars: your birth chart in the Chinese tradition, a unique coordinate in time that belongs only to you.' },
       { text: 'At the heart of your chart is your day master: your elemental identity. It defines whether you are Wood, Fire, Earth, Metal, or Water, and how you relate to the energy of each passing day.' },
       { text: 'Shiyun reads each day’s element against your day master. A day whose element nourishes yours reads as favorable. A day that works against it calls for care. A day that clashes with your zodiac sign says: save the big moves for later.' },
-      { text: "Shiyun goes one level deeper than the day. Tradition divides each day into twelve two-hour periods, and each period carries its own element. The day is not twelve equal slices. It is twelve distinct qualities of time. Shiyun applies the same method one level down: each period's element is read against your day master, and each period is weighed against the character of the day itself. Together, these tell you how the hour sits with you. Even within a single day, there is a time to act and a time to be still." },
+      { text: 'Shiyun goes one level deeper than the day. Tradition divides each day into twelve two-hour periods, and each period carries its own element. The day is not twelve equal slices. It is twelve distinct qualities of time. Shiyun applies the same method one level down: each period’s element is read against your day master, and each period is weighed against the character of the day itself. Together, these tell you how the hour sits with you. Even within a single day, there is a time to act and a time to be still.' },
       { text: 'Every reading you see is calculated this way, for you alone. All calculations happen locally on your device. Your birth information never leaves your phone.' },
     ],
     cn: [
