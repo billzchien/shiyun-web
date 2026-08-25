@@ -58,13 +58,23 @@ export function initCylinder(docBody: HTMLElement) {
 
   function measure() {
     if (!active) return;
-    const y = window.scrollY;
+    /**
+     * Measured RELATIVE TO `.doc`, not to the viewport. Entering a doc page
+     * slides that container on a transform, and a viewport-space read during
+     * the slide reports every block far below the fold — they get skipped,
+     * and the curl only lands on a later beat, which is what made the text
+     * spread AFTER it had already arrived. A relative read cancels the
+     * translate, so the geometry is right from the first frame.
+     */
+    const host = docBody.closest<HTMLElement>('.doc') ?? docBody;
+    const hostTop = host.getBoundingClientRect().top;
+    const hostDocTop = host.offsetTop;
     blocks = [...docBody.querySelectorAll<HTMLElement>(
       '.doc-title, .doc-en > *, .doc-cn > *, .doc-updated, .doc-soon'
     )].map((el) => {
       el.style.transform = '';
       const r = el.getBoundingClientRect();
-      return { el, top: r.top + y, half: r.height / 2, applied: false };
+      return { el, top: r.top - hostTop + hostDocTop, half: r.height / 2, applied: false };
     });
     paint();
   }
@@ -152,7 +162,18 @@ export function initCylinder(docBody: HTMLElement) {
      * (so early rects lie), a doc→doc swap only writes the new markup 150ms
      * in, and webfonts reflow the whole column when they land.
      */
+    // Hold the column back for one frame so it is never seen flat: measure,
+    // paint the curl, and only then fade the text in.
+    docBody.style.opacity = '0';
     measure();
+    let revealed = false;
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      docBody.style.opacity = '1';
+    };
+    requestAnimationFrame(reveal);
+    window.setTimeout(reveal, 120); // rAF never fires on a hidden tab
     for (const t of [200, 560]) window.setTimeout(measure, t);
     document.fonts?.ready.then(measure);
   }
@@ -160,6 +181,7 @@ export function initCylinder(docBody: HTMLElement) {
   function disable(keepIntent = false) {
     if (!keepIntent) wanted = false;
     if (!active) return;
+    docBody.style.opacity = '';
     active = false;
     document.body.classList.remove('cyl');
     for (const b of blocks) b.el.style.transform = '';

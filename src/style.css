@@ -673,7 +673,8 @@ body.at-doc .links {
   min-height: 100svh;
 }
 .doc-body {
-  transition: opacity 150ms var(--expressive);
+  /* Long enough that the curl, applied before the reveal, arrives with it. */
+  transition: opacity var(--fade) var(--expressive);
   /* 640 box − 20px side pads = a full 600px text measure at max width. */
   width: min(640px, 100%);
   margin-inline: auto;
