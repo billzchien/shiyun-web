@@ -187,7 +187,7 @@ function swapDoc(route: Exclude<Route, 'home'>) {
     docBody.innerHTML = DOC_HTML[route];
     window.scrollTo(0, 0);
     cylinder.measure();
-    setSectionNav(route);
+    if (route === 'about') showSectionNav();
     docBody.style.opacity = '1';
   }, FADE);
 }
@@ -282,16 +282,27 @@ window.addEventListener('scroll', () => {
 const cylinder = initCylinder(docBody);
 
 /**
- * The rail arrives WITH the column, never ahead of it. Toggled at click time
- * it popped in ~560ms before the text had finished fading, which read as the
- * page announcing itself twice.
+ * Leaving: the rail fades WITH the column it belongs to, starting on the click
+ * — dropped at the swap instead, it stayed lit through the whole fade and then
+ * vanished in one frame.
  */
-function setSectionNav(route: Route) {
-  if (route !== 'about') {
+function hideSectionNav() {
+  if (sectionNav.hidden) return;
+  sectionNav.style.opacity = '0';
+  sectionVeil.style.opacity = '0';
+  window.setTimeout(() => {
+    if (current === 'about') return; // came back before the fade was out
     sectionNav.hidden = true;
     sectionVeil.hidden = true;
-    return;
-  }
+  }, FADE);
+}
+
+/**
+ * Arriving: the rail comes up WITH the new column, never ahead of it. Raised
+ * at click time it appeared ~560ms early, which read as the page announcing
+ * itself twice.
+ */
+function showSectionNav() {
   sectionNav.hidden = false;
   sectionVeil.hidden = false;
   sectionNav.style.opacity = '0';
@@ -305,9 +316,11 @@ function setSectionNav(route: Route) {
 }
 
 /** Route-driven visibility for the section nav. `defer` = a doc→doc swap is
- *  in flight and will raise the rail itself, on the content's own beat. */
+ *  in flight and will raise the rail itself, on the content's own beat.
+ *  Hiding is never deferred: it belongs to the OUTGOING column. */
 function syncSectionNav(route: Route, defer = false) {
-  if (!defer) setSectionNav(route);
+  if (route !== 'about') hideSectionNav();
+  else if (!defer) showSectionNav();
   body.classList.remove('chrome-away');
   // The cylinder belongs to the long reads; Learn is a single centred line.
   if (route === 'about' || route === 'privacy') cylinder.enable();
