@@ -227,6 +227,7 @@ function applyInstant(route: Route) {
 // ─── About's section nav: rail / sticky bar, scrollspy, chrome hide ─────────
 
 const sectionNav = document.getElementById('sectionNav')!;
+const sectionVeil = document.getElementById('sectionVeil')!;
 const sectionNavInner = sectionNav.querySelector('.section-nav-inner')!;
 sectionNavInner.innerHTML = aboutSections
   .map((s) => `<a href="#${s.id}" data-section="${s.id}">${esc(s.nav)}</a>`)
@@ -242,7 +243,7 @@ sectionNavInner.addEventListener('click', (e) => {
 /** The section whose start has passed the sticky line owns the bold. */
 function spySections() {
   if (current !== 'about') return;
-  const line = window.scrollY + 220; // just under the chrome + bar
+  const line = window.scrollY + 275; // where a jumped-to title comes to rest
   let active = aboutSections[0].id;
   for (const s of aboutSections) {
     const el = document.getElementById(s.id);
@@ -288,14 +289,18 @@ const cylinder = initCylinder(docBody);
 function setSectionNav(route: Route) {
   if (route !== 'about') {
     sectionNav.hidden = true;
+    sectionVeil.hidden = true;
     return;
   }
   sectionNav.hidden = false;
+  sectionVeil.hidden = false;
   sectionNav.style.opacity = '0';
+  sectionVeil.style.opacity = '0';
   // Commit the 0 with a layout read before asking for 1 — straight off
   // display:none the two land in one style resolution and no fade runs.
   sectionNav.getBoundingClientRect();
   sectionNav.style.opacity = '1';
+  sectionVeil.style.opacity = '1';
   requestAnimationFrame(spySections);
 }
 

@@ -6,8 +6,6 @@
   --text-inverse: #fffcf9;
   --shape-low: #e2d8cc;
   --shape-lowest: #f2ebdd;
-  /* The secondary nav's band — a shade off the page, not a rule. */
-  --shape-lowest-warm: #faf7ef;
   --accent: #001f90; /* set per current hour's element by JS */
 
   --expressive: cubic-bezier(0.4, 0, 0, 1);
@@ -771,6 +769,58 @@ body.at-doc .links {
 /* Between sections the design breathes 80: the body's 40 gap plus this. */
 .doc-section + .doc-section { margin-top: 40px; }
 
+/* ─── Secondary nav band ──────────────────────────────────────────────────── */
+/* Taller than the links it sits behind: the top holds the page colour flat so
+   the labels stay legible, and the extra room below is spent dissolving —
+   opacity and blur easing off together — so nothing is ever cut at an edge. */
+.section-veil {
+  /* Sticky, not fixed: it rides inside .doc (so the nav can sit above it) and
+     sticky ignores the entry animation's transform, which fixed would not.
+     The negative margin gives its 100px back to the flow. */
+  position: sticky;
+  top: var(--subnav-bottom);
+  height: 100px;
+  margin-bottom: -100px;
+  z-index: 26;
+  pointer-events: none;
+  transition: opacity var(--fade) var(--expressive), top var(--fade) var(--expressive);
+}
+.section-veil[hidden] { display: none !important; }
+.section-veil span, .section-veil i { position: absolute; inset: 0; display: block; }
+/* Heaviest blur hugs the labels and clears first; the softest reaches furthest,
+   so the focus returns gradually rather than in a step. */
+.section-veil span:nth-child(1) {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to bottom, #000 42%, transparent 72%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 42%, transparent 72%);
+}
+.section-veil span:nth-child(2) {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 86%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 86%);
+}
+.section-veil span:nth-child(3) {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  mask-image: linear-gradient(to bottom, #000 68%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent 100%);
+}
+/* The page colour itself, opaque under the labels then washing out. */
+.section-veil i {
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    var(--bg) 46%,
+    rgb(255 252 249 / 0.72) 66%,
+    rgb(255 252 249 / 0.28) 85%,
+    transparent 100%
+  );
+}
+/* Wide screens put the sections in a left rail — no band to draw. */
+@media (min-width: 1200px) { .section-veil { display: none !important; } }
+
 /* ─── Cylinder focus (see cylinder.ts) ────────────────────────────────────── */
 /* Blocks tip on their own axis; the origin is their middle so a block flares
    from the line you are reading, not from the page edge. */
@@ -880,8 +930,7 @@ body.cyl .dof-bottom { opacity: 0; }
     height: 60px;
     display: flex;
     align-items: center;
-    /* A tinted band separates the secondary nav from the page — no hairline. */
-    background: var(--shape-lowest-warm);
+    /* No background of its own: .section-veil paints the band behind it. */
     overflow-x: auto;
     scrollbar-width: none;
     transition: top var(--fade) var(--expressive);
@@ -895,7 +944,9 @@ body.cyl .dof-bottom { opacity: 0; }
     padding: 0 20px;
   }
   .section-nav a { white-space: nowrap; }
-  .doc-section { scroll-margin-top: calc(var(--subnav-bottom) + 60px); }
+  /* Clear the WHOLE band (100), not just the labels — landing at 60 dropped
+     the title into the blur. The extra 20 is air below the fade. */
+  .doc-section { scroll-margin-top: calc(var(--subnav-bottom) + 120px); }
 }
 /* Mobile: reading on slides the whole main chrome away; the section bar takes
    the top edge. Scrolling up brings the chrome back down over it. */
@@ -918,7 +969,8 @@ body.cyl .dof-bottom { opacity: 0; }
   body.chrome-away.at-doc .links {
     translate: 0 calc(-1 * var(--subnav-bottom));
   }
-  body.chrome-away .section-nav { top: 0; }
+  body.chrome-away .section-nav,
+  body.chrome-away .section-veil { top: 0; }
 }
 
 /* Everything that travels during the home ⇄ doc handoff shares one clock. */
