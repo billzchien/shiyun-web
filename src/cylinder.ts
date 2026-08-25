@@ -162,18 +162,12 @@ export function initCylinder(docBody: HTMLElement) {
      * (so early rects lie), a doc→doc swap only writes the new markup 150ms
      * in, and webfonts reflow the whole column when they land.
      */
-    // Hold the column back for one frame so it is never seen flat: measure,
-    // paint the curl, and only then fade the text in.
-    docBody.style.opacity = '0';
+    /**
+     * No opacity games here — the ROUTE knows when its markup is final, and
+     * calls `measure()` while the column is still faded out. Owning the fade
+     * from both sides raced the doc→doc swap and flashed the old text.
+     */
     measure();
-    let revealed = false;
-    const reveal = () => {
-      if (revealed) return;
-      revealed = true;
-      docBody.style.opacity = '1';
-    };
-    requestAnimationFrame(reveal);
-    window.setTimeout(reveal, 120); // rAF never fires on a hidden tab
     for (const t of [200, 560]) window.setTimeout(measure, t);
     document.fonts?.ready.then(measure);
   }
@@ -181,7 +175,6 @@ export function initCylinder(docBody: HTMLElement) {
   function disable(keepIntent = false) {
     if (!keepIntent) wanted = false;
     if (!active) return;
-    docBody.style.opacity = '';
     active = false;
     document.body.classList.remove('cyl');
     for (const b of blocks) b.el.style.transform = '';

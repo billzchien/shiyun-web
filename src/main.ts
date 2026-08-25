@@ -180,11 +180,15 @@ function exitDoc() {
 function swapDoc(route: Exclude<Route, 'home'>) {
   placeCaret(route);
   docBody.style.opacity = '0';
+  // Wait out the WHOLE fade before swapping: cut it short and the old text is
+  // still half there when the new markup lands. Then curl the fresh column
+  // while it is invisible, so it is never seen flat.
   window.setTimeout(() => {
     docBody.innerHTML = DOC_HTML[route];
     window.scrollTo(0, 0);
+    cylinder.measure();
     docBody.style.opacity = '1';
-  }, 150);
+  }, FADE);
 }
 
 function navigate(route: Route, push: boolean) {
