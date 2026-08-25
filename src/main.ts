@@ -187,18 +187,20 @@ function swapDoc(route: Exclude<Route, 'home'>) {
     docBody.innerHTML = DOC_HTML[route];
     window.scrollTo(0, 0);
     cylinder.measure();
+    setSectionNav(route);
     docBody.style.opacity = '1';
   }, FADE);
 }
 
 function navigate(route: Route, push: boolean) {
   if (route === current) return;
+  const swapping = current !== 'home' && route !== 'home';
   if (current === 'home') enterDoc(route as Exclude<Route, 'home'>);
   else if (route === 'home') exitDoc();
   else swapDoc(route as Exclude<Route, 'home'>);
   markActive(route);
   current = route;
-  syncSectionNav(route);
+  syncSectionNav(route, swapping);
   document.title = TITLES[route];
   if (push) history.pushState(null, '', route === 'home' ? './' : `./${route}`);
 }
@@ -278,11 +280,30 @@ window.addEventListener('scroll', () => {
 /** Cylinder focus for the long-form reads (About, Privacy). */
 const cylinder = initCylinder(docBody);
 
-/** Route-driven visibility for the section nav. */
-function syncSectionNav(route: Route) {
-  sectionNav.hidden = route !== 'about';
+/**
+ * The rail arrives WITH the column, never ahead of it. Toggled at click time
+ * it popped in ~560ms before the text had finished fading, which read as the
+ * page announcing itself twice.
+ */
+function setSectionNav(route: Route) {
+  if (route !== 'about') {
+    sectionNav.hidden = true;
+    return;
+  }
+  sectionNav.hidden = false;
+  sectionNav.style.opacity = '0';
+  // Commit the 0 with a layout read before asking for 1 — straight off
+  // display:none the two land in one style resolution and no fade runs.
+  sectionNav.getBoundingClientRect();
+  sectionNav.style.opacity = '1';
+  requestAnimationFrame(spySections);
+}
+
+/** Route-driven visibility for the section nav. `defer` = a doc→doc swap is
+ *  in flight and will raise the rail itself, on the content's own beat. */
+function syncSectionNav(route: Route, defer = false) {
+  if (!defer) setSectionNav(route);
   body.classList.remove('chrome-away');
-  if (route === 'about') requestAnimationFrame(spySections);
   // The cylinder belongs to the long reads; Learn is a single centred line.
   if (route === 'about' || route === 'privacy') cylinder.enable();
   else cylinder.disable();

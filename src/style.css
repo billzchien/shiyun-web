@@ -6,6 +6,8 @@
   --text-inverse: #fffcf9;
   --shape-low: #e2d8cc;
   --shape-lowest: #f2ebdd;
+  /* The secondary nav's band — a shade off the page, not a rule. */
+  --shape-lowest-warm: #faf7ef;
   --accent: #001f90; /* set per current hour's element by JS */
 
   --expressive: cubic-bezier(0.4, 0, 0, 1);
@@ -847,6 +849,7 @@ body.cyl .dof-bottom { opacity: 0; }
 .section-nav[hidden] { display: none !important; }
 .section-nav {
   position: fixed;
+  transition: opacity var(--fade) var(--expressive);
   left: 48px; /* flush with the mark in the corner */
   /* Aligns with the first section title (subnav + the body's 80 top pad),
      whichever chrome height the breakpoint uses. */
@@ -877,8 +880,8 @@ body.cyl .dof-bottom { opacity: 0; }
     height: 60px;
     display: flex;
     align-items: center;
-    background: var(--bg);
-    border-bottom: 1px solid var(--shape-low);
+    /* A tinted band separates the secondary nav from the page — no hairline. */
+    background: var(--shape-lowest-warm);
     overflow-x: auto;
     scrollbar-width: none;
     transition: top var(--fade) var(--expressive);
