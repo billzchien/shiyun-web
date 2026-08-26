@@ -14,6 +14,7 @@ export const privacyEn = {
   ],
   paras2: [
     'Shiyun doesn’t share data with third parties, because there’s no data to share.',
+    'You can reach us by email through the feedback option in the app. Sending an email is entirely your choice, and it goes through your own mail app. Shiyun never reads or stores your messages. Anything you include in an email, such as your email address, is used only to respond to you and for nothing else.',
     'If you have questions about this policy, you can reach us at hello@myshiyun.com',
   ],
 };
@@ -26,17 +27,19 @@ export const privacyCn = {
   ],
   bullets: [
     '无需注册，无账号系统',
-    '不会主动收集你的姓名、性别、地理位置等任何个人敏感信息',
+    '不会收集你的姓名、性别、地理位置等任何个人敏感信息',
     '不使用第三方分析或广告追踪工具',
     '你填写的出生时间信息仅保存在本机本地，卸载应用后该信息将被完全清除，无法恢复',
   ],
   paras2: [
-    '时运不会与任何第三方共享你的个人数据——因为我们从始至终没有获取过你的相关数据，本就无数据可共享。',
+    '时运不会与任何第三方共享你的个人数据，因为我们从始至终没有获取过你的相关数据，本就无数据可共享。',
+    '你可以通过App内的反馈入口给我们发邮件。发或不发，完全由你决定。邮件从你自己的邮件应用发出，时运不会读取、存储你的任何邮件信息。你在邮件里提供的内容，包括你的邮箱地址，仅用于回复你的反馈，不会挪作他用。',
     '如你对本政策有任何疑问，可通过 hello@myshiyun.com 联系我们。',
   ],
 };
 
-export const privacyUpdated = 'Last updated: Aug 20, 2026';
+/** Stamped at build time (see vite.config.ts) — every deploy re-dates it. */
+export const privacyUpdated = `Last updated: ${__BUILD_DATE__}`;
 
 /** About page — four sections; a block with a `head` renders as 小标题 + body. */
 export type AboutBlock = { head?: string; text: string };
