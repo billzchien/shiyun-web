@@ -12,10 +12,10 @@ import { HourWheel } from './wheel';
 import { initPreview } from './preview';
 import { initGetApp } from './getapp';
 import { initCylinder } from './cylinder';
-import { aboutSections, creditLinks, learnSoon, privacyCn, privacyEn, privacyUpdated, type AboutBlock } from './content';
+import { aboutSections, creditLinks, learnSoon, privacyCn, privacyEn, privacyUpdated, supportFaq, type AboutBlock } from './content';
 import { noWidow } from './typeset';
 
-type Route = 'home' | 'about' | 'learn' | 'privacy';
+type Route = 'home' | 'about' | 'learn' | 'support' | 'privacy';
 
 const TRAVEL = 400;
 const FADE = 300;
@@ -73,6 +73,18 @@ const ABOUT_HTML = aboutSections
   )
   .join('');
 
+/** Support: the one place the email is a live mailto, not just selectable. */
+const SUPPORT_HTML = `
+    <header class="doc-title">
+      <span class="cn">常见问题</span>
+      <span class="en">FAQ</span>
+    </header>
+    <div class="doc-en en">${supportFaq.en.map(aboutBlock).join('')}</div>
+    <div class="doc-cn">${supportFaq.cn.map(aboutBlock).join('')}</div>`.replace(
+  /<span class="selectable">hello@myshiyun\.com<\/span>/g,
+  '<a class="doc-link selectable" href="mailto:hello@myshiyun.com">hello@myshiyun.com</a>'
+);
+
 const DOC_HTML: Record<Exclude<Route, 'home'>, string> = {
   privacy: `
     <header class="doc-title">
@@ -87,6 +99,7 @@ const DOC_HTML: Record<Exclude<Route, 'home'>, string> = {
     </div>
     <p class="doc-updated en">${set(privacyUpdated)}</p>`,
   about: ABOUT_HTML,
+  support: SUPPORT_HTML,
   learn: `<div class="doc-soon">
       <p class="cn">${esc(learnSoon.cn)}</p>
       <p class="en">${esc(learnSoon.en)}</p>
@@ -97,6 +110,7 @@ const TITLES: Record<Route, string> = {
   home: '时运 Shiyun',
   about: '时运 · About',
   learn: '时运 · Learn',
+  support: '时运 · Support',
   privacy: '时运 · Privacy',
 };
 
@@ -106,7 +120,9 @@ let current: Route = 'home';
 
 function routeFromLocation(): Route {
   const seg = location.pathname.replace(/\/+$/, '').split('/').pop() ?? '';
-  return seg === 'about' || seg === 'learn' || seg === 'privacy' ? seg : 'home';
+  return seg === 'about' || seg === 'learn' || seg === 'support' || seg === 'privacy'
+    ? seg
+    : 'home';
 }
 
 /** The selected link holds weight 500, same voice as its hover. */
@@ -323,7 +339,7 @@ function syncSectionNav(route: Route, defer = false) {
   else if (!defer) showSectionNav();
   body.classList.remove('chrome-away');
   // The cylinder belongs to the long reads; Learn is a single centred line.
-  if (route === 'about' || route === 'privacy') cylinder.enable();
+  if (route === 'about' || route === 'support' || route === 'privacy') cylinder.enable();
   else cylinder.disable();
 }
 

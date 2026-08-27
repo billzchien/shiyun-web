@@ -130,6 +130,41 @@ export const aboutSections: {
   },
 ];
 
+/** Support tab — FAQ. Q&A pairs share the About block shape (head + body);
+ *  the closing line has no head and carries the mailto. */
+export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
+  en: [
+    {
+      head: 'I didn’t enter my birth hour. Does that matter?',
+      text: 'It does. Without the hour, Shiyun calculates from three pillars instead of four. The results still hold, just with less precision. You can add your hour anytime on your profile page.',
+    },
+    {
+      head: 'Is my birth information safe?',
+      text: 'Absolutely. Nothing is uploaded or transmitted when you enter your birth information. It stays only on your device and deleting the app removes it completely.',
+    },
+    {
+      head: 'How do I change my birth information?',
+      text: 'Open your profile page and tap Birthday in the menu.',
+    },
+    { text: 'For anything else, email us at hello@myshiyun.com and we’ll get back to you soon.' },
+  ],
+  cn: [
+    {
+      head: '没填出生时辰会影响结果吗?',
+      text: '会的哦。未填时辰时，时运以三柱推算，结果依然有效，但精度不及四柱完整。你可以随时在个人页补填。',
+    },
+    {
+      head: '我的出生信息安全吗?',
+      text: '非常安全。你的出生信息只保存在本机，不上传、不联网。卸载应用即完全清除，无法恢复。',
+    },
+    {
+      head: '如何修改出生信息?',
+      text: '进入我的Profile，在菜单里选择「生日」即可。',
+    },
+    { text: '其他问题或建议，请发邮件至时运邮箱 hello@myshiyun.com，我们会尽快回复。' },
+  ],
+};
+
 /** Learn tab placeholder, centred on screen until the guides land. */
 export const learnSoon = {
   cn: '中国历法内容制作中',

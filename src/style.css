@@ -752,11 +752,12 @@ body.at-doc .links {
   text-decoration: none;
   border-bottom: 1px solid var(--shape-low);
   padding-bottom: 1px;
-  transition: border-color 200ms var(--expressive), font-weight 200ms var(--expressive);
+  transition: border-color 200ms var(--expressive);
 }
+/* Hover inks the line only — a weight change would widen the glyphs and
+   reflow the whole sentence around the link. */
 @media (hover: hover) {
   .doc-link:hover {
-    font-weight: 500;
     border-color: var(--text);
   }
 }
