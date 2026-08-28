@@ -118,6 +118,10 @@ const TITLES: Record<Route, string> = {
 
 let current: Route = 'home';
 
+/** Bumped on every route change: a timeout from an interrupted transition
+ *  (fast clicks) must not fire its stale state over the new one. */
+let gen = 0;
+
 function routeFromLocation(): Route {
   const seg = location.pathname.replace(/\/+$/, '').split('/').pop() ?? '';
   return seg === 'about' || seg === 'learn' || seg === 'support' || seg === 'privacy'
@@ -158,7 +162,9 @@ function flipLinks() {
 }
 
 function enterDoc(route: Exclude<Route, 'home'>) {
+  const g = ++gen;
   docBody.innerHTML = DOC_HTML[route];
+  docBody.style.opacity = '1';
   // One gesture: the row starts riding the moment the wheel starts clearing —
   // the fade is quick (half window + parallax drift), so the outgoing page is
   // gone while the incoming one is still early in its travel.
@@ -172,34 +178,44 @@ function enterDoc(route: Exclude<Route, 'home'>) {
   doc.style.transform = '';
   placeCaret(route);
   window.setTimeout(() => {
+    if (g !== gen) return;
     doc.classList.remove('traveling');
     body.classList.add('chrome-in');
   }, TRAVEL);
 }
 
 function exitDoc() {
+  const g = ++gen;
   body.classList.remove('chrome-in');
   flipLinks();
   doc.classList.add('traveling');
-  doc.style.transform = `translateY(${window.innerHeight}px)`;
+  // Clear the scrolled height too: one viewport of travel from deep in a page
+  // only brings EARLIER content through the frame, over the arriving wheel.
+  doc.style.transform = `translateY(${window.scrollY + window.innerHeight}px)`;
   // The wheel starts its descent early enough to arrive just as the row
   // lands — continuous both ways, no pause.
-  window.setTimeout(() => body.classList.remove('veiled'), FADE / 2);
   window.setTimeout(() => {
+    if (g === gen) body.classList.remove('veiled');
+  }, FADE / 2);
+  window.setTimeout(() => {
+    if (g !== gen) return;
     doc.classList.remove('traveling');
     doc.style.transform = '';
     doc.hidden = true;
+    docBody.style.opacity = '1'; // an interrupted swap may have left it at 0
   }, TRAVEL);
 }
 
 /** Doc → doc: the caret rides over (like the app's 中文/EN tabs), content swaps. */
 function swapDoc(route: Exclude<Route, 'home'>) {
+  const g = ++gen;
   placeCaret(route);
   docBody.style.opacity = '0';
   // Wait out the WHOLE fade before swapping: cut it short and the old text is
   // still half there when the new markup lands. Then curl the fresh column
   // while it is invisible, so it is never seen flat.
   window.setTimeout(() => {
+    if (g !== gen) return;
     docBody.innerHTML = DOC_HTML[route];
     window.scrollTo(0, 0);
     cylinder.measure();
@@ -223,6 +239,8 @@ function navigate(route: Route, push: boolean) {
 
 /** Deep links and back/forward while veiled: settle the state without motion. */
 function applyInstant(route: Route) {
+  gen++;
+  docBody.style.opacity = '1';
   body.classList.add('no-anim');
   body.classList.toggle('at-home', route === 'home');
   body.classList.toggle('at-doc', route !== 'home');
