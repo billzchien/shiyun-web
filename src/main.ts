@@ -26,17 +26,31 @@ const doc = document.getElementById('doc')!;
 const docBody = document.getElementById('docBody')!;
 const caret = document.getElementById('caret')!;
 
+/** Not on the App Store yet. Flip to true when the link lands: restores the
+ *  header pill, the QR flow, and the preview overlay's Get app — and turns
+ *  the home CTA back into 下载 Get app (see body.app-soon in style.css). */
+const APP_LIVE = false;
+
 const wheelEl = document.getElementById('wheel')!;
 const wheel = new HourWheel(wheelEl);
 setInterval(() => wheel.update(new Date()), 1000);
-const getApp = initGetApp(document.querySelector<HTMLElement>('.cta.getapp')!, wheelEl);
-initPreview(document.querySelector<HTMLElement>('.cta.preview')!, wheelEl, getApp.open);
+
+const getAppCta = document.querySelector<HTMLElement>('.cta.getapp')!;
+let openGetApp = () => {};
+if (APP_LIVE) {
+  openGetApp = initGetApp(getAppCta, wheelEl).open;
+} else {
+  body.classList.add('app-soon');
+  getAppCta.innerHTML = '<span class="cn">即将上架</span><span class="en">Coming soon</span>';
+  getAppCta.setAttribute('aria-disabled', 'true');
+}
+initPreview(document.querySelector<HTMLElement>('.cta.preview')!, wheelEl, openGetApp);
 
 // The doc pages' header pill: come home, then raise the QR.
 document.getElementById('getAppPill')!.addEventListener('click', (e) => {
   e.preventDefault();
   if (current !== 'home') navigate('home', true);
-  getApp.open();
+  openGetApp();
 });
 
 // ─── Doc content ─────────────────────────────────────────────────────────────
