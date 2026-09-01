@@ -311,6 +311,10 @@ body.qr-peeking .cta.preview {
 body.app-soon .pill,
 body.app-soon .preview-pill { display: none; }
 body.app-soon .cta.getapp { pointer-events: none; }
+/* With no download to offer, Preview takes the primary ink and the waiting
+   CTA steps back to the quiet fill — swapped back by the same flag. */
+body.app-soon .cta.preview { background: var(--accent); color: var(--text-inverse); }
+body.app-soon .cta.getapp { background: var(--shape-lowest); color: var(--text); }
 body.app-soon .cta.getapp .cn { font-size: 17px; line-height: 21px; }
 body.app-soon .cta.getapp .en { font-size: 18px; line-height: 22px; letter-spacing: -0.2px; }
 

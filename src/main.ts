@@ -41,7 +41,7 @@ if (APP_LIVE) {
   openGetApp = initGetApp(getAppCta, wheelEl).open;
 } else {
   body.classList.add('app-soon');
-  getAppCta.innerHTML = '<span class="cn">即将上架</span><span class="en">Coming soon</span>';
+  getAppCta.innerHTML = '<span class="cn">即将上架</span><span class="en">It’s coming.</span>';
   getAppCta.setAttribute('aria-disabled', 'true');
 }
 initPreview(document.querySelector<HTMLElement>('.cta.preview')!, wheelEl, openGetApp);
