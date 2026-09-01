@@ -317,8 +317,6 @@ body.app-soon .cta.getapp { pointer-events: none; }
    CTA steps back to the quiet fill — swapped back by the same flag. */
 body.app-soon .cta.preview { background: var(--accent); color: var(--text-inverse); }
 body.app-soon .cta.getapp { background: var(--shape-lowest); color: var(--text); }
-body.app-soon .cta.getapp .cn { font-size: 17px; line-height: 21px; }
-body.app-soon .cta.getapp .en { font-size: 18px; line-height: 22px; letter-spacing: -0.2px; }
 
 /* Hover grows, press shrinks and lets go with a little spring. The big side
    buttons grow gently (the app's scaleLarge idea) — full 1.2 reads huge at
