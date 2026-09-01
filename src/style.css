@@ -103,6 +103,8 @@ body.veiled .mark { opacity: 1; scale: 1; transition-delay: calc(var(--fade) / 2
    Only the visible mark stays a target (its click still bubbles to the link). */
 body.veiled .brand { pointer-events: none; }
 body.veiled .mark { pointer-events: auto; }
+/* On home the logotype isn't a link — there is nowhere for it to go. */
+body.at-home .brand { pointer-events: none; }
 
 .pill {
   pointer-events: auto;
