@@ -4,27 +4,7 @@ import { defineConfig } from 'vite';
 // project path (user.github.io/repo) or a custom domain root.
 export default defineConfig({
   base: './',
-  define: {
-    /**
-     * The privacy page's "Last updated" line. Stamped from the machine that
-     * runs the build — which, since CI builds on every push, is the deploy
-     * date. UTC and an explicit format so a runner's locale cannot change it.
-     */
-    __BUILD_DATE__: JSON.stringify(
-      new Intl.DateTimeFormat('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        timeZone: 'UTC',
-      }).format(new Date())
-    ),
-    __BUILD_DATE_CN__: JSON.stringify(
-      new Intl.DateTimeFormat('zh-CN', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'UTC',
-      }).format(new Date())
-    ),
-  },
+  // Vite doesn't read PORT on its own; honouring it lets a host assign the
+  // dev port when 5173 is already taken. Nothing here needs a fixed port.
+  server: { port: Number(process.env.PORT) || 5173 },
 });

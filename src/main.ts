@@ -26,6 +26,7 @@ const links = document.getElementById('links')!;
 const doc = document.getElementById('doc')!;
 const docBody = document.getElementById('docBody')!;
 const caret = document.getElementById('caret')!;
+const subnavRule = document.getElementById('subnavRule')!;
 
 /** Not on the App Store yet. Flip to true when the link lands: restores the
  *  header pill, the QR flow, and the preview overlay's Get app — and turns
@@ -256,20 +257,48 @@ function placeCaret(route: Route) {
 }
 
 /** FLIP the links row between its two slots, measured off the first link. */
+/** The subnav chrome that rides with the links row but has no second slot. */
+const riders = [subnavRule, caret];
+
 function flipLinks() {
   const before = links.firstElementChild!.getBoundingClientRect().top;
+  const entering = body.classList.contains('at-home');
   body.classList.toggle('at-doc');
   body.classList.toggle('at-home');
   const after = links.firstElementChild!.getBoundingClientRect().top;
-  links.style.transform = `translateY(${before - after}px)`;
+  const shift = before - after;
+
+  links.style.transform = `translateY(${shift}px)`;
+  /**
+   * The hairline and caret hold ONE layout spot in both slots, so they can't
+   * FLIP like the row: entering, they start a row's travel below and ride up;
+   * leaving, they start in place and ride down. Either way they move with the
+   * links — fading them where they stand read as a separate, later event.
+   */
+  if (entering) for (const el of riders) el.style.transform = `translateY(${shift}px)`;
   links.getBoundingClientRect(); // commit the offset before transitioning off it
-  links.classList.add('traveling');
+
+  for (const el of [links, ...riders]) el.classList.add('traveling');
+  if (!entering) for (const el of riders) el.classList.add('leaving');
   links.style.transform = '';
-  links.addEventListener(
-    'transitionend',
-    () => links.classList.remove('traveling'),
-    { once: true }
-  );
+  for (const el of riders) el.style.transform = entering ? '' : `translateY(${-shift}px)`;
+
+  /**
+   * Only the row's OWN transform ends the travel. transitionend bubbles, and
+   * the links' anchors run a 200ms font-weight transition as the active page
+   * changes — that child event used to land here first, strip `traveling`
+   * mid-flight and SNAP the row to its slot at ~190ms while the hairline was
+   * still riding: the two came apart, which is the doubling you could see.
+   */
+  const done = (e: TransitionEvent) => {
+    if (e.target !== links || e.propertyName !== 'transform') return;
+    links.removeEventListener('transitionend', done);
+    links.classList.remove('traveling');
+    // Leaving, the riders are cleared with the chrome itself (see exitDoc)
+    // — resetting them here would flash the line back into place.
+    if (entering) for (const el of riders) el.classList.remove('traveling');
+  };
+  links.addEventListener('transitionend', done);
 }
 
 function enterDoc(route: Exclude<Route, 'home'>) {
@@ -288,16 +317,17 @@ function enterDoc(route: Exclude<Route, 'home'>) {
   doc.classList.add('traveling');
   doc.style.transform = '';
   placeCaret(route);
+  // The hairline and caret belong TO the row: they resolve on its clock, not
+  // after it — held back they read as a second, late arrival.
+  body.classList.add('chrome-in');
   window.setTimeout(() => {
     if (g !== gen) return;
     doc.classList.remove('traveling');
-    body.classList.add('chrome-in');
   }, TRAVEL);
 }
 
 function exitDoc() {
   const g = ++gen;
-  body.classList.remove('chrome-in');
   flipLinks();
   doc.classList.add('traveling');
   // Clear the scrolled height too: one viewport of travel from deep in a page
@@ -314,6 +344,14 @@ function exitDoc() {
     doc.style.transform = '';
     doc.hidden = true;
     docBody.style.opacity = '1'; // an interrupted swap may have left it at 0
+    // The hairline rides all the way down before it goes: dropped at the
+    // click it would vanish from under the row mid-flight. Hiding it and
+    // resetting its offset in ONE task means no frame shows it back up top.
+    body.classList.remove('chrome-in');
+    for (const el of riders) {
+      el.classList.remove('traveling', 'leaving');
+      el.style.transform = '';
+    }
   }, TRAVEL);
 }
 
@@ -385,6 +423,9 @@ function buildSectionNav() {
   sectionNavInner.innerHTML = (RAILS[current] ?? [])
     .map((s) => `<a href="#${s.id}" data-section="${s.id}">${esc(lang === 'cn' ? s.navCn : s.nav)}</a>`)
     .join('');
+  // Fresh labels: forget where the bar was and let the next spy place it.
+  lastActive = '';
+  sectionNav.scrollLeft = 0;
 }
 
 sectionNavInner.addEventListener('click', (e) => {
@@ -412,6 +453,29 @@ function spySections() {
   sectionNavInner.querySelectorAll('a').forEach((a) =>
     a.classList.toggle('active', a.getAttribute('data-section') === active)
   );
+  if (active !== lastActive) {
+    lastActive = active;
+    centreLabel(active, true);
+  }
+}
+
+/**
+ * Phone and tablet read the rail as a scrolling bar wider than the screen.
+ * Once the bold label has travelled past the middle, the bar carries it back
+ * there — clamped at both ends, so the opening labels stay put on the left
+ * and the closing ones are free to sit right of centre.
+ */
+let lastActive = '';
+function centreLabel(id: string, smooth: boolean) {
+  if (!window.matchMedia('(max-width: 1199px)').matches) return; // desktop rail
+  const a = sectionNavInner.querySelector<HTMLElement>(`[data-section="${id}"]`);
+  if (!a) return;
+  const max = sectionNav.scrollWidth - sectionNav.clientWidth;
+  if (max <= 0) return;
+  const want = a.offsetLeft + a.offsetWidth / 2 - sectionNav.clientWidth / 2;
+  const next = Math.max(0, Math.min(max, want));
+  if (Math.abs(next - sectionNav.scrollLeft) < 1) return;
+  sectionNav.scrollTo({ left: next, behavior: smooth ? 'smooth' : 'auto' });
 }
 
 /**
@@ -425,12 +489,20 @@ function chromeOnScroll() {
   const y = window.scrollY;
   const delta = y - lastScrollY;
   lastScrollY = y;
-  if (!mobile || current === 'home') {
-    body.classList.remove('chrome-away');
+  if (current === 'home') {
+    body.classList.remove('chrome-away', 'chrome-compact');
     return;
   }
-  if (y < 60 || delta < -4) body.classList.remove('chrome-away');
-  else if (delta > 4 && y > 160) body.classList.add('chrome-away');
+  if (mobile) {
+    body.classList.remove('chrome-compact');
+    if (y < 60 || delta < -4) body.classList.remove('chrome-away');
+    else if (delta > 4 && y > 160) body.classList.add('chrome-away');
+    return;
+  }
+  // Desktop and tablet keep the row, condensed: 99 → 60, circles 48 → 40.
+  body.classList.remove('chrome-away');
+  if (y < 60 || delta < -4) body.classList.remove('chrome-compact');
+  else if (delta > 4 && y > 160) body.classList.add('chrome-compact');
 }
 
 window.addEventListener('scroll', () => {
@@ -482,7 +554,7 @@ function showSectionNav() {
 function syncSectionNav(route: Route, defer = false) {
   if (!RAILS[route]) hideSectionNav();
   else if (!defer) showSectionNav();
-  body.classList.remove('chrome-away');
+  body.classList.remove('chrome-away', 'chrome-compact'); // a new page opens full
   // The cylinder belongs to the long reads; Learn is a single centred line.
   if (route === 'about' || route === 'learn' || route === 'support' || route === 'privacy')
     cylinder.enable();
@@ -501,6 +573,80 @@ document.getElementById('brandHome')!.addEventListener('click', (e) => {
   navigate('home', true);
 });
 
+/**
+ * Home has nothing to scroll, so a scroll gesture there reads as "go in":
+ * one swipe up — or a wheel notch down — raises the doc pages at About, the
+ * same travel a link click runs. Downward gestures do nothing; home is
+ * already the top of the site.
+ */
+const PULL_IN = 48; // px of gesture before the page commits
+let pulled = 0;
+let pullLocked = false;
+let pullTimer = 0;
+
+/**
+ * The gesture that raised the page must not also scroll it — a trackpad's
+ * momentum runs on long after the flick, and About would arrive already
+ * halfway down. So the lock holds the page still and every further event of
+ * the SAME gesture pushes it out; it lifts once the wheel falls quiet.
+ */
+function holdPull(ms: number) {
+  clearTimeout(pullTimer);
+  pullTimer = window.setTimeout(() => {
+    pullLocked = false;
+    body.classList.remove('pulling');
+  }, ms);
+}
+
+const overlayUp = () =>
+  body.classList.contains('peeking') ||
+  body.classList.contains('qr-peeking') ||
+  body.classList.contains('qr-open') ||
+  document.documentElement.classList.contains('video-open');
+
+function pullFromHome(delta: number) {
+  if (pullLocked) {
+    holdPull(200); // still the same gesture: keep the page still
+    return;
+  }
+  if (current !== 'home' || overlayUp()) {
+    pulled = 0;
+    return;
+  }
+  if (delta <= 0) {
+    pulled = 0; // a downward twitch resets the run
+    return;
+  }
+  pulled += delta;
+  if (pulled < PULL_IN) return;
+  pulled = 0;
+  pullLocked = true; // one page per gesture, not one per wheel event
+  body.classList.add('pulling');
+  holdPull(TRAVEL);
+  navigate('about', true);
+}
+
+window.addEventListener('wheel', (e) => pullFromHome(e.deltaY), { passive: true });
+
+let touchY = 0;
+window.addEventListener(
+  'touchstart',
+  (e) => {
+    touchY = e.touches[0].clientY;
+    pulled = 0;
+  },
+  { passive: true }
+);
+window.addEventListener(
+  'touchmove',
+  (e) => {
+    const y = e.touches[0].clientY;
+    pullFromHome(touchY - y); // finger travelling up = positive
+    touchY = y;
+  },
+  { passive: true }
+);
+
 window.addEventListener('popstate', () => navigate(routeFromLocation(), false));
 
 // No "Save image as…" on the artwork (a deterrent; the files still ship).
@@ -508,7 +654,10 @@ document.addEventListener('contextmenu', (e) => {
   if ((e.target as HTMLElement).closest?.('img, svg')) e.preventDefault();
 });
 
-window.addEventListener('resize', () => placeCaret(current));
+window.addEventListener('resize', () => {
+  placeCaret(current);
+  centreLabel(lastActive, false); // the bar's width changed under the bold
+});
 
 applyLang();
 applyInstant(routeFromLocation());

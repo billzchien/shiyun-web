@@ -13,10 +13,19 @@
   --fade: 300ms;
 
   --header-h: 100px;
-  /* Home links row: 40 + 16 + 40. Subnav: pt 40 pb 20 (desktop). */
-  --links-home-h: 96px;
+  /* The page's side inset: the mark, the header's right-hand circles and the
+     section rail all start here, so every edge in the chrome lines up. */
+  --edge: 48px;
+  /* Home links row: pt 40 + text 16 + pb 32. Subnav: pt 40 pb 20 (desktop). */
+  --links-home-h: 88px;
   --subnav-top: 79px;
   --subnav-bottom: 155px;
+  /* The chrome you SEE. It condenses on scroll, while --subnav-bottom stays
+     put as the doc's top padding — shrinking that would shift the page under
+     the reader and feed back into the scroll that triggered it. */
+  --chrome-h: var(--subnav-bottom);
+  --chrome-size: 48px;
+  --chrome-top: 26px;
 }
 
 @font-face {
@@ -68,6 +77,9 @@ img, svg { -webkit-user-drag: none; }
 
 /* While a doc page is up the document scrolls; home never does. */
 body.at-home { overflow: hidden; }
+/* The swipe that RAISES a page doesn't also scroll it: the lock holds the
+   document still until the gesture's momentum has died (see pullFromHome). */
+body.pulling { overflow: hidden; }
 
 /* ─── Header ───────────────────────────────────────────────────────────────── */
 .site-header {
@@ -80,24 +92,40 @@ body.at-home { overflow: hidden; }
   z-index: 30;
   pointer-events: none;
 }
-.site-header .brand { pointer-events: auto; position: relative; display: grid; place-items: center; }
+/* Static, so the mark can take the header's left corner at every width while
+   home's logotype stays centred in the flex. */
+.site-header .brand { pointer-events: auto; position: static; display: grid; place-items: center; }
 .site-header .brand > * { grid-area: 1 / 1; }
 .logotype { width: 191px; height: 40px; }
-.mark { width: 48px; height: 48px; }
+.mark {
+  position: absolute;
+  left: var(--edge);
+  top: var(--chrome-top);
+  width: var(--chrome-size);
+  height: var(--chrome-size);
+}
 /* Logotype ⇄ mark is a HANDOFF, not a crossfade: the outgoing form clears in
    the first half of the fade window, the incoming one arrives in the second —
    the two never share the stage. Each rule below states its own delay for the
    direction it animates in. */
 .logotype, .mark {
   transition: opacity calc(var(--fade) / 2) var(--expressive), scale calc(var(--fade) / 2) var(--expressive),
-    filter var(--fade) var(--expressive);
+    filter var(--fade) var(--expressive), width var(--fade) var(--expressive),
+    height var(--fade) var(--expressive), top var(--fade) var(--expressive);
 }
 /* Over the Get app circle the logotype stays, in inverse. */
 body.qr-open .logotype { filter: brightness(0) invert(1); }
 .logotype { transition-delay: calc(var(--fade) / 2); } /* returning: in after mark leaves */
 .mark { opacity: 0; scale: 0.8; transition-delay: 0s; }
 body.veiled .logotype { opacity: 0; scale: 0.8; transition-delay: 0s; }
-body.veiled .mark { opacity: 1; scale: 1; transition-delay: calc(var(--fade) / 2); }
+/* The half-beat belongs to the FADE alone (it waits for the logotype to
+   clear). Listed per property — opacity, scale, filter, width, height, top —
+   so the mark's box condenses on the same clock as the circles. */
+body.veiled .mark {
+  opacity: 1;
+  scale: 1;
+  transition-delay: calc(var(--fade) / 2), calc(var(--fade) / 2), 0s, 0s, 0s, 0s;
+}
 /* On doc pages the hidden logotype must not keep catching clicks — on desktop
    the subnav rides into the header band and "Learn" sits right under it.
    Only the visible mark stays a target (its click still bubbles to the link). */
@@ -109,9 +137,9 @@ body.at-home .brand { pointer-events: none; }
 .pill {
   pointer-events: auto;
   position: absolute;
-  right: 48px;
-  top: 26px;
-  height: 48px;
+  right: var(--edge);
+  top: var(--chrome-top);
+  height: var(--chrome-size);
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -126,7 +154,8 @@ body.at-home .brand { pointer-events: none; }
   scale: 0.9;
   visibility: hidden;
   transition: opacity var(--fade) var(--expressive), scale var(--fade) var(--expressive),
-    visibility 0s var(--fade), transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    visibility 0s var(--fade), transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    height var(--fade) var(--expressive), top var(--fade) var(--expressive);
 }
 body.veiled .pill { opacity: 1; scale: 1; visibility: visible; transition-delay: 0s; }
 @media (hover: hover) { .pill:hover { transform: scale(1.1); } }
@@ -138,10 +167,10 @@ body.veiled .pill { opacity: 1; scale: 1; visibility: visible; transition-delay:
 .lang-toggle {
   pointer-events: auto;
   position: absolute;
-  right: 156px;
-  top: 26px;
-  width: 48px;
-  height: 48px;
+  right: calc(var(--edge) + 108px); /* steps left of the pill */
+  top: var(--chrome-top);
+  width: var(--chrome-size);
+  height: var(--chrome-size);
   padding: 0;
   border: none;
   border-radius: 999px;
@@ -159,11 +188,13 @@ body.veiled .pill { opacity: 1; scale: 1; visibility: visible; transition-delay:
   scale: 0.9;
   visibility: hidden;
   transition: opacity var(--fade) var(--expressive), scale var(--fade) var(--expressive),
-    visibility 0s var(--fade), transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    visibility 0s var(--fade), transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    width var(--fade) var(--expressive), height var(--fade) var(--expressive),
+    top var(--fade) var(--expressive);
 }
 .lang-toggle.en { letter-spacing: -0.2px; }
 /* While the Get app pill is hidden (app-soon) the toggle holds its corner. */
-body.app-soon .lang-toggle { right: 48px; }
+body.app-soon .lang-toggle { right: var(--edge); }
 body.veiled .lang-toggle { opacity: 1; scale: 1; visibility: visible; transition-delay: 0s; }
 @media (hover: hover) { .lang-toggle:hover { transform: scale(1.1); } }
 .lang-toggle:active { transform: scale(0.92); transition-duration: 150ms; }
@@ -183,29 +214,29 @@ body.lang-cn .doc-updated.en { display: none; }
 .chrome-bg {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: var(--subnav-bottom);
+  height: var(--chrome-h);
   background: var(--bg);
   z-index: 20;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--fade) var(--expressive);
+  transition: opacity var(--travel) var(--expressive), height var(--fade) var(--expressive);
 }
 .subnav-rule {
   position: fixed;
-  top: var(--subnav-bottom);
+  top: var(--chrome-h);
   left: 0; right: 0;
   border-top: 1px solid var(--shape-low);
   z-index: 25;
   opacity: 0;
-  transition: opacity var(--fade) var(--expressive);
+  transition: top var(--fade) var(--expressive);
 }
 .caret {
   position: fixed;
-  top: calc(var(--subnav-bottom) - 4px);
+  top: calc(var(--chrome-h) - 4px);
   z-index: 26;
   color: var(--text);
   opacity: 0;
-  transition: opacity var(--fade) var(--expressive), left var(--fade) var(--expressive);
+  transition: left var(--fade) var(--expressive), top var(--fade) var(--expressive);
 }
 body.chrome-in .chrome-bg,
 body.chrome-in .subnav-rule,
@@ -702,7 +733,7 @@ body.app-soon .cta.getapp { background: var(--shape-lowest); color: var(--text);
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 40px 20px;
+  padding: 40px 20px 32px;
   z-index: 28;
 }
 .links a {
@@ -722,6 +753,8 @@ body.at-doc .links {
   bottom: auto;
   top: var(--subnav-top);
   padding-bottom: 20px;
+  transition: opacity var(--fade) var(--expressive), top var(--fade) var(--expressive),
+    padding-top var(--fade) var(--expressive), padding-bottom var(--fade) var(--expressive);
 }
 
 /* ─── Doc pages ────────────────────────────────────────────────────────────── */
@@ -749,14 +782,20 @@ body.at-doc .links {
   text-align: left;
   align-items: flex-start;
   padding-bottom: 20px;
-  font-size: 32px;
-  line-height: 36px;
+  font-size: 40px;
+  line-height: 40px;
   /* Title-to-body reads 36px everywhere: the 40px column gap on the other
      doc pages is pulled back to match Learn's 16px-gap rhythm. */
   margin-bottom: -24px;
 }
 .learn .doc-title { margin-bottom: 0; }
-.doc-title .cn { font-weight: 600; letter-spacing: -0.5px; }
+/* The CN face carries more ink per glyph, so it holds the line a size down. */
+.doc-title .cn {
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  font-size: 36px;
+  line-height: 36px;
+}
 .doc-title .en {
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -871,8 +910,8 @@ body.at-doc .links {
 /* Small display titles inside a section; the margin recreates the design's
    blank-line beat (16 + 24 + 16) before each one. */
 .learn-sub {
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 24px;
+  line-height: 26px;
   margin-top: 40px;
 }
 .doc-en .learn-sub {
@@ -947,11 +986,12 @@ body.at-doc .links {
 .graph-note .swatch { color: var(--text-secondary); }
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {
-  .doc-title { font-size: 26px; line-height: 30px; }
+  /* The CN rule above carries a class more, so the phone restates it. */
+  .doc-title, .doc-title .cn { font-size: 32px; line-height: 32px; }
   .learn-sentence { padding-right: 16px; }
   .doc-en .learn-sentence,
   .doc-cn .learn-sentence { font-size: 26px; }
-  /* .learn-sub keeps its 20px — already the right step above mobile body. */
+  .learn-sub { font-size: 22px; }
 }
 
 /* ─── Secondary nav band ──────────────────────────────────────────────────── */
@@ -963,7 +1003,7 @@ body.at-doc .links {
      sticky ignores the entry animation's transform, which fixed would not.
      The negative margin gives its 100px back to the flow. */
   position: sticky;
-  top: var(--subnav-bottom);
+  top: var(--chrome-h);
   height: 100px;
   margin-bottom: -100px;
   z-index: 26;
@@ -1047,7 +1087,7 @@ body.cyl .curl-strip {
 body.cyl .dof-top { opacity: 0; }
 body.cyl .dof-bottom { opacity: 0; }
 .dof span { position: absolute; inset: 0; display: block; }
-.dof-top { top: var(--subnav-bottom); height: 150px; }
+.dof-top { top: var(--chrome-h); height: 150px; }
 .dof-bottom { bottom: 0; height: 170px; }
 
 .dof-top span:nth-child(1) {
@@ -1092,11 +1132,11 @@ body.cyl .dof-bottom { opacity: 0; }
 .section-nav[hidden] { display: none !important; }
 .section-nav {
   position: fixed;
-  transition: opacity var(--fade) var(--expressive);
-  left: 48px; /* flush with the mark in the corner */
+  transition: opacity var(--fade) var(--expressive), top var(--fade) var(--expressive);
+  left: var(--edge); /* flush with the mark in the corner */
   /* Aligns with the first section title (subnav + the body's 80 top pad),
      whichever chrome height the breakpoint uses. */
-  top: calc(var(--subnav-bottom) + 80px);
+  top: calc(var(--chrome-h) + 80px);
   z-index: 27;
 }
 .section-nav-inner {
@@ -1121,7 +1161,7 @@ body.cyl .dof-bottom { opacity: 0; }
   .section-nav {
     position: sticky;
     left: auto;
-    top: var(--subnav-bottom);
+    top: var(--chrome-h);
     height: 60px;
     display: flex;
     align-items: center;
@@ -1136,7 +1176,8 @@ body.cyl .dof-bottom { opacity: 0; }
     align-items: center;
     gap: 24px;
     margin-inline: auto;
-    padding: 0 20px;
+    /* Starts level with the mark, not at an inset of its own. */
+    padding: 0 var(--edge);
   }
   .section-nav a { white-space: nowrap; }
   /* Clear the WHOLE band (100), not just the labels — landing at 60 dropped
@@ -1168,8 +1209,19 @@ body.cyl .dof-bottom { opacity: 0; }
   body.chrome-away .section-veil { top: 0; }
 }
 
-/* Everything that travels during the home ⇄ doc handoff shares one clock. */
-.links.traveling, .doc.traveling { transition: transform var(--travel) var(--expressive); }
+/* Everything that travels during the home ⇄ doc handoff shares one clock.
+   Stated against both slots on purpose: the subnav's own transition list
+   (body.at-doc .links) outranks a bare .links.traveling and, carrying no
+   transform, would snap the row's flip on the way UP. */
+body.at-doc .links.traveling,
+body.at-home .links.traveling,
+.subnav-rule.traveling,
+.caret.traveling,
+.doc.traveling { transition: transform var(--travel) var(--expressive); }
+/* Leaving, the hairline drops out ahead of the row — down and gone before the
+   eye can follow it across the page. Arriving it still rides in step. */
+.subnav-rule.traveling.leaving,
+.caret.traveling.leaving { transition-duration: calc(var(--travel) * 0.4); }
 
 /* Deep links and breakpoint jumps render their state without motion. */
 body.no-anim *, body.no-anim { transition: none !important; }
@@ -1211,39 +1263,78 @@ body.no-anim *, body.no-anim { transition: none !important; }
    hairline at 99, the mark steps to the left corner, the pill keeps the right.
    Every dependent (chrome-bg, rule, caret, doc top, section rail) reads the
    vars, so only the numbers and the mark's position change here. */
-@media (min-width: 1024px) {
+/* ─── One row or two: the nav's own call, decided by fit ──────────────────
+   The row measures 227 (four English labels at 179 plus three 16 gaps) and
+   the corners cost --edge + 48 each. That clears easily from 768 up. A phone
+   cannot hold it: once the Get app pill returns the right corner alone runs
+   ~148, which needs about 440 of width, so below 768 the links drop under the
+   logo band. This threshold belongs to the nav alone — every other phone rule
+   keeps its own. */
+@media (min-width: 768px) {
   :root {
     --subnav-top: 23px;
     --subnav-bottom: 99px;
   }
-  .site-header .brand { position: static; }
-  .mark { position: absolute; left: 48px; top: 26px; }
   /* Link text bottoms out level with the pill (26 + 48 = 74): pt 35 / pb 25
      keeps the row's 76 and the hairline at 99. */
   body.at-doc .links { padding-top: 35px; padding-bottom: 25px; }
 }
 
+/* ─── Reading condenses the row ───────────────────────────────────────────
+   Scrolling INTO a page pulls the band from 99 to 60 and the corners from 48
+   to 40; scrolling back up restores them. In the short band the links centre
+   on it rather than bottoming out with the circles: 22 + 16 + 22 = 60, so the
+   text sits at 22–38 around the band's middle, and the circles at 10–50 are
+   centred on the same line. Phones aren't included — they send the whole
+   chrome away instead. */
+@media (min-width: 768px) {
+  body.chrome-compact {
+    --chrome-h: 60px;
+    --chrome-size: 40px;
+    --chrome-top: 10px;
+    --subnav-top: 0px;
+  }
+  body.chrome-compact.at-doc .links { padding-top: 22px; padding-bottom: 22px; }
+}
+/* Two tiers: the 80 logo band, then the links row — 8 + 14 + 16 = 38, so the
+   hairline lands at 118. */
+@media (max-width: 767px) {
+  :root {
+    --subnav-top: 80px;
+    --subnav-bottom: 118px;
+  }
+  body.at-doc .links { padding-top: 8px; padding-bottom: 16px; }
+}
+
 /* ─── Mobile ───────────────────────────────────────────────────────────────── */
 @media (max-width: 767px) {
   :root {
-    --subnav-top: 100px;
-    --subnav-bottom: 156px;
-    /* Footer links ride closer to the phone's bottom edge: pb 12, not 40. */
-    --links-home-h: 68px;
+    /* Footer links ride closer to the phone's bottom edge: 40 + 14 + 12. */
+    --links-home-h: 66px;
+    /* The phone pulls every chrome edge in to 20. */
+    --edge: 20px;
+    /* …and runs the corner circles a size down, centred in the 80px band. */
+    --chrome-size: 40px;
+    --chrome-top: 20px;
   }
-  .links { padding-bottom: 12px; }
+  /* Both link rows read a size down, and the top row hugs its labels on the
+     SAME 24 gap the section bar below it uses, so the two read as one system
+     rather than a 360 measure floating over a hugged one. */
+  .links a, .section-nav a { font-size: 14px; line-height: 14px; }
+  .links {
+    width: fit-content;
+    gap: 24px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 12px;
+  }
+  .links a { flex: 0 0 auto; }
   .ctas { margin-top: 40px; }
   .logotype { width: 152px; height: 32px; }
-  .pill { right: 20px; }
-  /* The phone's corners: toggle left, pill right — the centred mark between. */
-  .lang-toggle, body.app-soon .lang-toggle { left: 20px; right: auto; }
-
   .wheel .sign { width: 64%; top: 41.7%; }
   .hchar { font-size: 12px; }
   /* Tighter clock lock-up, sitting higher — the desktop proportions read
      roomy; at phone size the same percentages crowd the lower characters. */
   .wheel .clock { top: 68%; gap: 2px; }
   .clock .time { font-size: 22px; }
-
-  body.at-doc .links { padding-top: 20px; }
 }

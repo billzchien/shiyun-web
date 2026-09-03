@@ -38,9 +38,13 @@ export const privacyCn = {
   ],
 };
 
-/** Stamped at build time (see vite.config.ts) — every deploy re-dates it. */
-export const privacyUpdated = `Last updated: ${__BUILD_DATE__}`;
-export const privacyUpdatedCn = `更新日期: ${__BUILD_DATE_CN__}`;
+/**
+ * The policy's own date — bump BOTH lines when the text above actually
+ * changes. It used to be stamped from the build clock, which re-dated the
+ * page on every deploy and told readers a change had been made when none had.
+ */
+export const privacyUpdated = 'Last updated: Aug 26, 2026';
+export const privacyUpdatedCn = '更新日期: 2026年8月26日';
 
 /** Single-language mode — the top nav's labels per language (Figma CN/EN). */
 export const navLabels: Record<'en' | 'cn', Record<string, string>> = {
