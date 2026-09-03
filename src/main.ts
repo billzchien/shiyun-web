@@ -281,7 +281,21 @@ function flipLinks() {
   for (const el of [links, ...riders]) el.classList.add('traveling');
   if (!entering) for (const el of riders) el.classList.add('leaving');
   links.style.transform = '';
-  for (const el of riders) el.style.transform = entering ? '' : `translateY(${-shift}px)`;
+  for (const el of riders) {
+    if (entering) {
+      el.style.transform = '';
+      continue;
+    }
+    /**
+     * Leaving, each rider is pushed clear of the viewport rather than the
+     * row's distance: the row's travel left the hairline a few pixels short
+     * of the bottom edge, where it stopped, waited out the rest of the
+     * gesture and then blinked away — the caret's triangle most of all.
+     * Measured live, so a chrome-away offset is already accounted for.
+     */
+    const r = el.getBoundingClientRect();
+    el.style.transform = `translateY(${window.innerHeight - r.top + 8}px)`;
+  }
 
   /**
    * Only the row's OWN transform ends the travel. transitionend bubbles, and
