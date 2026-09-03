@@ -18,5 +18,13 @@ export default defineConfig({
         timeZone: 'UTC',
       }).format(new Date())
     ),
+    __BUILD_DATE_CN__: JSON.stringify(
+      new Intl.DateTimeFormat('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'UTC',
+      }).format(new Date())
+    ),
   },
 });

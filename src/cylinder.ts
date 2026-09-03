@@ -29,6 +29,8 @@ const PERSPECTIVE = 900;
 const FLAT_DEG = 0.2;
 
 type Block = { el: HTMLElement; top: number; half: number; applied: boolean };
+/** A figure surface: its strips fold as a chain, sharing edges in 3D. */
+type Box = { strips: HTMLElement[]; top: number; height: number; applied: boolean };
 
 export function initCylinder(docBody: HTMLElement) {
   const still = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -51,6 +53,7 @@ export function initCylinder(docBody: HTMLElement) {
   }
 
   let blocks: Block[] = [];
+  let boxes: Box[] = [];
   let active = false;
   let queued = false;
   /** What the route asked for, independent of whether it is currently allowed. */
@@ -69,12 +72,27 @@ export function initCylinder(docBody: HTMLElement) {
     const host = docBody.closest<HTMLElement>('.doc') ?? docBody;
     const hostTop = host.getBoundingClientRect().top;
     const hostDocTop = host.offsetTop;
+    /**
+     * A figure never curls as ONE plane — a tall image tilted whole reads as
+     * 3D, not as a scroll. Its `.curl-box` is measured as a SURFACE instead:
+     * paint() folds the strips like a chain, each band rotated about its top
+     * edge and translated so that edge sits exactly where the band above
+     * ended, all under the box's single shared perspective. Shared fold lines
+     * project identically, so the silhouette stays continuous.
+     */
     blocks = [...docBody.querySelectorAll<HTMLElement>(
-      '.doc-title, .doc-en > *, .doc-cn > *, .doc-updated, .doc-soon'
+      '.doc-title, .doc-en > :not(.doc-figure), .doc-cn > :not(.doc-figure), ' +
+        '.doc-figure figcaption, .doc-updated, .doc-soon'
     )].map((el) => {
       el.style.transform = '';
       const r = el.getBoundingClientRect();
       return { el, top: r.top - hostTop + hostDocTop, half: r.height / 2, applied: false };
+    });
+    boxes = [...docBody.querySelectorAll<HTMLElement>('.curl-box')].map((box) => {
+      const strips = [...box.children] as HTMLElement[];
+      for (const s of strips) s.style.transform = '';
+      const r = box.getBoundingClientRect();
+      return { strips, top: r.top - hostTop + hostDocTop, height: r.height, applied: false };
     });
     paint();
   }
@@ -131,6 +149,59 @@ export function initCylinder(docBody: HTMLElement) {
         `perspective(${PERSPECTIVE}px) translateZ(${z.toFixed(1)}px) rotateX(${angle.toFixed(2)}deg)`;
       b.applied = true;
     }
+
+    // Figure surfaces: fold the strip chain. Each band takes the cylinder
+    // angle at its own height; bands below the flattest one hang off its
+    // bottom edge, bands above hang off its top — every fold shared exactly.
+    for (const box of boxes) {
+      const topV = box.top - y;
+      if (topV + box.height < bandTop - 600 || topV > bandBottom + 600) continue;
+      const n = box.strips.length;
+      const h = box.height / n;
+      const th: number[] = [];
+      let flattest = 0;
+      for (let i = 0; i < n; i++) {
+        const mid = topV + (i + 0.5) * h;
+        let d = (mid - centre) / reach;
+        d = Math.max(-1, Math.min(1, d));
+        const eased = d * d * d;
+        th.push(((MAX_ANGLE * eased * (d < 0 ? upF : downF)) * Math.PI) / 180);
+        if (Math.abs(th[i]) < Math.abs(th[flattest])) flattest = i;
+      }
+      let bent = false;
+      const ty = new Array<number>(n);
+      const tz = new Array<number>(n);
+      let Y = flattest * h;
+      let Z = 0;
+      // rotateX(+θ) swings a band's bottom edge TOWARD the viewer (+z), so
+      // walking down the chain the folds accumulate positive z — the same
+      // "wall wrapping towards you" the text blocks ride.
+      for (let i = flattest; i < n; i++) {
+        ty[i] = Y - i * h;
+        tz[i] = Z;
+        Y += h * Math.cos(th[i]);
+        Z += h * Math.sin(th[i]);
+      }
+      Y = flattest * h;
+      Z = 0;
+      for (let i = flattest - 1; i >= 0; i--) {
+        Y -= h * Math.cos(th[i]);
+        Z -= h * Math.sin(th[i]);
+        ty[i] = Y - i * h;
+        tz[i] = Z;
+      }
+      for (let i = 0; i < n; i++) {
+        const deg = (th[i] * 180) / Math.PI;
+        if (Math.abs(deg) < FLAT_DEG && Math.abs(tz[i]) < 0.3 && Math.abs(ty[i]) < 0.3) {
+          if (box.applied) box.strips[i].style.transform = '';
+          continue;
+        }
+        bent = true;
+        box.strips[i].style.transform =
+          `translate3d(0, ${ty[i].toFixed(2)}px, ${tz[i].toFixed(2)}px) rotateX(${deg.toFixed(2)}deg)`;
+      }
+      box.applied = bent;
+    }
   }
 
   function onScroll() {
@@ -179,6 +250,8 @@ export function initCylinder(docBody: HTMLElement) {
     document.body.classList.remove('cyl');
     for (const b of blocks) b.el.style.transform = '';
     blocks = [];
+    for (const box of boxes) for (const s of box.strips) s.style.transform = '';
+    boxes = [];
   }
 
   return { enable, disable, measure };

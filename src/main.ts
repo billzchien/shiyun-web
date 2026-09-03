@@ -12,7 +12,8 @@ import { HourWheel } from './wheel';
 import { initPreview } from './preview';
 import { initGetApp } from './getapp';
 import { initCylinder } from './cylinder';
-import { aboutSections, creditLinks, learnSoon, privacyCn, privacyEn, privacyUpdated, supportFaq, type AboutBlock } from './content';
+import { aboutSections, creditLinks, learnIntro, learnSections, navLabels, privacyCn, privacyEn, privacyUpdated, privacyUpdatedCn, supportFaq, taijiCaption, type AboutBlock, type LearnBlock } from './content';
+import { curled, elementsGraph } from './learn';
 import { noWidow } from './typeset';
 
 type Route = 'home' | 'about' | 'learn' | 'support' | 'privacy';
@@ -65,12 +66,13 @@ const set = (s: string) =>
 const paras = (list: string[]) => list.map((p) => `<p>${set(p)}</p>`).join('');
 const bullets = (list: string[]) => `<ul>${list.map((b) => `<li>${set(b)}</li>`).join('')}</ul>`;
 
-/** About blocks: an optional 小标题 above the body, [Name] becomes a link. */
+/** About/Support blocks: an optional small display title (the Learn 小标题
+ *  voice) above the body, [Name] becomes a link. */
 const aboutBlock = (b: AboutBlock) => {
   const body = set(b.text).replace(/\[([^\]]+)\]/g, (_, name: string) => {
     return `<a class="doc-link" href="${creditLinks[name] ?? '#'}" target="_blank" rel="noopener">${name}</a>`;
   });
-  return `<p>${b.head ? `<span class="doc-sub">${set(b.head)}</span><br />` : ''}${body}</p>`;
+  return `${b.head ? `<p class="learn-sub">${set(b.head)}</p>` : ''}<p>${body}</p>`;
 };
 
 const ABOUT_HTML = aboutSections
@@ -91,13 +93,57 @@ const ABOUT_HTML = aboutSections
 const SUPPORT_HTML = `
     <header class="doc-title">
       <span class="cn">常见问题</span>
-      <span class="en">FAQ</span>
+      <span class="en">Frequently Asked Questions</span>
     </header>
     <div class="doc-en en">${supportFaq.en.map(aboutBlock).join('')}</div>
     <div class="doc-cn">${supportFaq.cn.map(aboutBlock).join('')}</div>`.replace(
   /<span class="selectable">hello@myshiyun\.com<\/span>/g,
   '<a class="doc-link selectable" href="mailto:hello@myshiyun.com">hello@myshiyun.com</a>'
 );
+
+// ─── Learn ───────────────────────────────────────────────────────────────────
+
+const TAIJI_ALT = { en: 'Three Star Gods presenting a taiji diagram, Qing dynasty embroidery', cn: '三星太极献寿图刺绣局部' };
+
+function learnBlock(b: LearnBlock, lang: 'en' | 'cn'): string {
+  if (b.fig === 'taiji')
+    return `
+    <figure class="doc-figure">
+      ${curled(
+        `<img src="${import.meta.env.BASE_URL}assets/learn/taiji.jpg" alt="${esc(TAIJI_ALT[lang])}" draggable="false" />`,
+        '1200/675'
+      )}
+      <figcaption>${esc(taijiCaption[lang])}</figcaption>
+    </figure>`;
+  if (b.fig === 'elements') return elementsGraph(lang);
+  if (b.sub !== undefined) return `<p class="learn-sub">${esc(b.sub)}</p>`;
+  return `<p>${set(b.p!).replace(/\n/g, '<br />')}</p>`;
+}
+
+const LEARN_HTML = `
+    <section class="doc-section learn">
+      <div class="doc-en en">
+        <p class="learn-sentence">${set(learnIntro.sentenceEn)}</p>
+        ${learnIntro.en.map((p) => `<p>${set(p)}</p>`).join('')}
+      </div>
+      <div class="doc-cn">
+        <p class="learn-sentence">${set(learnIntro.sentenceCn).replace(/\n/g, '<br />')}</p>
+        ${learnIntro.cn.map((p) => `<p>${set(p)}</p>`).join('')}
+      </div>
+    </section>
+    ${learnSections
+      .map(
+        (s) => `
+    <section class="doc-section learn" id="${s.id}">
+      <header class="doc-title">
+        <span class="cn">${esc(s.titleCn)}</span>
+        <span class="en">${esc(s.titleEn)}</span>
+      </header>
+      <div class="doc-en en">${s.en.map((b) => learnBlock(b, 'en')).join('')}</div>
+      <div class="doc-cn">${s.cn.map((b) => learnBlock(b, 'cn')).join('')}</div>
+    </section>`
+      )
+      .join('')}`;
 
 const DOC_HTML: Record<Exclude<Route, 'home'>, string> = {
   privacy: `
@@ -111,13 +157,11 @@ const DOC_HTML: Record<Exclude<Route, 'home'>, string> = {
     <div class="doc-cn">
       ${paras(privacyCn.paras1)}${bullets(privacyCn.bullets)}${paras(privacyCn.paras2)}
     </div>
-    <p class="doc-updated en">${set(privacyUpdated)}</p>`,
+    <p class="doc-updated en">${set(privacyUpdated)}</p>
+    <p class="doc-updated cn">${set(privacyUpdatedCn)}</p>`,
   about: ABOUT_HTML,
   support: SUPPORT_HTML,
-  learn: `<div class="doc-soon">
-      <p class="cn">${esc(learnSoon.cn)}</p>
-      <p class="en">${esc(learnSoon.en)}</p>
-    </div>`,
+  learn: LEARN_HTML,
 };
 
 const TITLES: Record<Route, string> = {
@@ -127,6 +171,59 @@ const TITLES: Record<Route, string> = {
   support: '时运 · Support',
   privacy: '时运 · Privacy',
 };
+
+// ─── Language ────────────────────────────────────────────────────────────────
+// Doc pages read in ONE language; the header's circle toggles it. First visit
+// follows the browser, after that the choice sticks. Home stays bilingual.
+
+type Lang = 'en' | 'cn';
+const LANG_KEY = 'shiyun-lang';
+
+let lang: Lang = (() => {
+  try {
+    const saved = localStorage.getItem(LANG_KEY);
+    if (saved === 'en' || saved === 'cn') return saved;
+  } catch {}
+  return /^zh/i.test(navigator.language) ? 'cn' : 'en';
+})();
+
+const langToggle = document.getElementById('langToggle')!;
+
+/** Everything the language touches outside the doc body: the body class the
+ *  CSS hides columns by, the nav labels, the section rail, the toggle glyph. */
+function applyLang() {
+  body.classList.toggle('lang-en', lang === 'en');
+  body.classList.toggle('lang-cn', lang === 'cn');
+  links.querySelectorAll('a[data-route]').forEach((a) => {
+    a.textContent = navLabels[lang][a.getAttribute('data-route')!];
+  });
+  // The toggle names the OTHER language, in that language's own face.
+  langToggle.textContent = lang === 'en' ? '中' : 'EN';
+  langToggle.classList.toggle('en', lang === 'cn');
+  langToggle.setAttribute('aria-label', lang === 'en' ? '切换到中文' : 'Switch to English');
+  buildSectionNav();
+  placeCaret(current);
+}
+
+/** Same beat as a doc→doc swap: the column fades, flips language, returns. */
+function setLang(next: Lang) {
+  if (next === lang) return;
+  lang = next;
+  try {
+    localStorage.setItem(LANG_KEY, next);
+  } catch {}
+  const g = ++gen;
+  docBody.style.opacity = '0';
+  window.setTimeout(() => {
+    if (g !== gen) return;
+    applyLang();
+    cylinder.measure();
+    spySections();
+    docBody.style.opacity = '1';
+  }, FADE);
+}
+
+langToggle.addEventListener('click', () => setLang(lang === 'en' ? 'cn' : 'en'));
 
 // ─── Routing ─────────────────────────────────────────────────────────────────
 
@@ -233,7 +330,7 @@ function swapDoc(route: Exclude<Route, 'home'>) {
     docBody.innerHTML = DOC_HTML[route];
     window.scrollTo(0, 0);
     cylinder.measure();
-    if (route === 'about') showSectionNav();
+    if (RAILS[route]) showSectionNav();
     docBody.style.opacity = '1';
   }, FADE);
 }
@@ -277,9 +374,18 @@ function applyInstant(route: Route) {
 const sectionNav = document.getElementById('sectionNav')!;
 const sectionVeil = document.getElementById('sectionVeil')!;
 const sectionNavInner = sectionNav.querySelector('.section-nav-inner')!;
-sectionNavInner.innerHTML = aboutSections
-  .map((s) => `<a href="#${s.id}" data-section="${s.id}">${esc(s.nav)}</a>`)
-  .join('');
+
+/** The routes that carry a section rail, and what it lists. */
+const RAILS: Partial<Record<Route, { id: string; nav: string; navCn: string }[]>> = {
+  about: aboutSections,
+  learn: learnSections,
+};
+
+function buildSectionNav() {
+  sectionNavInner.innerHTML = (RAILS[current] ?? [])
+    .map((s) => `<a href="#${s.id}" data-section="${s.id}">${esc(lang === 'cn' ? s.navCn : s.nav)}</a>`)
+    .join('');
+}
 
 sectionNavInner.addEventListener('click', (e) => {
   const a = (e.target as HTMLElement).closest('a[data-section]');
@@ -290,12 +396,18 @@ sectionNavInner.addEventListener('click', (e) => {
 
 /** The section whose start has passed the sticky line owns the bold. */
 function spySections() {
-  if (current !== 'about') return;
+  const list = RAILS[current];
+  if (!list) return;
   const line = window.scrollY + 275; // where a jumped-to title comes to rest
-  let active = aboutSections[0].id;
-  for (const s of aboutSections) {
+  let active = list[0].id;
+  for (const s of list) {
     const el = document.getElementById(s.id);
     if (el && el.offsetTop <= line) active = s.id;
+  }
+  // At the very bottom the LAST title can never reach the line — but the
+  // whole closing section is on screen, so it owns the bold.
+  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+    active = list[list.length - 1].id;
   }
   sectionNavInner.querySelectorAll('a').forEach((a) =>
     a.classList.toggle('active', a.getAttribute('data-section') === active)
@@ -339,7 +451,7 @@ function hideSectionNav() {
   sectionNav.style.opacity = '0';
   sectionVeil.style.opacity = '0';
   window.setTimeout(() => {
-    if (current === 'about') return; // came back before the fade was out
+    if (RAILS[current]) return; // came back before the fade was out
     sectionNav.hidden = true;
     sectionVeil.hidden = true;
   }, FADE);
@@ -351,6 +463,7 @@ function hideSectionNav() {
  * itself twice.
  */
 function showSectionNav() {
+  buildSectionNav(); // the rail lists the CURRENT route's sections
   sectionNav.hidden = false;
   sectionVeil.hidden = false;
   sectionNav.style.opacity = '0';
@@ -367,11 +480,12 @@ function showSectionNav() {
  *  in flight and will raise the rail itself, on the content's own beat.
  *  Hiding is never deferred: it belongs to the OUTGOING column. */
 function syncSectionNav(route: Route, defer = false) {
-  if (route !== 'about') hideSectionNav();
+  if (!RAILS[route]) hideSectionNav();
   else if (!defer) showSectionNav();
   body.classList.remove('chrome-away');
   // The cylinder belongs to the long reads; Learn is a single centred line.
-  if (route === 'about' || route === 'support' || route === 'privacy') cylinder.enable();
+  if (route === 'about' || route === 'learn' || route === 'support' || route === 'privacy')
+    cylinder.enable();
   else cylinder.disable();
 }
 
@@ -396,4 +510,5 @@ document.addEventListener('contextmenu', (e) => {
 
 window.addEventListener('resize', () => placeCaret(current));
 
+applyLang();
 applyInstant(routeFromLocation());
