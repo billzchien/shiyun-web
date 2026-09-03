@@ -1008,7 +1008,7 @@ body.at-doc .links {
   margin-bottom: -100px;
   z-index: 26;
   pointer-events: none;
-  transition: opacity var(--fade) var(--expressive), top var(--fade) var(--expressive);
+  transition: opacity var(--fade) var(--expressive), translate var(--fade) var(--expressive);
 }
 .section-veil[hidden] { display: none !important; }
 .section-veil span, .section-veil i { position: absolute; inset: 0; display: block; }
@@ -1168,7 +1168,10 @@ body.cyl .dof-bottom { opacity: 0; }
     /* No background of its own: .section-veil paints the band behind it. */
     overflow-x: auto;
     scrollbar-width: none;
-    transition: top var(--fade) var(--expressive);
+    /* translate, not top: the rest of the chrome moves on the compositor, and
+       a layout-driven top left this trailing it by a beat under a real
+       finger scroll, when the main thread has no frames to spare. */
+    transition: translate var(--fade) var(--expressive);
   }
   .section-nav::-webkit-scrollbar { display: none; }
   .section-nav-inner {
@@ -1206,7 +1209,7 @@ body.cyl .dof-bottom { opacity: 0; }
     translate: 0 calc(-1 * var(--subnav-bottom));
   }
   body.chrome-away .section-nav,
-  body.chrome-away .section-veil { top: 0; }
+  body.chrome-away .section-veil { translate: 0 calc(-1 * var(--subnav-bottom)); }
 }
 
 /* Everything that travels during the home ⇄ doc handoff shares one clock.
