@@ -219,7 +219,7 @@ body.lang-cn .doc-updated.en { display: none; }
   z-index: 20;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--travel) var(--expressive), height var(--fade) var(--expressive);
+  transition: opacity var(--fade) var(--expressive), height var(--fade) var(--expressive);
 }
 .subnav-rule {
   position: fixed;
@@ -238,9 +238,15 @@ body.lang-cn .doc-updated.en { display: none; }
   opacity: 0;
   transition: left var(--fade) var(--expressive), top var(--fade) var(--expressive);
 }
-body.chrome-in .chrome-bg,
+/* The BAND is opaque page colour: it must clear the moment you leave, or it
+   masks the top of the home stage for the whole ride and the wheel arrives
+   with its crown cut off. The hairline and caret keep theirs through the
+   travel instead — they are riding down the page and need to be seen. */
+body.chrome-in .chrome-bg { opacity: 1; }
 body.chrome-in .subnav-rule,
-body.chrome-in .caret { opacity: 1; }
+body.chrome-in .caret,
+body.chrome-exit .subnav-rule,
+body.chrome-exit .caret { opacity: 1; }
 
 /* ─── Home ─────────────────────────────────────────────────────────────────── */
 .home {

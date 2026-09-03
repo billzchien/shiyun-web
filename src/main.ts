@@ -319,6 +319,7 @@ function enterDoc(route: Exclude<Route, 'home'>) {
   placeCaret(route);
   // The hairline and caret belong TO the row: they resolve on its clock, not
   // after it — held back they read as a second, late arrival.
+  body.classList.remove('chrome-exit');
   body.classList.add('chrome-in');
   window.setTimeout(() => {
     if (g !== gen) return;
@@ -328,6 +329,10 @@ function enterDoc(route: Exclude<Route, 'home'>) {
 
 function exitDoc() {
   const g = ++gen;
+  // The band goes at once (it would mask the home stage); the hairline and
+  // caret hold their ink through the ride down.
+  body.classList.remove('chrome-in');
+  body.classList.add('chrome-exit');
   flipLinks();
   doc.classList.add('traveling');
   // Clear the scrolled height too: one viewport of travel from deep in a page
@@ -344,14 +349,12 @@ function exitDoc() {
     doc.style.transform = '';
     doc.hidden = true;
     docBody.style.opacity = '1'; // an interrupted swap may have left it at 0
-    // The hairline rides all the way down before it goes: dropped at the
-    // click it would vanish from under the row mid-flight. Hiding it and
-    // resetting its offset in ONE task means no frame shows it back up top.
-    body.classList.remove('chrome-in');
-    for (const el of riders) {
-      el.classList.remove('traveling', 'leaving');
-      el.style.transform = '';
-    }
+    // The riders lose their ink here, but KEEP the offset that carried them
+    // off the page: snapping them home in the same breath would play that
+    // fade in full view. The next entry assigns their offset outright, and
+    // applyInstant clears it for deep links.
+    body.classList.remove('chrome-exit');
+    for (const el of riders) el.classList.remove('traveling', 'leaving');
   }, TRAVEL);
 }
 
@@ -389,12 +392,17 @@ function navigate(route: Route, push: boolean) {
 /** Deep links and back/forward while veiled: settle the state without motion. */
 function applyInstant(route: Route) {
   gen++;
+  for (const el of riders) {
+    el.classList.remove('traveling', 'leaving');
+    el.style.transform = '';
+  }
   docBody.style.opacity = '1';
   body.classList.add('no-anim');
   body.classList.toggle('at-home', route === 'home');
   body.classList.toggle('at-doc', route !== 'home');
   body.classList.toggle('veiled', route !== 'home');
   body.classList.toggle('chrome-in', route !== 'home');
+  body.classList.remove('chrome-exit');
   doc.hidden = route === 'home';
   if (route !== 'home') {
     docBody.innerHTML = DOC_HTML[route];
