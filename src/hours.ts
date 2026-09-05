@@ -101,13 +101,9 @@ function select(fig: HTMLElement, i: number) {
   for (const arc of fig.querySelectorAll<SVGPathElement>('.h-arc'))
     arc.classList.toggle('lit', Number(arc.dataset.i) <= i);
 
-  // The range crossfades rather than cutting, so the eye follows the cell.
-  const range = fig.querySelector<HTMLElement>('.h-range')!;
-  range.classList.add('out');
-  window.setTimeout(() => {
-    range.textContent = hourRange(i, lang);
-    range.classList.remove('out');
-  }, 140);
+  // The range swaps outright. Fading it drew the eye to the middle, away from
+  // the cell the reader just turned.
+  fig.querySelector<HTMLElement>('.h-range')!.textContent = hourRange(i, lang);
 }
 
 /** Delegated, like the other Learn figures: the markup is rebuilt per render. */

@@ -1371,9 +1371,7 @@ body.at-doc .links {
   line-height: 1.25;
   letter-spacing: -0.2px;
   font-variation-settings: 'opsz' 14, 'wdth' 100;
-  transition: opacity 140ms var(--expressive);
 }
-.h-range.out { opacity: 0; }
 @media (hover: hover) {
   .h-cell:hover .z-front { background: var(--shape-low); }
 }
