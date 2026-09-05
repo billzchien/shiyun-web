@@ -78,10 +78,10 @@ export function stemsFigure(lang: 'en' | 'cn'): string {
  * Pacing. The beats OVERLAP rather than queue: each starts ~100ms after the
  * one before, so the whole handover reads as one gesture, not three.
  */
-/** Pair up: the pillar's glyphs fade in, all at once, this far into the
- *  cells' 380ms travel (--sb-travel) — the capsule and its edge fades are
- *  standing by then, so the characters arrive INTO something. */
-const GLYPHS_AT = 300;
+/** Pair up: the pillar's glyphs, captions and count fade in together this
+ *  far into the cells' 380ms travel (--sb-travel) — the capsule has set off
+ *  first, so the characters arrive into something already forming. */
+const GLYPHS_AT = 100;
 /** Separate: cells start flying home this long after the glyphs start out. */
 const CELLS_AT = 100;
 /** Separate: captions and line come in this long after the cells set off. */
