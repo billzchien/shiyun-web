@@ -1028,6 +1028,9 @@ body.at-doc .links {
   gap: 40px;
   user-select: none;
   -webkit-user-select: none;
+  /* Taps and scrolls only: a quick second tap on a chevron must step the
+     pair, not double-tap-zoom the page (iOS Safari). */
+  touch-action: manipulation;
   overflow: hidden;
 }
 .sb-stage { position: relative; flex: 1 0 0; width: 100%; min-height: 0; }
