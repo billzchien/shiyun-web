@@ -34,18 +34,18 @@ function polar(r: number, deg: number) {
 /** 子 opens at 23:00, and every branch runs two hours from there. */
 const startHour = (i: number) => (23 + i * 2) % 24;
 const hour12 = (h: number) => (h % 12 === 0 ? 12 : h % 12);
-const meridiem = (h: number) => (h < 12 ? 'am' : 'pm');
+const meridiem = (h: number) => (h < 12 ? 'AM' : 'PM');
 const clock24 = (h: number) => `${String(h).padStart(2, '0')}:00`;
 
 export function hourRange(i: number, lang: 'en' | 'cn'): string {
   const a = startHour(i);
   const b = (a + 2) % 24;
   if (lang === 'cn') return `${clock24(a)} – ${clock24(b)}`;
-  // Both ends in the same half of the day say am/pm once: 5–7am, not
-  // 5am – 7am. Only a range that crosses noon or midnight needs both.
+  // Both ends in the same half of the day say AM/PM once: 5–7 AM, not
+  // 5 AM – 7 AM. Only a range that crosses noon or midnight needs both.
   return meridiem(a) === meridiem(b)
-    ? `${hour12(a)}–${hour12(b)}${meridiem(b)}`
-    : `${hour12(a)}${meridiem(a)} – ${hour12(b)}${meridiem(b)}`;
+    ? `${hour12(a)}–${hour12(b)} ${meridiem(b)}`
+    : `${hour12(a)} ${meridiem(a)} – ${hour12(b)} ${meridiem(b)}`;
 }
 
 const HINT = {
