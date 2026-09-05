@@ -258,7 +258,7 @@ export const learnSections: {
     titleEn: 'Heavenly Stems & Earthly Branches',
     titleCn: '天干地支',
     en: [
-      { p: 'Two sets of counting signs, invented in ancient China to mark time. Their earliest traces are on Shang dynasty oracle bones, over three thousand years old, where they were used to count the days. The count has never stopped.' },
+      { p: 'Two sets of counting signs, invented in ancient China to mark time. Like Roman numerals, each is simply a written sequence for counting. Unlike Roman numerals, there are two sets, and they work by pairing up. Their earliest traces are on Shang dynasty oracle bones, over three thousand years old, where they were used to count the days. The count has never stopped.' },
       { p: 'There are ten Heavenly Stems and twelve Earthly Branches.' },
       { fig: 'stems' },
       { p: 'They pair by turning in step, like two wheels: first stem with first branch, second with second, and on they roll. The stems run out at ten and start over; the branches reset at twelve. The wheels only return to their starting point together after sixty pairs, the least common multiple of ten and twelve. Sixty pairs, no repeats, then round again: the sixty-pair cycle. These are the day names the Shang carved into bone, one pair per day, sixty days per round.' },
