@@ -187,7 +187,7 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
  * A block is one of: paragraph (`\n` renders as <br>), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
-export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' };
+export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' };
 
 export const learnIntro = {
   sentenceEn: 'Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization.',
@@ -280,11 +280,13 @@ export const learnSections: {
     titleCn: '生肖',
     en: [
       { p: 'Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig.' },
+      { fig: 'zodiac' },
       { p: 'The twelve animals are the faces of the twelve Earthly Branches: one animal per branch. The pairing gave abstract signs something anyone could remember. You may forget the third branch; you won’t forget the Tiger.' },
       { p: 'The earliest record of the pairing is on bamboo slips from the late Warring States period. By the Han dynasty the set had settled into today’s twelve, and it hasn’t changed in two thousand years.' },
     ],
     cn: [
       { p: '就是鼠、牛、虎、兔、龙、蛇、马、羊、猴、鸡、狗、猪。' },
+      { fig: 'zodiac' },
       { p: '生肖是十二地支的形象化身：子鼠、丑牛、寅虎，一个地支配一个动物。抽象的符号有了具体面孔，哪怕谁记不住「寅」这个字，也肯定记得住对应的「虎」。' },
       { p: '这套地支和生肖的配对，最早的实物记录见于战国晚期的秦简，到东汉就完全定型成今天我们熟悉的十二种，之后两千多年再也没有改动过。' },
     ],
