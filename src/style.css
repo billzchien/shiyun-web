@@ -1375,6 +1375,61 @@ body.at-doc .links {
 @media (hover: hover) {
   .h-cell:hover .z-front { background: var(--shape-low); }
 }
+
+/* ─── The lunisolar Venn (see calendar.ts) ────────────────────────────────── */
+/* Sun and moon arrive apart, slide together, and the Chinese calendar fades
+   up in the lens they make. Geometry comes from calendar.ts; this file only
+   carries the motion. */
+.cal-stage {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+.cal-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.cal-ring { fill: none; stroke: var(--shape-low); stroke-width: 1; }
+.cal-lens { fill: var(--shape-lowest); opacity: 0; transition: opacity 600ms var(--expressive); }
+.cal-figure.in .cal-lens { opacity: 1; }
+/* The two travelling halves: each circle, the clip that cuts the lens, and
+   that side's marker all carry the same shift, so they move as one body.
+   The shift is stated twice because the two live in different spaces — the
+   SVG's is in the drawing's own units, the marker's scales with the column. */
+.cal-figure .cal-side { transition: transform 800ms var(--expressive); }
+.cal-figure circle.cal-a { transform: translateX(calc(var(--spread) * -1)); }
+.cal-figure circle.cal-b { transform: translateX(var(--spread)); }
+.cal-figure .cal-marker.cal-a { transform: translateX(calc(var(--spread-m) * -1)); }
+.cal-figure .cal-marker.cal-b { transform: translateX(var(--spread-m)); }
+.cal-figure.in .cal-side { transform: none; }
+/* Markers are placed by their label's top edge and centred on their x. */
+.cal-marker {
+  position: absolute;
+  translate: -50% 0;
+  width: max-content;
+  text-align: center;
+  color: var(--text);
+}
+.cal-icon { position: absolute; left: 50%; translate: -50% 0; aspect-ratio: 1; }
+.cal-icon svg { display: block; width: 100%; height: 100%; }
+.cal-label {
+  display: block;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+.doc-en .cal-label { font-variation-settings: 'opsz' 14, 'wdth' 100; }
+/* The calendar the two of them make. It rises on the SAME beat as the merge,
+   not after it: the three are one gesture, and they settle together. */
+.cal-figure .cal-both {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 600ms var(--expressive), transform 800ms var(--expressive);
+}
+.cal-figure.in .cal-both { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .cal-figure .cal-side, .cal-lens, .cal-figure .cal-both { transition: none; }
+}
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {
   /* The CN rule above carries a class more, so the phone restates it. */

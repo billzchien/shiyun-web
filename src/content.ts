@@ -187,7 +187,7 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
  * A block is one of: paragraph (`\n` renders as <br>), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
-export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' };
+export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' };
 
 export const learnIntro = {
   sentenceEn: 'Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization.',
@@ -320,12 +320,14 @@ export const learnSections: {
     titleCn: '中国历法',
     en: [
       { p: 'You’ll often hear it called the “Chinese lunar calendar.” That name is wrong, and the error hides the system’s real elegance. The Chinese calendar is lunisolar: months follow the moon, years follow the sun, and the whole design is a negotiation between the two.' },
+      { fig: 'calendar' },
       { p: 'One lunar cycle, new moon to new moon, takes about 29.5 days. So calendar months alternate between 29 and 30 days, and every month begins on a new moon, with the full moon landing mid-month. Twelve such months add up to about 354 days, 11 days short of the solar year. Left alone, the drift would compound and New Year would wander into summer. The ancient solution is the leap month: every two or three years, one extra month is inserted, giving that year thirteen. The moon keeps the months, the sun keeps the years, and the leap month keeps the peace.' },
       { p: 'The sun’s own rhythm is marked by the 24 solar terms, one for every 15 degrees the sun travels along its path: Start of Spring, Summer Solstice, Frost’s Descent, Winter Solstice. Farmers worked by these, not by the months, because planting answers to the sun.' },
       { p: 'The system has been refined dynasty after dynasty since the Shang, and it has never stopped running.' },
     ],
     cn: [
       { p: '中国传统历法是一部阴阳合历：月随月亮，年随太阳，两套节律并行，缺一不可。' },
+      { fig: 'calendar' },
       { p: '月亮圆缺一轮约二十九天半，所以历法里的月，大月三十天，小月二十九天，初一必为朔日，十五前后必为望日。十二个月加起来约三百五十四天，比太阳年少十一天。如果放任这个差值累积，年年叠加之后，新年会一路偏移到夏天。古人的解决办法叫「置闰」：每两三年补进一个闰月，那一年便有十三个月。月份随月亮节律走，年岁随太阳节律走，始终把误差拉回可控范围。' },
       { p: '太阳的节律，则交给二十四节气：太阳在黄道上每走十五度就设一个节气，立春、夏至、霜降、冬至，全是太阳的脚步，和月亮完全无关。农事只看节气，不看月份，因为播种收割认的是太阳的冷暖节奏。' },
       { p: '这套历法从商代甲骨历起步，历代不断修订精化，一直沿用至今。' },

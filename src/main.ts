@@ -17,6 +17,7 @@ import { curled, elementsGraph } from './learn';
 import { initStems, stemsFigure } from './stems';
 import { initZodiac, zodiacFigure } from './zodiac';
 import { hoursFigure, initHours } from './hours';
+import { calendarFigure, mountCalendar } from './calendar';
 import { noWidow } from './typeset';
 
 type Route = 'home' | 'about' | 'learn' | 'support' | 'privacy';
@@ -131,6 +132,7 @@ function learnBlock(b: LearnBlock, lang: 'en' | 'cn'): string {
   if (b.fig === 'stems') return stemsFigure(lang);
   if (b.fig === 'zodiac') return zodiacFigure(lang);
   if (b.fig === 'hours') return hoursFigure(lang);
+  if (b.fig === 'calendar') return calendarFigure(lang);
   if (b.sub !== undefined) return `<p class="learn-sub">${esc(b.sub)}</p>`;
   return `<p>${set(b.p!).replace(/\n/g, '<br />')}</p>`;
 }
@@ -182,6 +184,13 @@ const DOC_HTML: Record<Exclude<Route, 'home'>, string> = {
 /** Every render goes through here so Learn always gets the current layout. */
 const docHtml = (route: Exclude<Route, 'home'>) =>
   route === 'learn' ? learnHtml() : DOC_HTML[route];
+
+/** The one place the doc body is written, so figures that need a DOM pass
+ *  after the markup lands (see calendar.ts) always get one. */
+function writeDoc(route: Exclude<Route, 'home'>) {
+  docBody.innerHTML = docHtml(route);
+  mountCalendar(docBody);
+}
 
 const TITLES: Record<Route, string> = {
   home: '时运 Shiyun',
@@ -335,7 +344,7 @@ function flipLinks() {
 
 function enterDoc(route: Exclude<Route, 'home'>) {
   const g = ++gen;
-  docBody.innerHTML = docHtml(route);
+  writeDoc(route);
   docBody.style.opacity = '1';
   // One gesture: the row starts riding the moment the wheel starts clearing —
   // the fade is quick (half window + parallax drift), so the outgoing page is
@@ -400,7 +409,7 @@ function swapDoc(route: Exclude<Route, 'home'>) {
   // while it is invisible, so it is never seen flat.
   window.setTimeout(() => {
     if (g !== gen) return;
-    docBody.innerHTML = docHtml(route);
+    writeDoc(route);
     window.scrollTo(0, 0);
     cylinder.measure();
     if (RAILS[route]) showSectionNav();
@@ -437,7 +446,7 @@ function applyInstant(route: Route) {
   body.classList.remove('chrome-exit');
   doc.hidden = route === 'home';
   if (route !== 'home') {
-    docBody.innerHTML = docHtml(route);
+    writeDoc(route);
     placeCaret(route);
   }
   markActive(route);
@@ -707,7 +716,7 @@ window.addEventListener('resize', () => {
 wideGraph.addEventListener('change', () => {
   if (current !== 'learn') return;
   const y = window.scrollY;
-  docBody.innerHTML = docHtml('learn');
+  writeDoc('learn');
   window.scrollTo(0, y);
   cylinder.measure();
 });
