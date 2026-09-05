@@ -69,7 +69,7 @@ export function stemsFigure(lang: 'en' | 'cn'): string {
         </div>
       </div>
       <button type="button" class="sb-toggle" data-act="toggle">
-        <span class="sb-pair-label">${t.pair}</span><span class="sb-split-label">${t.split}</span>
+        <span class="sb-labels"><span class="sb-pair-label">${t.pair}</span><span class="sb-split-label">${t.split}</span></span>
       </button>
     </figure>`;
 }

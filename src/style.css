@@ -1224,10 +1224,13 @@ body.at-doc .links {
   letter-spacing: -0.2px;
   font-variation-settings: 'opsz' 14, 'wdth' 100;
   cursor: pointer;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
 }
-.sb-toggle > span { grid-area: 1 / 1; transition: opacity 200ms var(--sb-ease); }
+/* The two labels stack in a grid INSIDE the button — WebKit will not lay a
+   <button> out as a grid container itself, and drew them run together. */
+.sb-labels { display: grid; place-items: center; }
+.sb-labels > span { grid-area: 1 / 1; transition: opacity 200ms var(--sb-ease); }
 .sb-split-label { opacity: 0; }
 .sb-figure.pairing .sb-pair-label { opacity: 0; }
 .sb-figure.pairing .sb-split-label { opacity: 1; }
