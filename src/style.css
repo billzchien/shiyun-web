@@ -972,12 +972,16 @@ body.at-doc .links {
 .elements-graph .gen { stroke: currentColor; fill: none; stroke-width: 1; }
 .elements-graph .ovr { stroke: currentColor; stroke-width: 1; stroke-dasharray: 2 4; }
 .elements-graph .head { fill: currentColor; }
+/* The label's size is drawn per layout (see learn.ts) — the compact box is
+   blown up by its column, so its type is set larger in viewBox units to
+   land on the same 12px. Everything else here is size-independent. */
 .elements-graph .el-label {
-  font-size: 12px;
   font-weight: 600;
   letter-spacing: -0.2px;
   fill: var(--text);
 }
+/* Both layouts are drawn at true size, so the line work needs no per-variant
+   compensation — a stroke of 1 is 1 either way. */
 .graph-note {
   display: flex;
   gap: 24px;
@@ -986,10 +990,269 @@ body.at-doc .links {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.2px;
-  padding-top: 4px;
+  /* Clear of the ring: the drawing's own box ends tight on the bottom glyphs. */
+  padding-top: 24px;
 }
+/* The phone's drawing wants more air under it: 80 from the foot of the ring
+   to the legend. Set on .compact rather than a viewport width, so it follows
+   whichever drawing is actually in use. */
+.elements-graph.compact .graph-note { padding-top: 74px; }
 .graph-note span { display: flex; align-items: center; gap: 8px; }
 .graph-note .swatch { color: var(--text-secondary); }
+
+/* ─── Stems & Branches (see stems.ts) ─────────────────────────────────────── */
+/* The card: Figma 600×534, radius 48, its own warmer cream. It is a plain
+   block (no curl strips — a played figure cannot be sixteen copies), so the
+   cylinder tips it whole. */
+.sb-figure {
+  --sb-ease: var(--expressive);
+  --sb-travel: 380ms;
+  /* Pillar geometry — the phone redraws it smaller (see the media rule). */
+  --sb-w: 159px;
+  --sb-h: 282px;
+  --sb-glyph: 48px;
+  --sb-line: 58px;
+  --sb-gap: 24px; /* between a pair and its neighbour */
+  --sb-step: calc(var(--sb-glyph) + var(--sb-gap));
+  --sb-inset: 57px; /* the current pair's left edge inside the pillar */
+  --sb-rows: 18px; /* between the stem row and the branch row */
+  --sb-side: 32px; /* captions to the pillar */
+  position: relative;
+  height: 534px;
+  padding: 24px;
+  border-radius: 48px;
+  background: #faf6ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+.sb-stage { position: relative; flex: 1 0 0; width: 100%; min-height: 0; }
+.sb-split,
+.sb-joined { position: absolute; inset: 0; }
+/* ── Separated: two blocks of cells, captions, a hairline between ── */
+.sb-split {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 0;
+}
+.sb-grid { display: grid; gap: 2px; }
+.sb-stems { grid-template-columns: repeat(5, 48px); }
+.sb-branches { grid-template-columns: repeat(6, 48px); }
+.sb-cell {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: var(--shape-lowest);
+  display: grid;
+  place-items: center;
+  transition: transform var(--sb-travel) var(--sb-ease), opacity 120ms var(--sb-ease);
+}
+.sb-figure.pairing .sb-cell { transition-delay: 0ms, calc(var(--sb-travel) - 120ms); }
+.sb-glyph {
+  font-family: 'OPPO Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+  transition: opacity 240ms var(--sb-ease);
+}
+.sb-cap {
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  margin: 0 !important;
+  transition: opacity 240ms var(--sb-ease), transform 320ms var(--sb-ease);
+}
+.doc-en .sb-cap { font-variation-settings: 'opsz' 14, 'wdth' 100; }
+.sb-line {
+  width: 1px;
+  flex: 0 0 56px;
+  background: var(--shape-low);
+  transform-origin: 50% 50%;
+  transition: transform 320ms var(--sb-ease);
+}
+/* Pairing: captions drift into the middle and go, the line folds to nothing,
+   the cells fly to the centre (aimed by stems.ts) while their glyphs fade. */
+.sb-figure.pairing .sb-cap-stems { opacity: 0; transform: translateY(24px); }
+.sb-figure.pairing .sb-cap-branches { opacity: 0; transform: translateY(-24px); }
+.sb-figure.pairing .sb-line { transform: scaleY(0); }
+.sb-figure.pairing .sb-cell { transform: translate(var(--dx), var(--dy)) scale(0.5); opacity: 0; }
+.sb-figure.pairing .sb-glyph { opacity: 0; }
+/* Settling (the tail of Separate): the cells are flying home, so the captions
+   and the line wait until they have landed before coming in. */
+.sb-figure.settling .sb-cap-stems { opacity: 0; transform: translateY(24px); transition: none; }
+.sb-figure.settling .sb-cap-branches { opacity: 0; transform: translateY(-24px); transition: none; }
+.sb-figure.settling .sb-line { transform: scaleY(0); transition: none; }
+.sb-figure.pairing .sb-split { pointer-events: none; }
+/* ── Paired: the pillar, the sixty pairs sliding through it ── */
+.sb-joined { pointer-events: none; }
+.sb-figure.paired .sb-joined { pointer-events: auto; }
+.sb-pillar {
+  touch-action: pan-y; /* the horizontal swipe is ours (see stems.ts) */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--sb-w);
+  height: var(--sb-h);
+  border-radius: 80px;
+  background: var(--shape-lowest);
+  overflow: hidden;
+  transform: translate(-50%, -50%) scale(0.35, 0.2);
+  opacity: 0;
+  transition: transform var(--sb-travel) var(--sb-ease), opacity 120ms var(--sb-ease);
+}
+.sb-figure.pairing .sb-pillar { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+/* The fade at the pillar's edges, so the neighbouring pair only peeks. */
+.sb-pillar::before,
+.sb-pillar::after {
+  content: '';
+  position: absolute;
+  top: 50px;
+  bottom: 50px;
+  width: 15px;
+  z-index: 1;
+  pointer-events: none;
+}
+.sb-pillar::before { left: 0; background: linear-gradient(90deg, var(--shape-lowest), transparent); }
+.sb-pillar::after { right: 0; background: linear-gradient(270deg, var(--shape-lowest), transparent); }
+.sb-track {
+  position: absolute;
+  left: var(--sb-inset);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sb-rows);
+}
+/* Each row is its own wheel: it slides by its own count, and the ride back
+   from the last sign to the first is the same one transition, just longer. */
+.sb-row {
+  display: flex;
+  gap: var(--sb-gap);
+  transform: translateX(calc(var(--cur, 0) * var(--sb-step) * -1));
+  transition: transform 400ms var(--sb-ease);
+}
+.sb-row-stems { --cur: var(--si, 0); }
+.sb-row-branches { --cur: var(--bi, 0); }
+.sb-char {
+  flex: 0 0 var(--sb-glyph);
+  width: var(--sb-glyph);
+  text-align: center;
+  font-family: 'OPPO Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: var(--sb-glyph);
+  line-height: var(--sb-line);
+  letter-spacing: -0.2px;
+  opacity: 0;
+  transition: opacity 240ms var(--sb-ease);
+}
+/* The neighbours read at a fifth; the current pair full. */
+.sb-figure.paired .sb-char { opacity: 0.2; }
+.sb-figure.paired .sb-char.current { opacity: 1; }
+/* Fade in left to right: the pair in view first, its neighbour after. */
+.sb-figure.paired .sb-char { transition-delay: calc(80ms * max(0, min(3, var(--i) - var(--cur, 0)))); }
+.sb-figure:not(.paired) .sb-char { transition-delay: 0ms; }
+.sb-side {
+  position: absolute;
+  right: calc(50% + var(--sb-w) / 2 + var(--sb-side));
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  /* Caption to caption = row centre to row centre, less the caption's own height. */
+  gap: calc(var(--sb-line) + var(--sb-rows) - 14px);
+  align-items: flex-end;
+  text-align: right;
+  white-space: nowrap;
+}
+.sb-side .sb-cap, .sb-counter { opacity: 0; transition: opacity 240ms var(--sb-ease); }
+.sb-figure.paired .sb-side .sb-cap,
+.sb-figure.paired .sb-counter { opacity: 1; transition-delay: 120ms; }
+.sb-counter {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  font-variation-settings: 'opsz' 14, 'wdth' 100;
+}
+/* Fixed width, so the chevrons hold still as the count goes 1 → 60. The
+   digits are tabular so the number does not wander inside it either. */
+.sb-count {
+  min-width: 3.4em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.sb-step {
+  all: unset;
+  width: 32px;
+  height: 32px;
+  margin: -8px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--text);
+  transition: opacity var(--fade) var(--sb-ease);
+}
+.sb-step:disabled { opacity: 0.3; cursor: default; }
+/* The one button, Pair up ↔ Separate. */
+.sb-toggle {
+  all: unset;
+  flex: 0 0 auto;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 100px;
+  background: var(--text);
+  color: var(--text-inverse);
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  font-variation-settings: 'opsz' 14, 'wdth' 100;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.sb-toggle > span { grid-area: 1 / 1; transition: opacity 200ms var(--sb-ease); }
+.sb-split-label { opacity: 0; }
+.sb-figure.pairing .sb-pair-label { opacity: 0; }
+.sb-figure.pairing .sb-split-label { opacity: 1; }
+@media (max-width: 767px) {
+  .sb-figure {
+    height: 480px;
+    border-radius: 32px;
+    --sb-w: 108px;
+    --sb-h: 200px;
+    --sb-glyph: 32px;
+    --sb-line: 40px;
+    --sb-gap: 16px;
+    --sb-inset: 38px;
+    --sb-rows: 12px;
+    --sb-side: 24px;
+  }
+  .sb-glyph { font-size: 18px; }
+  .sb-pillar { border-radius: 54px; }
+  .sb-pillar::before, .sb-pillar::after { top: 36px; bottom: 36px; }
+  /* The counter hangs 24 under the pillar rather than sitting on the stage's floor. */
+  .sb-counter { bottom: auto; top: calc(50% + var(--sb-h) / 2 + 24px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sb-figure * { transition-duration: 1ms !important; transition-delay: 0ms !important; }
+}
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {
   /* The CN rule above carries a class more, so the phone restates it. */
@@ -1014,7 +1277,12 @@ body.at-doc .links {
   margin-bottom: -100px;
   z-index: 26;
   pointer-events: none;
-  transition: opacity var(--fade) var(--expressive), translate var(--fade) var(--expressive);
+  /* Two different moves land here: the phone sends it away on `translate`
+     (compositor, to keep step with the header), and the condense re-seats it
+     on `top` as --chrome-h shrinks. Both are declared, or whichever is
+     missing snaps while the rest of the chrome eases. */
+  transition: opacity var(--fade) var(--expressive), translate var(--fade) var(--expressive),
+    top var(--fade) var(--expressive);
 }
 .section-veil[hidden] { display: none !important; }
 .section-veil span, .section-veil i { position: absolute; inset: 0; display: block; }
@@ -1174,10 +1442,10 @@ body.cyl .dof-bottom { opacity: 0; }
     /* No background of its own: .section-veil paints the band behind it. */
     overflow-x: auto;
     scrollbar-width: none;
-    /* translate, not top: the rest of the chrome moves on the compositor, and
-       a layout-driven top left this trailing it by a beat under a real
-       finger scroll, when the main thread has no frames to spare. */
-    transition: translate var(--fade) var(--expressive);
+    /* translate for the phone's hide (compositor, so it keeps step with the
+       header under a real finger scroll) and top for the condense, which
+       re-seats it as --chrome-h shrinks. Both, or the missing one snaps. */
+    transition: translate var(--fade) var(--expressive), top var(--fade) var(--expressive);
   }
   .section-nav::-webkit-scrollbar { display: none; }
   .section-nav-inner {

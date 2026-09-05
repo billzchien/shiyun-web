@@ -14,6 +14,7 @@ import { initGetApp } from './getapp';
 import { initCylinder } from './cylinder';
 import { aboutSections, creditLinks, learnIntro, learnSections, navLabels, privacyCn, privacyEn, privacyUpdated, privacyUpdatedCn, supportFaq, taijiCaption, type AboutBlock, type LearnBlock } from './content';
 import { curled, elementsGraph } from './learn';
+import { initStems, stemsFigure } from './stems';
 import { noWidow } from './typeset';
 
 type Route = 'home' | 'about' | 'learn' | 'support' | 'privacy';
@@ -106,6 +107,14 @@ const SUPPORT_HTML = `
 
 const TAIJI_ALT = { en: 'Three Star Gods presenting a taiji diagram, Qing dynasty embroidery', cn: '三星太极献寿图刺绣局部' };
 
+/**
+ * The graph is drawn at true size for the column it lands in, so Learn's
+ * markup is built per breakpoint rather than once. The switch is the COLUMN,
+ * not the phone breakpoint: the body measures min(640,vw) − 40, so the full
+ * 600 only exists from 640 up.
+ */
+const wideGraph = window.matchMedia('(min-width: 640px)');
+
 function learnBlock(b: LearnBlock, lang: 'en' | 'cn'): string {
   if (b.fig === 'taiji')
     return `
@@ -116,12 +125,13 @@ function learnBlock(b: LearnBlock, lang: 'en' | 'cn'): string {
       )}
       <figcaption>${esc(taijiCaption[lang])}</figcaption>
     </figure>`;
-  if (b.fig === 'elements') return elementsGraph(lang);
+  if (b.fig === 'elements') return elementsGraph(lang, !wideGraph.matches);
+  if (b.fig === 'stems') return stemsFigure(lang);
   if (b.sub !== undefined) return `<p class="learn-sub">${esc(b.sub)}</p>`;
   return `<p>${set(b.p!).replace(/\n/g, '<br />')}</p>`;
 }
 
-const LEARN_HTML = `
+const learnHtml = () => `
     <section class="doc-section learn">
       <div class="doc-en en">
         <p class="learn-sentence">${set(learnIntro.sentenceEn)}</p>
@@ -162,8 +172,12 @@ const DOC_HTML: Record<Exclude<Route, 'home'>, string> = {
     <p class="doc-updated cn">${set(privacyUpdatedCn)}</p>`,
   about: ABOUT_HTML,
   support: SUPPORT_HTML,
-  learn: LEARN_HTML,
+  learn: '', // built per breakpoint — see docHtml()
 };
+
+/** Every render goes through here so Learn always gets the current layout. */
+const docHtml = (route: Exclude<Route, 'home'>) =>
+  route === 'learn' ? learnHtml() : DOC_HTML[route];
 
 const TITLES: Record<Route, string> = {
   home: '时运 Shiyun',
@@ -317,7 +331,7 @@ function flipLinks() {
 
 function enterDoc(route: Exclude<Route, 'home'>) {
   const g = ++gen;
-  docBody.innerHTML = DOC_HTML[route];
+  docBody.innerHTML = docHtml(route);
   docBody.style.opacity = '1';
   // One gesture: the row starts riding the moment the wheel starts clearing —
   // the fade is quick (half window + parallax drift), so the outgoing page is
@@ -382,7 +396,7 @@ function swapDoc(route: Exclude<Route, 'home'>) {
   // while it is invisible, so it is never seen flat.
   window.setTimeout(() => {
     if (g !== gen) return;
-    docBody.innerHTML = DOC_HTML[route];
+    docBody.innerHTML = docHtml(route);
     window.scrollTo(0, 0);
     cylinder.measure();
     if (RAILS[route]) showSectionNav();
@@ -419,7 +433,7 @@ function applyInstant(route: Route) {
   body.classList.remove('chrome-exit');
   doc.hidden = route === 'home';
   if (route !== 'home') {
-    docBody.innerHTML = DOC_HTML[route];
+    docBody.innerHTML = docHtml(route);
     placeCaret(route);
   }
   markActive(route);
@@ -534,6 +548,7 @@ window.addEventListener('scroll', () => {
 
 /** Cylinder focus for the long-form reads (About, Privacy). */
 const cylinder = initCylinder(docBody);
+initStems(docBody);
 
 /**
  * Leaving: the rail fades WITH the column it belongs to, starting on the click
@@ -679,6 +694,16 @@ document.addEventListener('contextmenu', (e) => {
 window.addEventListener('resize', () => {
   placeCaret(current);
   centreLabel(lastActive, false); // the bar's width changed under the bold
+});
+
+/** Crossing it re-lays the Five Elements graph, which is drawn for its column
+ *  rather than scaled into it. */
+wideGraph.addEventListener('change', () => {
+  if (current !== 'learn') return;
+  const y = window.scrollY;
+  docBody.innerHTML = docHtml('learn');
+  window.scrollTo(0, y);
+  cylinder.measure();
 });
 
 applyLang();

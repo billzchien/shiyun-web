@@ -187,7 +187,7 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
  * A block is one of: paragraph (`\n` renders as <br>), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
-export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' };
+export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' };
 
 export const learnIntro = {
   sentenceEn: 'Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization.',
@@ -260,12 +260,14 @@ export const learnSections: {
     en: [
       { p: 'Two sets of counting signs, invented in ancient China to mark time. Their earliest traces are on Shang dynasty oracle bones, over three thousand years old, where they were used to count the days. The count has never stopped.' },
       { p: 'There are ten Heavenly Stems and twelve Earthly Branches.' },
+      { fig: 'stems' },
       { p: 'They pair by turning in step, like two wheels: first stem with first branch, second with second, and on they roll. The stems run out at ten and start over; the branches reset at twelve. The wheels only return to their starting point together after sixty pairs, the least common multiple of ten and twelve. Sixty pairs, no repeats, then round again: the sixty-pair cycle. These are the day names the Shang carved into bone, one pair per day, sixty days per round.' },
     ],
     cn: [
       { p: '天干地支，是中国古人发明的一套计时符号，两组互相配合，构成了中华文明的时间坐标。' },
       { p: '最早的记录见于商代甲骨文，当时就用来纪日，三千多年从来没有间断过。' },
       { p: '天干一共十个：甲、乙、丙、丁、戊、己、庚、辛、壬、癸；\n地支一共十二个：子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥。' },
+      { fig: 'stems' },
       { p: '两者的配合方式是两组同步轮转：甲配子为「甲子」，乙配丑为「乙丑」，顺着次序往下排。天干十个用完就从头再来，地支十二个转完也从头再来，两个轮子各自按自己的节奏转，要到第六十对才会同时回到起点。' },
       { p: '十和十二的最小公倍数，刚好就是六十。从甲子排到癸亥，六十对完全不重复，转完就从头再来，这就是大家熟悉的「六十甲子」。商代人纪日用的正是这套规则，一天一对，六十天一轮。' },
     ],

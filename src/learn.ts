@@ -24,23 +24,57 @@ const ELEMENTS: El[] = [
   { key: 'water', color: '#001F90', en: 'Water', cn: '水', raw: waterSvg },
 ];
 
-const W = 600;
-const H = 460;
-const CX = 300;
-const CY = 233;
-const R = 170;
-const ICON = 54;
-/** Degrees of ring kept clear around each glyph — 15° puts the arc tips
- *  ~46px from a glyph's centre, matching the dashed chords' 48. */
-const ARC_GAP = 15;
-/** Chord endpoints stop this far from a glyph's centre. */
-const CHORD_GAP = 48;
+/**
+ * TWO layouts, each drawn at the size it will be SEEN at — never stretched to
+ * fill its column. One geometry scaled to fit can only be right at a single
+ * width: at 600 units in a phone's 335px column the glyphs render at 30 and
+ * the labels at 7; blown the other way, into the 600px column a small tablet
+ * still has under the phone breakpoint, the same drawing came out half again
+ * too big, arrowheads and all. So here the units ARE pixels: a label set at
+ * 12 is 12 on screen in both, and the compact ring simply holds in tighter.
+ */
+type Geom = {
+  W: number;
+  H: number;
+  CX: number;
+  CY: number;
+  R: number;
+  ICON: number;
+  /** Degrees of ring kept clear around each glyph, so the arcs never touch. */
+  ARC_GAP: number;
+  /** Chord endpoints stop this far from a glyph's centre. */
+  CHORD_GAP: number;
+  /** Label type, in viewBox units — it renders at LABEL × the column's scale. */
+  LABEL: number;
+  /** Air between a glyph and its label. */
+  PAD: number;
+  /** Whether the ring is named. The phone reads the five off the sentence
+   *  above the drawing, so it drops them and spends the width on the ring. */
+  LABELS: boolean;
+};
+
+/** The full column: 600 across, the ring at its Figma size. */
+const WIDE: Geom = {
+  W: 600, H: 460, CX: 300, CY: 233, R: 170,
+  ICON: 54, ARC_GAP: 15, CHORD_GAP: 48, LABEL: 12, PAD: 12, LABELS: true,
+};
+/**
+ * 335 across — a 375 phone's column exactly, so it lands 1:1 there and only
+ * ever shrinks on something narrower. It runs UNNAMED: the five are read off
+ * the sentence directly above the drawing, and dropping the labels hands the
+ * whole half-width back to the ring, which opens from 110 to 150. What is
+ * left is spent exactly — 143 of radius across plus 24 of glyph — so the
+ * Water and Fire glyphs land flush on the page margins.
+ */
+const COMPACT: Geom = {
+  W: 335, H: 326, CX: 167.5, CY: 174, R: 150,
+  ICON: 48, ARC_GAP: 13, CHORD_GAP: 36, LABEL: 12, PAD: 8, LABELS: false,
+};
 
 const rad = (deg: number) => (deg * Math.PI) / 180;
 const px = (n: number) => n.toFixed(1);
 /** Pentagon points, Wood at the top, clockwise. */
 const angle = (i: number) => -90 + i * 72;
-const pt = (deg: number, r = R) => ({ x: CX + r * Math.cos(rad(deg)), y: CY + r * Math.sin(rad(deg)) });
 
 /** The raw asset minus its outer <svg> tag, ready to nest. */
 const inner = (raw: string) => raw.replace(/^[^>]*>/, '').replace(/<\/svg>\s*$/, '');
@@ -64,16 +98,19 @@ function arrowAt(x: number, y: number, dir: number): string {
  * so a tall image bends like the text column instead of tilting whole.
  */
 export const CURL_STRIPS = 16;
-export function curled(content: string, aspect: string): string {
+export function curled(content: string, aspect: string, maxW?: number): string {
   const strips = Array.from(
     { length: CURL_STRIPS },
     (_, i) => `<div class="curl-strip" style="--i:${i}">${content}</div>`
   ).join('');
   // --n feeds the CSS clip and origin math, so this constant is the ONE knob.
-  return `<div class="curl-box" style="--n:${CURL_STRIPS};aspect-ratio:${aspect}">${strips}</div>`;
+  const cap = maxW ? `max-width:${maxW}px;margin-inline:auto;` : '';
+  return `<div class="curl-box" style="--n:${CURL_STRIPS};aspect-ratio:${aspect};${cap}">${strips}</div>`;
 }
 
-export function elementsGraph(lang: 'en' | 'cn'): string {
+export function elementsGraph(lang: 'en' | 'cn', compact = false): string {
+  const { W, H, CX, CY, R, ICON, ARC_GAP, CHORD_GAP, LABEL, PAD, LABELS } = compact ? COMPACT : WIDE;
+  const pt = (deg: number) => ({ x: CX + R * Math.cos(rad(deg)), y: CY + R * Math.sin(rad(deg)) });
   const parts: string[] = [];
 
   // Generating ring: solid arcs, one per neighbouring pair, arrow at the end.
@@ -136,23 +173,25 @@ export function elementsGraph(lang: 'en' | 'cn'): string {
     parts.push(
       `<g class="el" style="color:${el.color}" transform="translate(${px(c.x - ICON / 2)},${px(c.y - ICON / 2)}) scale(${s})">${inner(el.raw)}</g>`
     );
+    if (!LABELS) return;
     const name = lang === 'cn' ? el.cn : el.en;
+    const pad = PAD;
     let lx = c.x;
     let ly = c.y;
     let anchor = 'middle';
     if (i === 0) {
-      ly = c.y - ICON / 2 - 12;
+      ly = c.y - ICON / 2 - pad;
     } else if (i === 1 || i === 2) {
-      lx = c.x + ICON / 2 + 12;
-      ly = c.y + (i === 1 ? 4 : 4);
+      lx = c.x + ICON / 2 + pad;
+      ly = c.y + LABEL / 3;
       anchor = 'start';
     } else {
-      lx = c.x - ICON / 2 - 12;
-      ly = c.y + 4;
+      lx = c.x - ICON / 2 - pad;
+      ly = c.y + LABEL / 3;
       anchor = 'end';
     }
     parts.push(
-      `<text class="el-label" x="${px(lx)}" y="${px(ly)}" text-anchor="${anchor}">${name}</text>`
+      `<text class="el-label" x="${px(lx)}" y="${px(ly)}" font-size="${LABEL}" text-anchor="${anchor}">${name}</text>`
     );
   });
 
@@ -171,8 +210,8 @@ export function elementsGraph(lang: 'en' | 'cn'): string {
       </svg>`;
 
   return `
-    <figure class="doc-figure elements-graph">
-      ${curled(svg, `${W}/${H}`)}
+    <figure class="doc-figure elements-graph${compact ? ' compact' : ''}">
+      ${curled(svg, `${W}/${H}`, W)}
       <figcaption class="graph-note">${note}</figcaption>
     </figure>`;
 }
