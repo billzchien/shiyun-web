@@ -44,7 +44,7 @@ const TEXT = {
   cn: {
     stems: '天干', branches: '地支',
     rows: ['阳干', '阴干', '阳支', '阴支'],
-    add: '加入阴阳', mixing: '混合中', unmix: '还原',
+    add: '加入阴阳', mixing: '融合中', unmix: '还原',
   },
 };
 
