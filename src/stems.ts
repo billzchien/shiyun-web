@@ -69,7 +69,7 @@ export function stemsFigure(lang: 'en' | 'cn'): string {
         </div>
       </div>
       <button type="button" class="sb-toggle" data-act="toggle">
-        <span class="sb-labels"><span class="sb-pair-label">${t.pair}</span><span class="sb-split-label">${t.split}</span></span>
+        <span class="sb-labels"><span class="sb-pair-label on">${t.pair}</span><span class="sb-split-label">${t.split}</span></span>
       </button>
     </figure>`;
 }
@@ -86,6 +86,12 @@ const GLYPHS_AT = 100;
 const CELLS_AT = 100;
 /** Separate: captions and line come in this long after the cells set off. */
 const CAPS_AT = 120;
+
+/** Bring one of a toggle button's stacked labels forward (see .sb-labels). */
+export function showLabel(fig: HTMLElement, cls: string) {
+  for (const l of fig.querySelectorAll<HTMLElement>('.sb-labels > span'))
+    l.classList.toggle('on', l.classList.contains(cls));
+}
 
 function setIndex(fig: HTMLElement, i: number) {
   const n = Math.max(0, Math.min(PAIRS - 1, i));
@@ -123,6 +129,7 @@ function toggle(fig: HTMLElement) {
     // Reverse, three beats: glyphs out; cells fly home (captions and line
     // held back); then the captions and line come in over the settled cells.
     fig.classList.remove('paired');
+    showLabel(fig, 'sb-pair-label');
     fig.dataset.timer = String(
       window.setTimeout(() => {
         fig.classList.add('settling');
@@ -140,6 +147,7 @@ function toggle(fig: HTMLElement) {
     aimCells(fig);
     setIndex(fig, 0);
     fig.classList.add('pairing');
+    showLabel(fig, 'sb-split-label');
     fig.dataset.timer = String(
       window.setTimeout(() => {
         fig.classList.add('paired');

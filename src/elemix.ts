@@ -10,7 +10,7 @@
  *
  * Geometry is one table below, in the card's 600 × 396 stage.
  */
-import { STEMS } from './stems';
+import { STEMS, showLabel } from './stems';
 import { ELEMENT_COLOR, type Element } from './tables';
 import woodSvg from '../assets/learn/element-wood.svg?raw';
 import fireSvg from '../assets/learn/element-fire.svg?raw';
@@ -61,7 +61,7 @@ export function elemixFigure(lang: 'en' | 'cn'): string {
     <figure class="doc-figure sb-figure ex-figure" data-lang="${lang}">
       <div class="sb-stage ex-stage">${row(0)}${row(1)}</div>
       <button type="button" class="sb-toggle ex-toggle" data-act="elemix" aria-pressed="false">
-        <span class="sb-labels"><span class="ex-l-mix">${t.mix}</span><span class="ex-l-unmix">${t.unmix}</span></span>
+        <span class="sb-labels"><span class="ex-l-mix on">${t.mix}</span><span class="ex-l-unmix">${t.unmix}</span></span>
       </button>
     </figure>`;
 }
@@ -73,5 +73,6 @@ export function initElemix(root: HTMLElement) {
     if (!btn || !fig) return;
     const on = fig.classList.toggle('mixed');
     btn.setAttribute('aria-pressed', String(on));
+    showLabel(fig, on ? 'ex-l-unmix' : 'ex-l-mix');
   });
 }

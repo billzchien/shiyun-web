@@ -14,7 +14,7 @@
  * of its homes written as CSS variables, so the travel is a single transform
  * transition and the layout can be retuned by editing numbers here.
  */
-import { STEMS, BRANCHES } from './stems';
+import { STEMS, BRANCHES, showLabel } from './stems';
 
 /** The stage is the card's inner box: 600 × 396 (Figma Frame 32). */
 const STAGE = { W: 600, H: 396 };
@@ -94,7 +94,7 @@ export function mixFigure(lang: 'en' | 'cn'): string {
         ${mixedCaps}
       </div>
       <button type="button" class="sb-toggle mx-toggle" data-act="mix">
-        <span class="sb-labels"><span class="mx-l-add">${t.add}</span><span class="mx-l-mixing">${t.mixing}</span><span class="mx-l-unmix">${t.unmix}</span></span>
+        <span class="sb-labels"><span class="mx-l-add on">${t.add}</span><span class="mx-l-mixing">${t.mixing}</span><span class="mx-l-unmix">${t.unmix}</span></span>
       </button>
     </figure>`;
 }
@@ -111,21 +111,25 @@ function toggle(fig: HTMLElement) {
   if (fig.classList.contains('tint')) {
     fig.classList.remove('mixed');
     fig.classList.add('mixing');
+    showLabel(fig, 'mx-l-mixing');
     btn.disabled = true;
     fig.dataset.timer = String(
       window.setTimeout(() => {
         fig.classList.remove('tint', 'mixing');
+        showLabel(fig, 'mx-l-add');
         btn.disabled = false;
         fig.dataset.timer = '';
       }, TRAVEL)
     );
   } else {
     fig.classList.add('tint', 'mixing');
+    showLabel(fig, 'mx-l-mixing');
     btn.disabled = true;
     fig.dataset.timer = String(
       window.setTimeout(() => {
         fig.classList.add('mixed');
         fig.classList.remove('mixing');
+        showLabel(fig, 'mx-l-unmix');
         btn.disabled = false;
         fig.dataset.timer = '';
       }, TINT)
