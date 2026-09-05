@@ -16,6 +16,7 @@ import { aboutSections, creditLinks, learnIntro, learnSections, navLabels, priva
 import { curled, elementsGraph } from './learn';
 import { initStems, stemsFigure } from './stems';
 import { initZodiac, zodiacFigure } from './zodiac';
+import { hoursFigure, initHours } from './hours';
 import { noWidow } from './typeset';
 
 type Route = 'home' | 'about' | 'learn' | 'support' | 'privacy';
@@ -129,6 +130,7 @@ function learnBlock(b: LearnBlock, lang: 'en' | 'cn'): string {
   if (b.fig === 'elements') return elementsGraph(lang, !wideGraph.matches);
   if (b.fig === 'stems') return stemsFigure(lang);
   if (b.fig === 'zodiac') return zodiacFigure(lang);
+  if (b.fig === 'hours') return hoursFigure(lang);
   if (b.sub !== undefined) return `<p class="learn-sub">${esc(b.sub)}</p>`;
   return `<p>${set(b.p!).replace(/\n/g, '<br />')}</p>`;
 }
@@ -552,6 +554,7 @@ window.addEventListener('scroll', () => {
 const cylinder = initCylinder(docBody);
 initStems(docBody);
 initZodiac(docBody);
+initHours(docBody);
 
 /**
  * Leaving: the rail fades WITH the column it belongs to, starting on the click

@@ -1283,7 +1283,9 @@ body.at-doc .links {
   transform-style: preserve-3d;
   transition: transform 460ms var(--expressive);
 }
-.z-cell[aria-pressed='true'] .z-disc { transform: rotateY(180deg); }
+/* Any disc-bearing button turns the same way — the zodiac cells and the
+   hour wheel's (see hours.ts) both. */
+[aria-pressed='true'] > .z-disc { transform: rotateY(180deg); }
 .z-face {
   position: absolute;
   inset: 0;
@@ -1323,6 +1325,57 @@ body.at-doc .links {
 }
 @media (max-width: 767px) {
   .z-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ─── The twelve hours wheel (see hours.ts) ───────────────────────────────── */
+/* The home wheel, answerable: the reader picks the branch. Drawn in the
+   Figma 492 box and placed in percent of it, so it scales with the column;
+   the type scales with it in container units. */
+.hours-figure { gap: 40px; }
+.h-wheel {
+  position: relative;
+  width: min(492px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1;
+  container-type: inline-size;
+}
+.h-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* No accent here: this is a doc page, not the live home wheel, so the lit
+   arcs take the page's own ink. */
+.h-arc { stroke: var(--shape-low); transition: stroke var(--fade) var(--expressive); }
+.h-arc.lit { stroke: var(--text); }
+.h-cell {
+  all: unset;
+  position: absolute;
+  width: 10.976%; /* 54 of 492 */
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  perspective: 600px;
+  touch-action: manipulation;
+}
+/* The cell borrows the zodiac disc (see zodiac.ts) and turns the same way;
+   only its type size and the animal's inset are its own. */
+.h-cell .z-front { font-size: max(13px, 4.07cqw); }
+/* 4px clear of a 54 cell, kept as a ratio so it holds at any width. */
+.h-cell .z-back svg { width: 85.2%; height: 85.2%; }
+.h-range {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0 !important;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: max(16px, 4.07cqw);
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+  font-variation-settings: 'opsz' 14, 'wdth' 100;
+  transition: opacity 140ms var(--expressive);
+}
+.h-range.out { opacity: 0; }
+@media (hover: hover) {
+  .h-cell:hover .z-front { background: var(--shape-low); }
 }
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {

@@ -25,12 +25,13 @@ import rooster from '../assets/learn/sign/rooster.svg?raw';
 import dog from '../assets/learn/sign/dog.svg?raw';
 import pig from '../assets/learn/sign/pig.svg?raw';
 
-const ICON: Record<string, string> = {
+/** The twelve sign icons by animal key, shared with the hour wheel. */
+export const SIGN_SVG: Record<string, string> = {
   rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig,
 };
 
-const ANIMAL_CN = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
-const ANIMAL_EN = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
+export const ANIMAL_CN = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
+export const ANIMAL_EN = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
 
 const HINT = {
   en: 'Click on Branches to reveal animal',
@@ -44,7 +45,7 @@ export function zodiacFigure(lang: 'en' | 'cn'): string {
         <button type="button" class="z-cell" aria-pressed="false" aria-label="${branch} · ${animal}">
           <span class="z-disc">
             <span class="z-face z-front">${branch}</span>
-            <span class="z-face z-back">${ICON[BRANCH_ANIMAL[i]]}</span>
+            <span class="z-face z-back">${SIGN_SVG[BRANCH_ANIMAL[i]]}</span>
           </span>
         </button>`;
   }).join('');
