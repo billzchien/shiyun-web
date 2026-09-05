@@ -41,10 +41,10 @@ export function hourRange(i: number, lang: 'en' | 'cn'): string {
   const a = startHour(i);
   const b = (a + 2) % 24;
   if (lang === 'cn') return `${clock24(a)} – ${clock24(b)}`;
-  // Both ends in the same half of the day say AM/PM once: 5–7 AM, not
+  // Both ends in the same half of the day say AM/PM once: 5 – 7 AM, not
   // 5 AM – 7 AM. Only a range that crosses noon or midnight needs both.
   return meridiem(a) === meridiem(b)
-    ? `${hour12(a)}–${hour12(b)} ${meridiem(b)}`
+    ? `${hour12(a)} – ${hour12(b)} ${meridiem(b)}`
     : `${hour12(a)} ${meridiem(a)} – ${hour12(b)} ${meridiem(b)}`;
 }
 
