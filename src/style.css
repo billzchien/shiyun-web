@@ -1250,8 +1250,8 @@ body.at-doc .links {
   .sb-glyph { font-size: 18px; }
   .sb-pillar { border-radius: 54px; }
   .sb-pillar::before, .sb-pillar::after { top: 36px; bottom: 36px; }
-  /* The counter hangs 24 under the pillar rather than sitting on the stage's floor. */
-  .sb-counter { bottom: auto; top: calc(50% + var(--sb-h) / 2 + 24px); }
+  /* The counter hangs 32 under the pillar rather than sitting on the stage's floor. */
+  .sb-counter { bottom: auto; top: calc(50% + var(--sb-h) / 2 + 32px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .sb-figure * { transition-duration: 1ms !important; transition-delay: 0ms !important; }
