@@ -299,15 +299,15 @@ export const learnSections: {
     titleCn: '时辰',
     en: [
       { p: 'The traditional Chinese day divides into twelve segments of two hours each.' },
-      { fig: 'hours' },
       { p: 'At first, each stretch carried a name drawn from sky and daily routine: Midnight, Rooster’s Crow, Daybreak, Sunrise, Meal Time, High Noon, Dusk, Settling In. Every name is a little picture of daily life.' },
+      { fig: 'hours' },
       { p: 'Under the Han dynasty, the system was fixed: the day splits into twelve equal parts, counted by the Earthly Branches, starting at 11 p.m. and changing every two hours. The two sets of names have run side by side ever since.' },
       { p: 'Twelve hours, end to end, around and around.' },
     ],
     cn: [
       { p: '古人把一昼夜分成十二段，每段两小时，就叫一个时辰。' },
-      { fig: 'hours' },
       { p: '最开始是按天色和日常作息给时段起名：夜半、鸡鸣、平旦、日出、食时、日中、黄昏、人定，每个名字都是一幅鲜活的生活图景。' },
+      { fig: 'hours' },
       { p: '到了汉代，把一天十二等分、用地支来纪时的制度正式定型：夜里十一点到凌晨一点为子时，顺着地支次序每两小时换一个时辰，两套名字从此并行通用。子时就是夜半，卯时就是日出，午时就是日中。' },
       { p: '一天十二时辰，首尾相接，循环不息。' },
     ],
