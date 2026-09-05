@@ -1018,8 +1018,10 @@ body.at-doc .links {
   --sb-rows: 18px; /* between the stem row and the branch row */
   --sb-side: 32px; /* captions to the pillar */
   position: relative;
-  height: 534px;
-  padding: 24px;
+  /* 540 tall with 40 above the stage (Figma redraw): the extra air on top
+     balances the block against the button below. */
+  height: 540px;
+  padding: 40px 24px 24px;
   border-radius: 48px;
   background: #faf6ee;
   display: flex;
@@ -1436,6 +1438,59 @@ body.at-doc .links {
 .cal-figure.in .cal-both { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .cal-figure .cal-side, .cal-figure .cal-lens, .cal-figure .cal-both { transition: none; }
+}
+
+/* ─── Yin-yang × stems & branches (see mix.ts) ────────────────────────────── */
+/* The Stems & Branches card again, with every cell placed absolutely from
+   mix.ts's geometry and given two homes: apart (--x0/--y0) and mixed. */
+.mx-stage { --mx-ease: var(--expressive); }
+.mx-cell {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(var(--x0), var(--y0));
+  transition: transform 560ms var(--mx-ease), background 320ms var(--mx-ease);
+}
+.mix-figure.tint .mx-cell.yin { background: var(--shape-low); }
+.mix-figure.mixed .mx-cell { transform: translate(var(--x1), var(--y1)); }
+.mx-cap-apart,
+.mx-cap-mixed {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  transition: opacity 240ms var(--mx-ease);
+}
+.mix-figure.tint .mx-cap-apart { opacity: 0; }
+.mx-cap-mixed { opacity: 0; }
+.mix-figure.mixed .mx-cap-mixed { opacity: 1; transition-delay: 320ms; }
+/* The hairline: it grows into the captions' place as they go, and is gone
+   once the rows have re-formed. */
+.mx-line {
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  background: var(--shape-low);
+  top: var(--line-y);
+  height: var(--line-h);
+  transition: top 320ms var(--mx-ease), height 320ms var(--mx-ease), opacity 240ms var(--mx-ease);
+}
+.mix-figure.tint .mx-line { top: var(--line-y2); height: var(--line-h2); }
+.mix-figure.mixed .mx-line { opacity: 0; }
+/* Three labels in one button; MIXING is the pale, resting middle state. */
+.mx-toggle { transition: background 240ms var(--mx-ease), color 240ms var(--mx-ease); }
+.mx-toggle .mx-l-mixing, .mx-toggle .mx-l-unmix { opacity: 0; }
+.mix-figure.mixing .mx-toggle { background: var(--shape-lowest); color: var(--text); cursor: default; }
+.mix-figure.mixing .mx-toggle .mx-l-add, .mix-figure.mixed .mx-toggle .mx-l-add { opacity: 0; }
+.mix-figure.mixing .mx-toggle .mx-l-mixing { opacity: 1; }
+.mix-figure.mixed:not(.mixing) .mx-toggle .mx-l-unmix { opacity: 1; }
+/* The phone keeps the full card: the four mixed rows need all 396 of stage,
+   and the stems card's 480 is drawn for its own smaller pillar. */
+@media (max-width: 767px) {
+  .mix-figure { height: 540px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mx-cell, .mx-cap-apart, .mx-cap-mixed, .mx-line, .mx-toggle { transition: none; }
 }
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {

@@ -187,7 +187,7 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
  * A block is one of: paragraph (`\n` renders as <br>), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
-export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' };
+export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' };
 
 export const learnIntro = {
   sentenceEn: 'Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization.',
@@ -346,6 +346,7 @@ export const learnSections: {
       { sub: 'Yin-Yang  ×  Stems & Branches' },
       { p: 'Every stem and every branch takes a charge, alternating yang and yin down each list. Odd positions are yang, even positions are yin.' },
       { p: 'Now look back at the sixty-pair cycle. Because both wheels start together and move in step, odd always lands on odd: a yang stem only ever meets a yang branch, a yin stem only a yin branch. All sixty pairs, no exceptions.' },
+      { fig: 'mix' },
       { sub: 'Yin-Yang  ×  the Five Elements' },
       { p: 'Each of the five elements splits in two: a yang side that reaches outward, a yin side that gathers within. Five times two, ten states.' },
       { p: 'Yang Wood is the towering tree; yin Wood, the flowering vine. Yang Fire is the blazing sun; yin Fire, the warm lamp. Yang Earth is the mountain; yin Earth, the field. Yang Metal is the axe; yin Metal, the jewel. Yang Water is the river; yin Water, the morning dew.' },
@@ -364,6 +365,7 @@ export const learnSections: {
       { p: '阴阳与干支的结合，是干支获得的第一层属性。干支按次序，奇数位属阳，偶数位属阴。' },
       { p: '十天干里，甲、丙、戊、庚、壬是阳干，乙、丁、己、辛、癸是阴干；\n十二地支里，子、寅、辰、午、申、戌是阳支，丑、卯、巳、未、酉、亥是阴支。' },
       { p: '回头看六十甲子的配对，会发现一个天然形成的秩序：天干地支两轮同步起步，奇数位永远对上奇数位，所以阳干只会配阳支，阴干只会配阴支，六十组配对没有任何例外。' },
+      { fig: 'mix' },
       { sub: '阴阳 × 五行' },
       { p: '五行各分阴阳，五乘二，刚好十种细分状态。同属一种五行，阳的一面取其向外舒展的气势，阴的一面取其向内凝聚的质地。' },
       { p: '同样是木：阳木像参天的乔木，阴木像柔软的花草枝蔓；\n同样是火：阳火像普照大地的烈日，阴火像温暖安静的灯烛；\n同样是土：阳土像厚重稳固的山岳，阴土像滋养作物的田园；\n同样是金：阳金像锋利坚硬的刀斧，阴金像温润精致的珠玉；\n同样是水：阳水像奔涌向前的江河，阴水像细密浸润的雨露。' },
