@@ -1051,7 +1051,7 @@ body.at-doc .links {
 .sb-cell {
   width: 48px;
   height: 48px;
-  border-radius: 16px;
+  border-radius: 50%;
   background: var(--shape-lowest);
   display: grid;
   place-items: center;
