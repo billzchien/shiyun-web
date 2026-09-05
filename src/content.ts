@@ -187,7 +187,7 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
  * A block is one of: paragraph (`\n` renders as <br>), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
-export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' };
+export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' | 'elemix' };
 
 export const learnIntro = {
   sentenceEn: 'Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization.',
@@ -353,6 +353,7 @@ export const learnSections: {
       { p: 'Neither side outranks the other. Timber builds the house, vines bear the flowers; the sun drives growth, the lamp lights the night. Ten states draw the world in finer strokes than five.' },
       { sub: 'The Five Elements  ×  Stems & Branches' },
       { p: 'Five elements, each split yang and yin: ten states, and exactly ten stems to carry them. The first two stems are yang and yin Wood, the next two yang and yin Fire, then Earth, Metal, Water, two by two down the list. The towering tree, the flowering vine, the sun, the lamp, the mountain, the field, the axe, the jewel, the river, the dew: ten signs, ten temperaments.' },
+      { fig: 'elemix' },
       { p: 'The branches take their elements from the seasons. They were the month-markers of the old calendar: twelve branches, twelve months, three to a season. Spring is when wood grows, so its branches belong to Wood; summer blazes, so Fire; autumn cuts and clears, so Metal; winter runs cold, so Water. The last month of each season, four in all, is the turning between seasons, and turning ground belongs to Earth.' },
       { p: 'So every stem-branch pair becomes a particular meeting of forces: the first pair joins yang Wood with a Water branch; another joins yang Fire with a Fire branch. Sixty pairs, sixty different tempers. Whichever pair the day lands on, that is the day’s disposition. Time, which had only ever been a measure, now has character.' },
       { p: 'The layers are now all in place. Every stem-branch pair carries a charge, an element, an image. One question remains: what do they have to do with you?' },
@@ -372,6 +373,7 @@ export const learnSections: {
       { p: '气势和质地没有高低之分，各有各的用处：乔木能做房梁，枝蔓能开花结果；烈日能催生万物，烛火能照亮夜晚。这十种细分状态，把世间万物的特质描摹得比五行本身更精细。' },
       { sub: '五行 × 干支' },
       { p: '五行阴阳的十种状态，刚好与十个天干一一匹配：甲是阳木，乙是阴木；丙是阳火，丁是阴火；戊是阳土，己是阴土；庚是阳金，辛是阴金；壬是阳水，癸是阴水。至此，乔木、枝蔓、烈日、灯烛、山岳、田园、刀斧、珠玉、江河、雨露，十个天干字，披上了十种完全不同的气质。' },
+      { fig: 'elemix' },
       { p: '十二地支的五行属性，来自对应的季节。地支后来也用来纪月，十二支直接对应十二个月份：寅卯辰是春，巳午未是夏，申酉戌是秋，亥子丑是冬。春天草木生发，所以寅卯属木；夏天暑热蒸腾，所以巳午属火；秋天肃杀收敛，所以申酉属金；冬天寒凉闭藏，所以亥子属水。每个季节的最后一个月，辰、未、戌、丑，是季节交替的过渡阶段，全部归属于土。' },
       { p: '到这里，每一对干支都成了一个具体的五行组合：甲子，是阳木遇上子水；丙午，是阳火遇上午火。六十甲子，就是六十种完全不同的五行搭配，各有各的脾气。轮到哪一天，哪一天就是那副样子。原本只是标记刻度的时间，走到这里，就有了自己的性格。' },
       { p: '至此，三层结合全部完成。一对干支，先天有阴阳，再带五行，又各具意象。\n剩下的问题只有一个：这些符号，和你有什么关系？' },

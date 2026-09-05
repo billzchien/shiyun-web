@@ -1492,6 +1492,35 @@ body.at-doc .links {
 @media (prefers-reduced-motion: reduce) {
   .mx-cell, .mx-cap-apart, .mx-cap-mixed, .mx-line, .mx-toggle { transition: none; }
 }
+
+/* ─── The Five Elements × stems (see elemix.ts) ───────────────────────────── */
+/* Two rows of ten stems on the Stems & Branches card; each cell turns over
+   to its element, in the element's own color, left to right. */
+.ex-row { position: absolute; left: 0; right: 0; }
+.ex-cells { display: flex; justify-content: center; gap: 2px; }
+.ex-cap { position: absolute; left: 0; right: 0; text-align: center; }
+.ex-cell {
+  width: 64px;
+  height: 64px;
+  background: none; /* the faces carry the disc */
+  perspective: 600px;
+  display: block;
+}
+.ex-cell .z-disc { transition-delay: calc(var(--k) * 60ms); }
+.ex-figure.mixed .ex-cell .z-disc { transform: rotateY(180deg); }
+.ex-cell .z-front,
+.ex-cell .z-back { background: var(--shape-lowest); }
+.ex-cell.yin .z-front,
+.ex-cell.yin .z-back { background: var(--shape-low); }
+/* The element mark: 40 in a 64 cell, colored by --el (see tables.ts). */
+.ex-cell .z-back { color: var(--el); }
+.ex-cell .z-back svg { display: block; width: 62.5%; height: 62.5%; }
+.ex-toggle .ex-l-unmix { opacity: 0; }
+.ex-figure.mixed .ex-toggle .ex-l-mix { opacity: 0; }
+.ex-figure.mixed .ex-toggle .ex-l-unmix { opacity: 1; }
+@media (max-width: 767px) {
+  .ex-figure { height: 540px; }
+}
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {
   /* The CN rule above carries a class more, so the phone restates it. */
