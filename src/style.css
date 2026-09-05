@@ -1160,9 +1160,6 @@ body.at-doc .links {
 /* The neighbours read at a fifth; the current pair full. */
 .sb-figure.paired .sb-char { opacity: 0.2; }
 .sb-figure.paired .sb-char.current { opacity: 1; }
-/* Fade in left to right: the pair in view first, its neighbour after. */
-.sb-figure.paired .sb-char { transition-delay: calc(80ms * max(0, min(3, var(--i) - var(--cur, 0)))); }
-.sb-figure:not(.paired) .sb-char { transition-delay: 0ms; }
 .sb-side {
   position: absolute;
   right: calc(50% + var(--sb-w) / 2 + var(--sb-side));

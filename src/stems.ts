@@ -12,7 +12,7 @@
  *               nothing, every cell travels to the centre (its own --dx/--dy,
  *               measured at click time) while its glyph fades; the pillar
  *               grows up under them.
- *   .paired   — the pillar's glyphs fade in left to right, and the side
+ *   .paired   — the pillar's glyphs fade in together, and the side
  *               captions and the <1/60> counter come with them.
  * Separate strips them in the reverse order.
  */
@@ -36,7 +36,7 @@ export function stemsFigure(lang: 'en' | 'cn'): string {
   // The pillar's two rows hold exactly the ten and the twelve. Each row slides
   // on its own wheel (--si / --bi on the figure), so when the stems run out at
   // 癸 the row rides all the way back to 甲 while the branches carry on — the
-  // sixty-pair cycle shown as it actually works. --i stages the fade-in.
+  // sixty-pair cycle shown as it actually works.
   const row = (list: string[]) =>
     list.map((c, i) => `<span class="sb-char" style="--i:${i}">${c}</span>`).join('');
 
@@ -78,9 +78,10 @@ export function stemsFigure(lang: 'en' | 'cn'): string {
  * Pacing. The beats OVERLAP rather than queue: each starts ~100ms after the
  * one before, so the whole handover reads as one gesture, not three.
  */
-/** Pair up: the pillar's glyphs start fading in this far into the cells'
- *  380ms travel (--sb-travel). */
-const GLYPHS_AT = 180;
+/** Pair up: the pillar's glyphs fade in, all at once, this far into the
+ *  cells' 380ms travel (--sb-travel) — the capsule and its edge fades are
+ *  standing by then, so the characters arrive INTO something. */
+const GLYPHS_AT = 300;
 /** Separate: cells start flying home this long after the glyphs start out. */
 const CELLS_AT = 100;
 /** Separate: captions and line come in this long after the cells set off. */
