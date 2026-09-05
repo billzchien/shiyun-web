@@ -83,13 +83,21 @@ export function calendarFigure(lang: 'en' | 'cn'): string {
       <div class="cal-stage" style="aspect-ratio:${G.W}/${G.H}">
         <svg class="cal-svg" viewBox="0 0 ${G.W} ${G.H}" aria-hidden="true">
           <defs>
-            <clipPath id="cal-clip">
-              <circle class="cal-side cal-a" cx="${CX_A}" cy="${CY}" r="${G.R}" />
+            <!-- One clip per language: the two columns share a document, and
+                 a url(#id) resolves to the FIRST match — the hidden one. -->
+            <clipPath id="cal-clip-${lang}">
+              <circle cx="${CX_A}" cy="${CY}" r="${G.R}" />
             </clipPath>
           </defs>
-          <!-- The lens is the second circle seen through the first, so it is
-               re-cut on every frame while the two are still travelling. -->
-          <circle class="cal-lens cal-side cal-b" cx="${CX_B}" cy="${CY}" r="${G.R}" clip-path="url(#cal-clip)" />
+          <!-- The lens is the moon's circle seen through the sun's, re-cut on
+               every frame while the two are still travelling. The clip itself
+               never moves (browsers ignore a transform on a clip's child): it
+               rides in a group that carries the sun's shift, and inside that
+               group the moon's circle is offset by the DIFFERENCE of the two
+               shifts, so in page space it sits exactly where the moon does. -->
+          <g class="cal-side cal-a" clip-path="url(#cal-clip-${lang})">
+            <circle class="cal-lens" cx="${CX_B}" cy="${CY}" r="${G.R}" />
+          </g>
           <circle class="cal-ring cal-side cal-a" cx="${CX_A}" cy="${CY}" r="${G.R}" />
           <circle class="cal-ring cal-side cal-b" cx="${CX_B}" cy="${CY}" r="${G.R}" />
         </svg>

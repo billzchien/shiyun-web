@@ -1388,15 +1388,22 @@ body.at-doc .links {
 }
 .cal-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .cal-ring { fill: none; stroke: var(--shape-low); stroke-width: 1; }
-.cal-lens { fill: var(--shape-lowest); opacity: 0; transition: opacity 600ms var(--expressive); }
-.cal-figure.in .cal-lens { opacity: 1; }
+/* The tint is pure geometry: it does not fade in, it GROWS, because the two
+   circles do not overlap at all until they have travelled — so the shade
+   appears exactly as, and only as, the two come together. */
+.cal-lens { fill: var(--shape-lowest); }
 /* The two travelling halves: each circle, the clip that cuts the lens, and
    that side's marker all carry the same shift, so they move as one body.
    The shift is stated twice because the two live in different spaces — the
    SVG's is in the drawing's own units, the marker's scales with the column. */
 .cal-figure .cal-side { transition: transform 800ms var(--expressive); }
-.cal-figure circle.cal-a { transform: translateX(calc(var(--spread) * -1)); }
+.cal-figure circle.cal-a,
+.cal-figure g.cal-a { transform: translateX(calc(var(--spread) * -1)); }
 .cal-figure circle.cal-b { transform: translateX(var(--spread)); }
+/* Inside the sun's clip group (shifted −spread), the moon's circle must land
+   at +spread in page space: +2·spread locally. Same clock as the rest. */
+.cal-figure .cal-lens { transform: translateX(calc(var(--spread) * 2)); transition: transform 800ms var(--expressive); }
+.cal-figure.in .cal-lens { transform: none; }
 .cal-figure .cal-marker.cal-a { transform: translateX(calc(var(--spread-m) * -1)); }
 .cal-figure .cal-marker.cal-b { transform: translateX(var(--spread-m)); }
 .cal-figure.in .cal-side { transform: none; }
@@ -1428,7 +1435,7 @@ body.at-doc .links {
 }
 .cal-figure.in .cal-both { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
-  .cal-figure .cal-side, .cal-lens, .cal-figure .cal-both { transition: none; }
+  .cal-figure .cal-side, .cal-figure .cal-lens, .cal-figure .cal-both { transition: none; }
 }
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {
