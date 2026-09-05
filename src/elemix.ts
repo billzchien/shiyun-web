@@ -24,12 +24,14 @@ const ICON: Record<Element, string> = {
 /** 甲→癸, two stems to an element down the list. */
 const STEM_ELEMENT: Element[] = ['Wood', 'Wood', 'Fire', 'Fire', 'Earth', 'Earth', 'Metal', 'Metal', 'Water', 'Water'];
 
-/** Rows of 64-cells at 66 pitch; each row's caption sits 80 below its top. */
-const G = { CELL: 64, PITCH: 66, rows: [80, 222], capOffset: 80 };
+/** Rows of 64-cells at 66 pitch; each row's caption sits 80 below its top.
+ *  Two rows need less card than four, so this one stands 420 tall (see
+ *  .ex-figure): a 276 stage, the rows at 20 and 162. */
+const G = { CELL: 64, PITCH: 66, rows: [20, 162], capOffset: 80 };
 
 const TEXT = {
   en: { rows: ['Yang stems', 'Yin stems'], mix: 'Mix elements', unmix: 'Unmix' },
-  cn: { rows: ['阳干', '阴干'], mix: '加入五行', unmix: '还原' },
+  cn: { rows: ['阳干', '阴干'], mix: '融入五行', unmix: '还原' },
 };
 
 export function elemixFigure(lang: 'en' | 'cn'): string {

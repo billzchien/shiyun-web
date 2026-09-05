@@ -1496,6 +1496,8 @@ body.at-doc .links {
 /* ─── The Five Elements × stems (see elemix.ts) ───────────────────────────── */
 /* Two rows of ten stems on the Stems & Branches card; each cell turns over
    to its element, in the element's own color, left to right. */
+/* Shorter than its siblings: two rows, not four, so 420 rather than 540. */
+.ex-figure { height: 420px; }
 .ex-row { position: absolute; left: 0; right: 0; }
 .ex-cells { display: flex; justify-content: center; gap: 2px; }
 .ex-cap { position: absolute; left: 0; right: 0; text-align: center; }
@@ -1519,7 +1521,7 @@ body.at-doc .links {
 .ex-figure.mixed .ex-toggle .ex-l-mix { opacity: 0; }
 .ex-figure.mixed .ex-toggle .ex-l-unmix { opacity: 1; }
 @media (max-width: 767px) {
-  .ex-figure { height: 540px; }
+  .ex-figure { height: 420px; }
 }
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {
