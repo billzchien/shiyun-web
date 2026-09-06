@@ -1188,6 +1188,9 @@ body.at-doc .links {
   height: 40px;
   display: grid;
   place-items: center;
+  /* Above the stage box, whose top edge overlaps this row: otherwise the
+     stage swallowed taps on the lower half of the chevrons. */
+  z-index: 1;
 }
 .sb-joined { top: 64px; }
 .sb-counter {
@@ -1223,9 +1226,10 @@ body.at-doc .links {
 }
 .sb-step {
   all: unset;
-  width: 32px;
-  height: 32px;
-  margin: -8px;
+  /* A 40 touch target around the 16 glyph. */
+  width: 40px;
+  height: 40px;
+  margin: -12px;
   display: grid;
   place-items: center;
   cursor: pointer;
