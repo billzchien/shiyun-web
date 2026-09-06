@@ -187,7 +187,7 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
  * A block is one of: paragraph (`\n` renders as <br>), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
-export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' | 'elemix' | 'seasons' };
+export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' | 'elemix' | 'seasons' | 'lucky' };
 
 export const learnIntro = {
   sentenceEn: 'Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization.',
@@ -357,6 +357,7 @@ export const learnSections: {
       { p: 'The branches take their elements from the seasons. They were the month-markers of the old calendar: twelve branches, twelve months, three to a season. Spring is when wood grows, so its branches belong to Wood; summer blazes, so Fire; autumn cuts and clears, so Metal; winter runs cold, so Water. The last month of each season, four in all, is the turning between seasons, and turning ground belongs to Earth.' },
       { fig: 'seasons' },
       { p: 'So every stem-branch pair becomes a particular meeting of forces: the first pair joins yang Wood with a Water branch; another joins yang Fire with a Fire branch. Sixty pairs, sixty different tempers. Whichever pair the day lands on, that is the day’s disposition. Time, which had only ever been a measure, now has character.' },
+      { fig: 'lucky' },
       { p: 'The layers are now all in place. Every stem-branch pair carries a charge, an element, an image. One question remains: what do they have to do with you?' },
     ],
     cn: [
@@ -378,6 +379,7 @@ export const learnSections: {
       { p: '十二地支的五行属性，来自对应的季节。地支后来也用来纪月，十二支直接对应十二个月份：寅卯辰是春，巳午未是夏，申酉戌是秋，亥子丑是冬。春天草木生发，所以寅卯属木；夏天暑热蒸腾，所以巳午属火；秋天肃杀收敛，所以申酉属金；冬天寒凉闭藏，所以亥子属水。每个季节的最后一个月，辰、未、戌、丑，是季节交替的过渡阶段，全部归属于土。' },
       { fig: 'seasons' },
       { p: '到这里，每一对干支都成了一个具体的五行组合：甲子，是阳木遇上子水；丙午，是阳火遇上午火。六十甲子，就是六十种完全不同的五行搭配，各有各的脾气。轮到哪一天，哪一天就是那副样子。原本只是标记刻度的时间，走到这里，就有了自己的性格。' },
+      { fig: 'lucky' },
       { p: '至此，三层结合全部完成。一对干支，先天有阴阳，再带五行，又各具意象。\n剩下的问题只有一个：这些符号，和你有什么关系？' },
     ],
   },

@@ -17,19 +17,38 @@
  * Separate strips them in the reverse order.
  */
 
+import { ELEMENT_COLOR, type Element } from './tables';
+import woodSvg from '../assets/learn/element-wood.svg?raw';
+import fireSvg from '../assets/learn/element-fire.svg?raw';
+import earthSvg from '../assets/learn/element-earth.svg?raw';
+import metalSvg from '../assets/learn/element-metal.svg?raw';
+import waterSvg from '../assets/learn/element-water.svg?raw';
+
 export const STEMS = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
 export const BRANCHES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 const PAIRS = 60;
 
 const TEXT = {
-  en: { stems: 'Stems', branches: 'Branches', pair: 'Pair up', split: 'Separate', prev: 'Previous pair', next: 'Next pair' },
-  cn: { stems: '天干', branches: '地支', pair: '搭配起来', split: '分开', prev: '上一对', next: '下一对' },
+  en: { stems: 'Stems', branches: 'Branches', pair: 'Pair up', split: 'Start over', lucky: 'Feeling lucky', prev: 'Previous pair', next: 'Next pair' },
+  cn: { stems: '天干', branches: '地支', pair: '搭配起来', split: '重新开始', lucky: '随便试试', prev: '上一对', next: '下一对' },
 };
 
 const chevron = (dir: 'prev' | 'next') =>
   `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="${dir === 'next' ? 'M6 3.5 10.5 8 6 12.5' : 'M10 3.5 5.5 8 10 12.5'}" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-export function stemsFigure(lang: 'en' | 'cn'): string {
+/** 天干 and 地支 五行 — the branch's 本气 — for the lucky variant's marks. */
+const STEM_EL: Element[] = ['Wood', 'Wood', 'Fire', 'Fire', 'Earth', 'Earth', 'Metal', 'Metal', 'Water', 'Water'];
+const BRANCH_EL: Element[] = ['Water', 'Earth', 'Wood', 'Wood', 'Earth', 'Fire', 'Fire', 'Earth', 'Metal', 'Metal', 'Earth', 'Water'];
+const EL_ICON: Record<Element, string> = {
+  Wood: woodSvg, Fire: fireSvg, Earth: earthSvg, Metal: metalSvg, Water: waterSvg,
+};
+
+/**
+ * @param lucky The Convergence variant (Figma 1264:7442): the pillar alone,
+ *   already paired, with each sign's ELEMENT marked beside it instead of the
+ *   Stems/Branches captions, and a button that lands on a random pair.
+ */
+export function stemsFigure(lang: 'en' | 'cn', lucky = false): string {
   const t = TEXT[lang];
   const cells = (list: string[]) =>
     list.map((c) => `<span class="sb-cell"><span class="sb-glyph">${c}</span></span>`).join('');
@@ -38,39 +57,54 @@ export function stemsFigure(lang: 'en' | 'cn'): string {
   // 癸 the row rides all the way back to 甲 while the branches carry on — the
   // sixty-pair cycle shown as it actually works.
   const row = (list: string[]) =>
-    list.map((c, i) => `<span class="sb-char" style="--i:${i}">${c}</span>`).join('');
+    list.map((c, i) => `<span class="sb-char${i === 0 ? ' current' : ''}" style="--i:${i}">${c}</span>`).join('');
 
-  return `
-    <figure class="doc-figure sb-figure" data-lang="${lang}" data-index="0">
-      <div class="sb-stage">
-        <div class="sb-split">
+  // The lucky variant's side: every element's mark, stacked per row; setIndex
+  // brings the current sign's forward.
+  const marks = (row: 'stem' | 'branch') =>
+    (Object.keys(EL_ICON) as Element[])
+      .map((el) => `<span class="sb-mark${el === (row === 'stem' ? STEM_EL[0] : BRANCH_EL[0]) ? ' on' : ''}" data-row="${row}" data-el="${el}" style="color:${ELEMENT_COLOR[el]}">${EL_ICON[el]}</span>`)
+      .join('');
+  const side = lucky
+    ? `<div class="sb-side sb-side-marks"><span class="sb-markstack">${marks('stem')}</span><span class="sb-markstack">${marks('branch')}</span></div>`
+    : `<div class="sb-side"><p class="sb-cap">${t.stems}</p><p class="sb-cap">${t.branches}</p></div>`;
+  const button = lucky
+    ? `<button type="button" class="sb-toggle" data-act="lucky"><span class="sb-labels"><span class="on">${t.lucky}</span></span></button>`
+    : `<button type="button" class="sb-toggle" data-act="toggle">
+        <span class="sb-labels"><span class="sb-pair-label on">${t.pair}</span><span class="sb-split-label">${t.split}</span></span>
+      </button>`;
+  const split = lucky
+    ? ''
+    : `<div class="sb-split">
           <div class="sb-grid sb-stems">${cells(STEMS)}</div>
           <p class="sb-cap sb-cap-stems">${t.stems}</p>
           <div class="sb-line"></div>
           <p class="sb-cap sb-cap-branches">${t.branches}</p>
           <div class="sb-grid sb-branches">${cells(BRANCHES)}</div>
+        </div>`;
+
+  return `
+    <figure class="doc-figure sb-figure${lucky ? ' lucky pairing paired' : ''}" data-lang="${lang}" data-index="0">
+      <div class="sb-head">
+        <div class="sb-counter">
+          <button type="button" class="sb-step" data-act="prev" aria-label="${t.prev}">${chevron('prev')}</button>
+          <span class="sb-count"><span class="sb-n">1</span> / ${PAIRS}</span>
+          <button type="button" class="sb-step" data-act="next" aria-label="${t.next}">${chevron('next')}</button>
         </div>
+      </div>
+      <div class="sb-stage">
+        ${split}
         <div class="sb-joined">
-          <div class="sb-side">
-            <p class="sb-cap">${t.stems}</p>
-            <p class="sb-cap">${t.branches}</p>
-          </div>
+          ${side}
           <div class="sb-pillar">
             <div class="sb-track">
               <div class="sb-row sb-row-stems">${row(STEMS)}</div>
               <div class="sb-row sb-row-branches">${row(BRANCHES)}</div>
             </div>
           </div>
-          <div class="sb-counter">
-            <button type="button" class="sb-step" data-act="prev" aria-label="${t.prev}">${chevron('prev')}</button>
-            <span class="sb-count"><span class="sb-n">1</span> / ${PAIRS}</span>
-            <button type="button" class="sb-step" data-act="next" aria-label="${t.next}">${chevron('next')}</button>
-          </div>
         </div>
       </div>
-      <button type="button" class="sb-toggle" data-act="toggle">
-        <span class="sb-labels"><span class="sb-pair-label on">${t.pair}</span><span class="sb-split-label">${t.split}</span></span>
-      </button>
+      ${button}
     </figure>`;
 }
 
@@ -105,6 +139,9 @@ function setIndex(fig: HTMLElement, i: number) {
     fig.querySelectorAll<HTMLElement>(sel).forEach((c) => c.classList.toggle('current', Number(c.style.getPropertyValue('--i')) === cur));
   mark('.sb-row-stems .sb-char', si);
   mark('.sb-row-branches .sb-char', bi);
+  // The lucky variant's element marks: one forward per row.
+  for (const m of fig.querySelectorAll<HTMLElement>('.sb-mark'))
+    m.classList.toggle('on', m.dataset.el === (m.dataset.row === 'stem' ? STEM_EL[si] : BRANCH_EL[bi]));
   (fig.querySelector('[data-act="prev"]') as HTMLButtonElement).disabled = n === 0;
   (fig.querySelector('[data-act="next"]') as HTMLButtonElement).disabled = n === PAIRS - 1;
 }
@@ -190,6 +227,13 @@ export function initStems(root: HTMLElement) {
     if (!fig) return;
     const act = btn.dataset.act;
     if (act === 'toggle') toggle(fig);
+    else if (act === 'lucky') {
+      // Anywhere but here, so the button always visibly does something.
+      const cur = Number(fig.dataset.index);
+      let n = Math.floor(Math.random() * (PAIRS - 1));
+      if (n >= cur) n += 1;
+      setIndex(fig, n);
+    }
     else if (act === 'next') setIndex(fig, Number(fig.dataset.index) + 1);
     else if (act === 'prev') setIndex(fig, Number(fig.dataset.index) - 1);
   });

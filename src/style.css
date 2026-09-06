@@ -1178,11 +1178,19 @@ body.at-doc .links {
 .sb-side .sb-cap, .sb-counter { opacity: 0; transition: opacity 240ms var(--sb-ease); }
 .sb-figure.paired .sb-side .sb-cap,
 .sb-figure.paired .sb-counter { opacity: 1; }
-.sb-counter {
+/* The count lives in a 40 header row across the top of the card (24 down),
+   above the stage; the paired layer then centres in what is left below. */
+.sb-head {
   position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  top: 24px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+}
+.sb-joined { top: 64px; }
+.sb-counter {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1192,6 +1200,20 @@ body.at-doc .links {
   letter-spacing: -0.2px;
   font-variation-settings: 'opsz' 14, 'wdth' 100;
 }
+/* The lucky variant: element marks beside the pillar, one per row, the
+   current sign's forward. Same seat as the captions, 40 square. */
+.sb-side-marks { gap: calc(var(--sb-line) + var(--sb-rows) - 40px); }
+.sb-markstack { position: relative; width: 40px; height: 40px; display: block; }
+.sb-mark {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 200ms var(--sb-ease), transform 200ms var(--sb-ease);
+}
+.sb-mark svg { display: block; width: 100%; height: 100%; }
+.sb-figure.paired .sb-mark.on { opacity: 1; transform: none; }
+.sb-figure.lucky .sb-toggle { cursor: pointer; }
 /* Fixed width, so the chevrons hold still as the count goes 1 → 60. The
    digits are tabular so the number does not wander inside it either. */
 .sb-count {
@@ -1274,8 +1296,6 @@ body.at-doc .links {
   .sb-glyph { font-size: 18px; }
   .sb-pillar { border-radius: 54px; }
   .sb-pillar::before, .sb-pillar::after { top: 36px; bottom: 36px; }
-  /* The counter hangs 32 under the pillar rather than sitting on the stage's floor. */
-  .sb-counter { bottom: auto; top: calc(50% + var(--sb-h) / 2 + 32px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .sb-figure * { transition-duration: 1ms !important; transition-delay: 0ms !important; }

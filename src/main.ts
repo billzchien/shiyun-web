@@ -133,6 +133,7 @@ function learnBlock(b: LearnBlock, lang: 'en' | 'cn'): string {
     </figure>`;
   if (b.fig === 'elements') return elementsGraph(lang, !wideGraph.matches);
   if (b.fig === 'stems') return stemsFigure(lang);
+  if (b.fig === 'lucky') return stemsFigure(lang, true);
   if (b.fig === 'zodiac') return zodiacFigure(lang);
   if (b.fig === 'hours') return hoursFigure(lang);
   if (b.fig === 'calendar') return calendarFigure(lang);
