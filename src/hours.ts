@@ -19,7 +19,7 @@ import { SIGN_SVG, ANIMAL_CN, ANIMAL_EN } from './zodiac';
 const BOX = 492;
 const C = BOX / 2;
 const RING_R = 240;
-const STROKE = 2.5;
+const STROKE = 1.2;
 const ARC_SPAN = 27.5;
 const CELL_R = 194;
 
