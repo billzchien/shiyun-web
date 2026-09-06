@@ -1338,9 +1338,12 @@ body.at-doc .links {
 }
 .z-back svg { display: block; width: 66%; height: 66%; }
 /* The hint reads in the Five Elements legend's voice (see .graph-note). */
-/* The footnotes read regular, not the English body's light. */
+/* The footnotes read regular, not the English body's light, and in the
+   secondary ink. */
 .doc-en .z-hint,
 .doc-en .graph-note { font-weight: 400; }
+.doc-figure .z-hint,
+.doc-figure .graph-note { color: var(--text-secondary); }
 .doc-figure .z-hint {
   text-align: center;
   font-size: 13px;
