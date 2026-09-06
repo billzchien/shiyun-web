@@ -56,7 +56,7 @@ type Geom = {
 /** The full column: 600 across, the ring at its Figma size. */
 const WIDE: Geom = {
   W: 600, H: 460, CX: 300, CY: 233, R: 170,
-  ICON: 54, ARC_GAP: 15, CHORD_GAP: 48, LABEL: 12, PAD: 12, LABELS: true,
+  ICON: 54, ARC_GAP: 15, CHORD_GAP: 48, LABEL: 13, PAD: 12, LABELS: true,
 };
 /**
  * 335 across — a 375 phone's column exactly, so it lands 1:1 there and only
@@ -68,7 +68,7 @@ const WIDE: Geom = {
  */
 const COMPACT: Geom = {
   W: 335, H: 326, CX: 167.5, CY: 174, R: 150,
-  ICON: 48, ARC_GAP: 13, CHORD_GAP: 36, LABEL: 12, PAD: 8, LABELS: false,
+  ICON: 48, ARC_GAP: 13, CHORD_GAP: 36, LABEL: 13, PAD: 8, LABELS: false,
 };
 
 const rad = (deg: number) => (deg * Math.PI) / 180;

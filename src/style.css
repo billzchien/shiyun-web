@@ -982,13 +982,13 @@ body.at-doc .links {
 }
 /* Both layouts are drawn at true size, so the line work needs no per-variant
    compensation — a stroke of 1 is 1 either way. */
-.graph-note {
+.doc-figure .graph-note {
   display: flex;
   gap: 24px;
   justify-content: center;
   align-items: center;
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 13px;
+  line-height: 15px;
   letter-spacing: -0.2px;
   /* Clear of the ring: the drawing's own box ends tight on the bottom glyphs. */
   padding-top: 24px;
@@ -1341,7 +1341,7 @@ body.at-doc .links {
 .doc-figure .z-hint {
   text-align: center;
   font-size: 13px;
-  line-height: 14px;
+  line-height: 15px;
   letter-spacing: -0.2px;
 }
 @media (hover: hover) {
