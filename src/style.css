@@ -1588,9 +1588,9 @@ body.at-doc .links {
 .se-cell .z-back { background: var(--shape-lowest); }
 .se-cell .z-back { color: var(--el); }
 .se-cell .z-back svg { display: block; width: 62.5%; height: 62.5%; }
-/* The turn runs in reading order down the season grid. */
-.se-cell .z-disc { transition-delay: calc(var(--k) * 40ms); }
-.se-figure.elements .se-cell .z-disc { transform: rotateY(180deg); }
+/* The turn runs in reading order down the season grid; turning BACK, the
+   cells go all at once. */
+.se-figure.elements .se-cell .z-disc { transform: rotateY(180deg); transition-delay: calc(var(--k) * 40ms); }
 /* Season names ride their row's centre line, right-aligned to the grid. */
 .se-label {
   position: absolute;
