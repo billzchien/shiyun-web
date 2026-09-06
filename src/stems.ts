@@ -30,7 +30,7 @@ const PAIRS = 60;
 
 const TEXT = {
   en: { stems: 'Stems', branches: 'Branches', pair: 'Pair up', split: 'Start over', lucky: 'Feeling lucky', prev: 'Previous pair', next: 'Next pair' },
-  cn: { stems: '天干', branches: '地支', pair: '搭配起来', split: '重新开始', lucky: '随便试试', prev: '上一对', next: '下一对' },
+  cn: { stems: '天干', branches: '地支', pair: '搭配起来', split: '重新开始', lucky: '任意一组', prev: '上一对', next: '下一对' },
 };
 
 const chevron = (dir: 'prev' | 'next') =>
