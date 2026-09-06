@@ -1417,7 +1417,7 @@ body.at-doc .links {
   container-type: inline-size;
 }
 .cal-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.cal-ring { fill: none; stroke: var(--shape-low); stroke-width: 1; }
+.cal-ring { fill: none; stroke: var(--text); stroke-width: 1; } /* shape/highest */
 /* The tint is pure geometry: it does not fade in, it GROWS, because the two
    circles do not overlap at all until they have travelled — so the shade
    appears exactly as, and only as, the two come together. */
