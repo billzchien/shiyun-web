@@ -1069,8 +1069,8 @@ body.at-doc .links {
   transition: opacity 240ms var(--sb-ease);
 }
 .sb-cap {
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 13px;
+  line-height: 15px;
   font-weight: 600;
   letter-spacing: -0.2px;
   margin: 0 !important;
@@ -1338,9 +1338,9 @@ body.at-doc .links {
 }
 .z-back svg { display: block; width: 66%; height: 66%; }
 /* The hint reads in the Five Elements legend's voice (see .graph-note). */
-.z-hint {
+.doc-figure .z-hint {
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 14px;
   letter-spacing: -0.2px;
 }
@@ -1443,8 +1443,8 @@ body.at-doc .links {
 .cal-icon svg { display: block; width: 100%; height: 100%; }
 .cal-label {
   display: block;
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 13px;
+  line-height: 15px;
   font-weight: 600;
   letter-spacing: -0.2px;
   white-space: nowrap;
