@@ -9,7 +9,7 @@
  *              reading order; the season names go, having done their work.
  *
  * The back arrow steps to the previous state; START OVER turns the cells
- * back and walks them home. Geometry is one table below, in the card's
+ * back and walks them home in one move. Geometry is one table below, in the card's
  * 600 × 332 stage; the cells hang off the stage's centre.
  */
 import { BRANCHES, showLabel } from './stems';
@@ -101,31 +101,12 @@ export function seasonsFigure(lang: 'en' | 'cn'): string {
     </figure>`;
 }
 
-/** The flip, last cell included; START OVER waits for it before the walk home. */
-const FLIP = 460 + 11 * 40;
-
 function setStep(fig: HTMLElement, step: 0 | 1 | 2) {
-  const timer = Number(fig.dataset.timer || 0);
-  if (timer) window.clearTimeout(timer);
-  fig.dataset.timer = '';
-  const btn = fig.querySelector<HTMLButtonElement>('.se-toggle')!;
-  const was = fig.classList.contains('elements') ? 2 : fig.classList.contains('seasons') ? 1 : 0;
+  // Start over is one gesture: the cells turn back and walk home together,
+  // and the season names never reappear on the way.
   fig.classList.toggle('seasons', step >= 1);
   fig.classList.toggle('elements', step === 2);
   showLabel(fig, ['se-l-1', 'se-l-2', 'se-l-3'][step]);
-  btn.disabled = false;
-  if (was === 2 && step === 0) {
-    // Turn back first; the walk home follows once the last cell has turned.
-    fig.classList.add('seasons');
-    btn.disabled = true;
-    fig.dataset.timer = String(
-      window.setTimeout(() => {
-        fig.classList.remove('seasons');
-        btn.disabled = false;
-        fig.dataset.timer = '';
-      }, FLIP)
-    );
-  }
 }
 
 export function initSeasons(root: HTMLElement) {

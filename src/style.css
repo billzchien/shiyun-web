@@ -1567,7 +1567,8 @@ body.at-doc .links {
   pointer-events: none;
   transition: opacity 200ms var(--expressive), transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.se-back svg { width: 16px; height: 16px; }
+/* Drawn for 16 but set at 20: at 16 its fine strokes fell between pixels. */
+.se-back svg { width: 20px; height: 20px; }
 .se-figure.seasons .se-back { opacity: 1; pointer-events: auto; }
 .se-back:active { transform: scale(0.9); transition-duration: 150ms; }
 .se-cell {
