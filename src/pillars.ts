@@ -74,7 +74,7 @@ const TEXT = {
   },
   cn: {
     cols: ['年', '月', '日', '时'],
-    person: ['第一位', '第二位', '第三位'],
+    person: ['用户一', '用户二', '用户三'],
     master: (el: Element) => `日主属${EL_CN[el]}`,
     when: (p: (typeof PEOPLE)[0]) => [`${p.y}年`, `${p.m}月`, `${p.d}日`, `${BRANCHES[p.chart.hour.b]}时`],
   },
