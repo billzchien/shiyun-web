@@ -85,7 +85,7 @@ export function seasonsFigure(lang: 'en' | 'cn'): string {
   }).join('');
 
   const labels = t.seasons
-    .map((name, i) => `<p class="sb-cap se-label" style="top:${G.seasonRows[i] + G.CELL / 2}px;right:calc(50% - ${G.labelRight}px)">${name}</p>`)
+    .map((name, i) => `<p class="sb-cap se-label" style="--ly:${G.seasonRows[i] + G.CELL / 2}px;--lr:${G.labelRight}px">${name}</p>`)
     .join('');
 
   return `

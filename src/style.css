@@ -1582,7 +1582,10 @@ body.at-doc .links {
 .ex-cell .z-back { color: var(--el); }
 .ex-cell .z-back svg { display: block; width: 62.5%; height: 62.5%; }
 @media (max-width: 767px) {
+  /* Five of 64 are 328 wide; the phone's stage is 287. */
   .ex-figure { height: 420px; }
+  .ex-cell { width: 52px; height: 52px; }
+  .ex-cell .z-front { font-size: 20px; }
 }
 
 /* ─── The Five Elements × branches (see seasons.ts) ───────────────────────── */
@@ -1618,6 +1621,10 @@ body.at-doc .links {
 .se-back svg { width: 20px; height: 20px; }
 .se-figure.seasons .se-back { opacity: 1; pointer-events: auto; }
 .se-back:active { transform: scale(0.9); transition-duration: 150ms; }
+/* --se-k scales the whole drawing for a narrower column (the phone): the
+   cells' homes are in the 600 stage's units, and the factor is applied at
+   the transform, so nothing else needs re-deriving. */
+.se-figure { --se-k: 1; }
 .se-cell {
   position: absolute;
   left: 50%;
@@ -1627,10 +1634,11 @@ body.at-doc .links {
   background: none;
   perspective: 600px;
   display: block;
-  transform: translate(var(--x0), var(--y0));
+  transform-origin: 0 0;
+  transform: translate(calc(var(--x0) * var(--se-k)), calc(var(--y0) * var(--se-k))) scale(var(--se-k));
   transition: transform 560ms var(--expressive);
 }
-.se-figure.seasons .se-cell { transform: translate(var(--x1), var(--y1)); }
+.se-figure.seasons .se-cell { transform: translate(calc(var(--x1) * var(--se-k)), calc(var(--y1) * var(--se-k))) scale(var(--se-k)); }
 .se-cell .z-front,
 .se-cell .z-back { background: var(--shape-lowest); }
 .se-cell .z-back { color: var(--el); }
@@ -1642,13 +1650,17 @@ body.at-doc .links {
 .se-label {
   position: absolute;
   margin: 0 !important;
+  top: calc(var(--ly) * var(--se-k));
+  right: calc(50% - var(--lr) * var(--se-k));
   transform: translateY(-50%);
   opacity: 0;
   transition: opacity 240ms var(--expressive);
 }
 .se-figure.seasons:not(.elements) .se-label { opacity: 1; transition-delay: 320ms; }
 @media (max-width: 767px) {
-  .se-figure { height: 540px; }
+  /* Six cells of 64 at 66 pitch are 394 wide; the phone's stage is 287.
+     Scale the drawing to 0.7 (276) and give the card back the height. */
+  .se-figure { height: 480px; --se-k: 0.7; }
 }
 @media (prefers-reduced-motion: reduce) {
   .se-cell, .se-label, .se-back { transition: none; }
