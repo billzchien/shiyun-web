@@ -1703,11 +1703,12 @@ body.at-doc .links {
   font-size: var(--bc-glyph);
   line-height: 1.2;
   letter-spacing: -0.14px;
-  /* A tenth: just enough to hint at the wheel, faint against the fade. */
-  opacity: 0.1;
-  transition: transform 400ms var(--expressive), opacity 240ms var(--expressive);
+  /* The neighbours read in a warm tan at full opacity, rather than as a
+     ghost of the ink: a cleaner edge against the fade. */
+  color: #b8a084;
+  transition: transform 400ms var(--expressive), color 240ms var(--expressive);
 }
-.bc-char.current { opacity: 1; }
+.bc-char.current { color: var(--text); }
 .bc-wheel .bc-char:nth-child(1)  { transform: translateX(calc((0 - var(--cur)) * var(--bc-pitch))); }
 .bc-wheel .bc-char:nth-child(2)  { transform: translateX(calc((1 - var(--cur)) * var(--bc-pitch))); }
 .bc-wheel .bc-char:nth-child(3)  { transform: translateX(calc((2 - var(--cur)) * var(--bc-pitch))); }
