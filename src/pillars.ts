@@ -128,7 +128,7 @@ export function dayMasterFigure(lang: 'en' | 'cn'): string {
       const color = isDay ? `style="color:${ELEMENT_COLOR[stemEl]}"` : '';
       return `
           <div class="bc-col">
-            <div class="bc-pillar bc-marked">
+            <div class="bc-signs">
               <span class="bc-sign" ${color}><span class="bc-glyph">${STEMS[pr.s]}</span><span class="bc-mark">${ICON[stemEl]}</span></span>
               <span class="bc-sign"><span class="bc-glyph">${BRANCHES[pr.b]}</span><span class="bc-mark">${ICON[BRANCH_EL[pr.b]]}</span></span>
             </div>
@@ -143,10 +143,12 @@ export function dayMasterFigure(lang: 'en' | 'cn'): string {
   const master = `<p class="bc-master">${t.master(
     `<span class="bc-vals">${PEOPLE.map((p, i) => `<span class="bc-val${i === 0 ? ' on' : ''}" data-i="${i}">${t.el(STEM_EL[p.chart.day.s])}</span>`).join('')}</span>`
   )}</p>`;
+  // The pillars themselves are drawn once and stay; only the signs change.
+  const pillars = `<div class="bc-row bc-pillars">${KEYS.map(() => `<div class="bc-col"><div class="bc-pillar"></div></div>`).join('')}</div>`;
   const whens = `<div class="bc-row bc-whens">${KEYS.map((_, i) => `<div class="bc-col"><p class="sb-cap bc-when">${values(lang, i)}</p></div>`).join('')}</div>`;
   return `
     <figure class="doc-figure sb-figure bc-figure bc-master-fig" data-lang="${lang}" data-person="0">
-      <div class="sb-stage bc-stage">${master}${layers}${whens}</div>
+      <div class="sb-stage bc-stage">${master}${pillars}${layers}${whens}</div>
       ${buttons(lang)}
     </figure>`;
 }

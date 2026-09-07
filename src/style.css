@@ -1752,18 +1752,24 @@ body.at-doc .links {
 /* ── Day master: stacked layers, crossfaded; each sign with its mark ── */
 .bc-master-fig { padding-top: 24px; }
 .bc-master-fig .bc-stage { position: relative; }
-/* A switch is a pop, not a dissolve: the old chart shrinks away and the new
-   one grows in after it, so the change is seen rather than sensed. */
-.bc-layer {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: scale(0.9);
-  transform-origin: 50% 40%;
-  transition: opacity 160ms var(--expressive), transform 160ms var(--expressive);
-  pointer-events: none;
+/* A switch is a pop, not a dissolve — and it is the CHARACTERS that pop, not
+   the pillars: the old signs shrink away and the new ones grow in after. */
+.bc-layer { position: absolute; inset: 0; pointer-events: none; }
+.bc-pillars .bc-pillar { margin-top: 90px; }
+.bc-signs {
+  margin-top: 90px;
+  height: var(--bc-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.bc-layer.on { opacity: 1; transform: none; transition-delay: 140ms; }
+.bc-sign, .bc-master .bc-val {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 160ms var(--expressive), transform 160ms var(--expressive);
+}
+.bc-layer.on .bc-sign, .bc-master .bc-val.on { opacity: 1; transform: none; transition-delay: 140ms; }
 .bc-master {
   position: absolute;
   left: 0;
@@ -1777,7 +1783,6 @@ body.at-doc .links {
   letter-spacing: -0.2px;
   font-variation-settings: 'opsz' 14, 'wdth' 100;
 }
-.bc-layer .bc-pillar { margin-top: 90px; }
 .bc-whens { top: 310px; }
 .bc-whens .bc-when { margin-top: 0 !important; }
 .bc-sign { display: flex; align-items: center; height: 36px; }
