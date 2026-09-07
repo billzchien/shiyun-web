@@ -1136,7 +1136,11 @@ body.at-doc .links {
   width: 15px;
   z-index: 1;
   pointer-events: none;
+  /* WebKit lifts the sliding characters onto their own layers and then
+     paints them OVER these unless the fades are layers too. */
+  transform: translateZ(0);
 }
+.sb-pillar { isolation: isolate; }
 .sb-pillar::before { left: 0; background: linear-gradient(90deg, var(--shape-lowest), transparent); }
 .sb-pillar::after { right: 0; background: linear-gradient(270deg, var(--shape-lowest), transparent); }
 .sb-track {
@@ -1733,7 +1737,9 @@ body.at-doc .links {
   width: 15px;
   z-index: 1;
   pointer-events: none;
+  transform: translateZ(0); /* as on the big pillar: a layer, so it stays on top */
 }
+.bc-pillar { isolation: isolate; }
 .bc-pillar::before { left: 0; background: linear-gradient(90deg, var(--shape-lowest), transparent); }
 .bc-pillar::after { right: 0; background: linear-gradient(270deg, var(--shape-lowest), transparent); }
 /* A wheel: its signs in a row, the current one centred, neighbours faint. */
