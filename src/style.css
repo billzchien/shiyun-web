@@ -51,7 +51,10 @@ html { height: 100%; background: var(--bg); }
    runs a few pixels past the edge must not open a horizontal scroll on the
    phone. `clip` keeps the viewport as the scroll container (so sticky and
    fixed chrome behave); `hidden` is the fallback where clip is unknown. */
-html { overflow-x: hidden; overflow-x: clip; }
+html, body { overflow-x: hidden; overflow-x: clip; }
+/* iOS pans a body that is merely `overflow-x: hidden`; anchoring it keeps
+   the clip honest there too. */
+body { position: relative; }
 /* THE PROVEN RECIPE (do not decompose — every variation of it failed):
    Safari's two toolbars settle dark only when the theme-color meta AND the
    document background AND the actually rendered pixels all go dark in the

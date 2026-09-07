@@ -703,15 +703,29 @@ window.addEventListener(
   },
   { passive: true }
 );
+/**
+ * A finger is not a wheel: `overflow: hidden` on the body does not stop iOS
+ * from panning the page under a touch that is still down, so the swipe that
+ * raised About went on to scroll it. While the pull holds, the rest of the
+ * same touch is cancelled outright — the listener is non-passive for that
+ * one call — and the hold lasts until the finger lifts, not a timer.
+ */
 window.addEventListener(
   'touchmove',
   (e) => {
+    if (pullLocked) {
+      e.preventDefault();
+      holdPull(TRAVEL);
+      return;
+    }
     const y = e.touches[0].clientY;
     pullFromHome(touchY - y); // finger travelling up = positive
     touchY = y;
+    if (pullLocked) e.preventDefault(); // the event that committed the pull
   },
-  { passive: true }
+  { passive: false }
 );
+window.addEventListener('touchend', () => { if (pullLocked) holdPull(TRAVEL); }, { passive: true });
 
 window.addEventListener('popstate', () => navigate(routeFromLocation(), false));
 
