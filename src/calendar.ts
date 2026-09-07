@@ -64,18 +64,29 @@ const SUN = ink(sunRaw);
 const MOON = ink(moonRaw);
 const stamp = ink(stampRaw);
 
+/** English carries a short form for the phone, where the three full labels
+ *  would run into each other; Chinese is short already. */
 const TEXT = {
-  en: { solar: 'Solar Calendar', lunar: 'Lunar Calendar', both: 'Chinese Calendar' },
-  cn: { solar: '阳历', lunar: '阴历', both: '中国历法' },
+  en: {
+    solar: 'Solar Calendar', lunar: 'Lunar Calendar', both: 'Chinese Calendar',
+    short: { solar: 'Solar', lunar: 'Lunar', both: 'Chinese<br>Calendar' },
+  },
+  cn: { solar: '阳历', lunar: '阴历', both: '中国历法', short: null },
 };
 
 export function calendarFigure(lang: 'en' | 'cn'): string {
   const t = TEXT[lang];
-  const marker = (cls: string, x: number, size: number, icon: string, label: string) => `
+  const marker = (cls: string, x: number, size: number, icon: string, key: 'solar' | 'lunar' | 'both') => {
+    const short = t.short?.[key];
+    const label = short
+      ? `<span class="cal-long">${t[key]}</span><span class="cal-short">${short}</span>`
+      : t[key];
+    return `
         <div class="cal-marker ${cls}" style="left:${pc(x, G.W)};top:${pc(G.TEXT_Y, G.H)}">
           <span class="cal-icon" style="width:${cq(size)};bottom:calc(100% + ${cq(G.ICON_GAP)})">${icon}</span>
           <span class="cal-label">${label}</span>
         </div>`;
+  };
 
   return `
     <figure class="doc-figure cal-figure"
@@ -101,9 +112,9 @@ export function calendarFigure(lang: 'en' | 'cn'): string {
           <circle class="cal-ring cal-side cal-a" cx="${CX_A}" cy="${CY}" r="${G.R}" />
           <circle class="cal-ring cal-side cal-b" cx="${CX_B}" cy="${CY}" r="${G.R}" />
         </svg>
-        ${marker('cal-side cal-a', G.W / 2 - G.MARKER_X, G.SIDE_ICON, SUN, t.solar)}
-        ${marker('cal-side cal-b', G.W / 2 + G.MARKER_X, G.SIDE_ICON, MOON, t.lunar)}
-        ${marker('cal-both', G.W / 2, G.STAMP, stamp, t.both)}
+        ${marker('cal-side cal-a', G.W / 2 - G.MARKER_X, G.SIDE_ICON, SUN, 'solar')}
+        ${marker('cal-side cal-b', G.W / 2 + G.MARKER_X, G.SIDE_ICON, MOON, 'lunar')}
+        ${marker('cal-both', G.W / 2, G.STAMP, stamp, 'both')}
       </div>
     </figure>`;
 }

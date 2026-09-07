@@ -1497,8 +1497,13 @@ body.at-doc .links {
 /* On the phone the circles start closer: at the full spread the moon's
    circle ran past the column while it waited. (The inline values are the
    drawing's; these override them for the narrow column.) */
+/* Short English labels on the phone, the middle one on two lines. */
+.cal-short { display: none; }
 @media (max-width: 767px) {
   .cal-figure { --spread: 56px !important; --spread-m: 9.333cqw !important; }
+  .cal-long { display: none; }
+  .cal-short { display: inline; }
+  .cal-label { white-space: normal; line-height: 15px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cal-figure .cal-side, .cal-figure .cal-lens, .cal-figure .cal-both { transition: none; }
