@@ -672,13 +672,18 @@ const overlayUp = () =>
 
 /** The last wheel step seen while locked: momentum only ever decays. */
 let lastStep = 0;
+/** When the lock was taken: a swipe's steps still RAMP UP for a moment after
+ *  the pull commits, so growth is only read as a new swipe once the page's
+ *  travel is over and the first gesture can only be decaying. */
+let lockedAt = 0;
 
 function pullFromHome(delta: number) {
   if (pullLocked) {
     // Momentum decays, so a step that GROWS is a new swipe, not the tail of
     // the one that raised the page: let it go — the reader wants to read.
     const step = Math.abs(delta);
-    if (lastStep && step > lastStep * 1.5 + 4) {
+    const settled = performance.now() - lockedAt > TRAVEL;
+    if (settled && lastStep && step > lastStep * 1.5 + 4) {
       pullLocked = false;
       body.classList.remove('pulling');
       clearTimeout(pullTimer);
@@ -702,6 +707,7 @@ function pullFromHome(delta: number) {
   if (pulled < PULL_IN) return;
   pulled = 0;
   pullLocked = true; // one page per gesture, not one per wheel event
+  lockedAt = performance.now();
   lastStep = Math.abs(delta);
   body.classList.add('pulling');
   holdPull(TRAVEL);
