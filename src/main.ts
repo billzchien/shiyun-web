@@ -718,10 +718,15 @@ window.addEventListener(
       holdPull(TRAVEL);
       return;
     }
+    // iOS decides on the FIRST move whether a touch is a pan, and once it is
+    // one, later cancels are ignored. Home has nothing to scroll, so every
+    // move there is cancelled from the outset — the touch never becomes a
+    // pan, and is still ours when the pull commits partway through it.
+    const onHome = current === 'home' && !overlayUp();
+    if (onHome && e.cancelable) e.preventDefault();
     const y = e.touches[0].clientY;
     pullFromHome(touchY - y); // finger travelling up = positive
     touchY = y;
-    if (pullLocked) e.preventDefault(); // the event that committed the pull
   },
   { passive: false }
 );
