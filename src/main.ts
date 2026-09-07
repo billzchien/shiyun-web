@@ -670,11 +670,26 @@ const overlayUp = () =>
   body.classList.contains('qr-open') ||
   document.documentElement.classList.contains('video-open');
 
+/** The last wheel step seen while locked: momentum only ever decays. */
+let lastStep = 0;
+
 function pullFromHome(delta: number) {
   if (pullLocked) {
+    // Momentum decays, so a step that GROWS is a new swipe, not the tail of
+    // the one that raised the page: let it go — the reader wants to read.
+    const step = Math.abs(delta);
+    if (lastStep && step > lastStep * 1.5 + 4) {
+      pullLocked = false;
+      body.classList.remove('pulling');
+      clearTimeout(pullTimer);
+      lastStep = 0;
+      return;
+    }
+    lastStep = step;
     holdPull(300); // still the same gesture: keep the page still
     return;
   }
+  lastStep = 0;
   if (current !== 'home' || overlayUp()) {
     pulled = 0;
     return;
@@ -687,6 +702,7 @@ function pullFromHome(delta: number) {
   if (pulled < PULL_IN) return;
   pulled = 0;
   pullLocked = true; // one page per gesture, not one per wheel event
+  lastStep = Math.abs(delta);
   body.classList.add('pulling');
   holdPull(TRAVEL);
   navigate('about', true);
