@@ -47,6 +47,11 @@
 /* The canvas itself is cream: html carries the color too, so overscroll
    rubber-banding and any area beyond the body never flashes another color. */
 html { height: 100%; background: var(--bg); }
+/* The page never scrolls sideways: a figure's wheel or a fixed band that
+   runs a few pixels past the edge must not open a horizontal scroll on the
+   phone. `clip` keeps the viewport as the scroll container (so sticky and
+   fixed chrome behave); `hidden` is the fallback where clip is unknown. */
+html { overflow-x: hidden; overflow-x: clip; }
 /* THE PROVEN RECIPE (do not decompose — every variation of it failed):
    Safari's two toolbars settle dark only when the theme-color meta AND the
    document background AND the actually rendered pixels all go dark in the
@@ -1489,6 +1494,12 @@ body.at-doc .links {
   transition: opacity 600ms var(--expressive), transform 800ms var(--expressive);
 }
 .cal-figure.in .cal-both { opacity: 1; transform: none; }
+/* On the phone the circles start closer: at the full spread the moon's
+   circle ran past the column while it waited. (The inline values are the
+   drawing's; these override them for the narrow column.) */
+@media (max-width: 767px) {
+  .cal-figure { --spread: 56px !important; --spread-m: 9.333cqw !important; }
+}
 @media (prefers-reduced-motion: reduce) {
   .cal-figure .cal-side, .cal-figure .cal-lens, .cal-figure .cal-both { transition: none; }
 }
