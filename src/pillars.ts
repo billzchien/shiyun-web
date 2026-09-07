@@ -69,13 +69,15 @@ const TEXT = {
   en: {
     cols: ['Year', 'Month', 'Day', 'Hour'],
     person: ['Person 1', 'Person 2', 'Person 3'],
-    master: (el: Element) => `The Day Master is ${el}`,
+    master: (el: string) => `The Day Master is ${el}`,
+    el: (el: Element) => el,
     when: (p: (typeof PEOPLE)[0]) => [String(p.y), MONTH_EN[p.m - 1], String(p.d), HOUR_EN[p.chart.hour.b]],
   },
   cn: {
     cols: ['年', '月', '日', '时'],
     person: ['用户一', '用户二', '用户三'],
-    master: (el: Element) => `日主属${EL_CN[el]}`,
+    master: (el: string) => `日主属${el}`,
+    el: (el: Element) => EL_CN[el],
     when: (p: (typeof PEOPLE)[0]) => [`${p.y}年`, `${p.m}月`, `${p.d}日`, `${BRANCHES[p.chart.hour.b]}时`],
   },
 };
@@ -119,7 +121,6 @@ export function dayMasterFigure(lang: 'en' | 'cn'): string {
   const t = TEXT[lang];
   // One layer per person, stacked; the switch crossfades between them.
   const layers = PEOPLE.map((p, i) => {
-    const dm = STEM_EL[p.chart.day.s];
     const cols = KEYS.map((k) => {
       const pr = p.chart[k];
       const isDay = k === 'day';
@@ -135,14 +136,17 @@ export function dayMasterFigure(lang: 'en' | 'cn'): string {
     }).join('');
     return `
         <div class="bc-layer${i === 0 ? ' on' : ''}" data-i="${i}">
-          <p class="bc-master">${t.master(dm)}</p>
           <div class="bc-row">${cols}</div>
         </div>`;
   }).join('');
+  // The sentence stays put; only the element in it changes with the person.
+  const master = `<p class="bc-master">${t.master(
+    `<span class="bc-vals">${PEOPLE.map((p, i) => `<span class="bc-val${i === 0 ? ' on' : ''}" data-i="${i}">${t.el(STEM_EL[p.chart.day.s])}</span>`).join('')}</span>`
+  )}</p>`;
   const whens = `<div class="bc-row bc-whens">${KEYS.map((_, i) => `<div class="bc-col"><p class="sb-cap bc-when">${values(lang, i)}</p></div>`).join('')}</div>`;
   return `
     <figure class="doc-figure sb-figure bc-figure bc-master-fig" data-lang="${lang}" data-person="0">
-      <div class="sb-stage bc-stage">${layers}${whens}</div>
+      <div class="sb-stage bc-stage">${master}${layers}${whens}</div>
       ${buttons(lang)}
     </figure>`;
 }

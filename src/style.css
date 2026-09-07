@@ -1655,7 +1655,10 @@ body.at-doc .links {
 .bc-label { margin: 21px 0 0 !important; height: 16px; line-height: 16px; }
 .bc-when { margin: 20px 0 0 !important; color: var(--text-secondary); height: 16px; line-height: 16px; position: relative; width: 100%; text-align: center; }
 /* Every person's value is written in; only the current one shows. */
-.bc-vals { display: grid; place-items: center; }
+/* Stacked words share the widest one's box; in a sentence they must start
+   together, so the slack falls after the word, not before it. */
+.bc-vals { display: inline-grid; place-items: center; vertical-align: top; }
+.bc-master .bc-vals { justify-items: start; }
 .bc-val { grid-area: 1 / 1; white-space: nowrap; opacity: 0; transition: opacity 240ms var(--expressive); }
 .bc-val.on { opacity: 1; }
 .bc-pillar {
@@ -1749,8 +1752,18 @@ body.at-doc .links {
 /* ── Day master: stacked layers, crossfaded; each sign with its mark ── */
 .bc-master-fig { padding-top: 24px; }
 .bc-master-fig .bc-stage { position: relative; }
-.bc-layer { position: absolute; inset: 0; opacity: 0; transition: opacity 240ms var(--expressive); pointer-events: none; }
-.bc-layer.on { opacity: 1; }
+/* A switch is a pop, not a dissolve: the old chart shrinks away and the new
+   one grows in after it, so the change is seen rather than sensed. */
+.bc-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(0.9);
+  transform-origin: 50% 40%;
+  transition: opacity 160ms var(--expressive), transform 160ms var(--expressive);
+  pointer-events: none;
+}
+.bc-layer.on { opacity: 1; transform: none; transition-delay: 140ms; }
 .bc-master {
   position: absolute;
   left: 0;
