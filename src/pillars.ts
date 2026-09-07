@@ -148,7 +148,7 @@ export function dayMasterFigure(lang: 'en' | 'cn'): string {
   const whens = `<div class="bc-row bc-whens">${KEYS.map((_, i) => `<div class="bc-col"><p class="sb-cap bc-when">${values(lang, i)}</p></div>`).join('')}</div>`;
   return `
     <figure class="doc-figure sb-figure bc-figure bc-master-fig" data-lang="${lang}" data-person="0">
-      <div class="sb-stage bc-stage">${master}${pillars}${layers}${whens}</div>
+      <div class="sb-stage bc-stage"><div class="bc-block">${master}${pillars}${layers}${whens}</div></div>
       ${buttons(lang)}
     </figure>`;
 }

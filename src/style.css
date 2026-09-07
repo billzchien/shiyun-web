@@ -1674,7 +1674,7 @@ body.at-doc .links {
 /* ─── The Birth Chart's figures (see pillars.ts) ─────────────────────────── */
 /* Four small pillars in a row, each a wheel of its own; three people to
    switch between. On the card, stage 600 × 396. */
-.bc-figure { --bc-w: 112px; --bc-h: 200px; --bc-glyph: 32px; --bc-pitch: 48px; --bc-top: 90px; /* the day-master pillars' top, under the sentence */ }
+.bc-figure { --bc-w: 112px; --bc-h: 200px; --bc-glyph: 32px; --bc-pitch: 48px; --bc-top: 78px; /* the day-master pillars' top, under the sentence */ }
 .bc-stage { display: block; }
 .bc-row {
   position: absolute;
@@ -1684,8 +1684,19 @@ body.at-doc .links {
   transform: translateX(-50%);
   display: flex;
 }
+/* Both figures centre their block in the stage rather than hanging from
+   its top: the four-pillars row directly, the day master via .bc-block. */
+.bc-four .bc-row { top: 50%; transform: translate(-50%, -50%); }
+.bc-block {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: calc(var(--bc-top) + var(--bc-h) + 36px);
+}
 .bc-col { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; }
-.bc-label { margin: 21px 0 0 !important; height: 16px; line-height: 16px; }
+.bc-label { margin: 0 !important; height: 16px; line-height: 16px; }
 .bc-when { margin: 20px 0 0 !important; color: var(--text-secondary); height: 16px; line-height: 16px; position: relative; width: 100%; text-align: center; }
 /* Every person's value is written in; only the current one shows. */
 /* Stacked words share the widest one's box; in a sentence they must start
@@ -1807,7 +1818,7 @@ body.at-doc .links {
   position: absolute;
   left: 0;
   right: 0;
-  top: 12px;
+  top: 0;
   margin: 0 !important;
   text-align: center;
   font-size: 16px;
@@ -1837,7 +1848,7 @@ body.at-doc .links {
   .bc-figure { height: 420px; --bc-w: 71px; --bc-h: 160px; --bc-glyph: 22px; --bc-pitch: 34px; }
   /* 24 + 74 = 98: the day-master pillars land where the four-pillars' do,
      so the two cards' dates and people line up exactly. */
-  .bc-master-fig { --bc-top: 74px; }
+  .bc-master-fig { --bc-top: 62px; }
   .bc-row { width: calc(var(--bc-w) * 4); }
   .bc-pillar::before, .bc-pillar::after { width: 10px; }
   .bc-glyph { font-size: 18px; width: 18px; }
