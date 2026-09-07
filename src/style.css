@@ -2213,8 +2213,13 @@ body.no-anim *, body.no-anim { transition: none !important; }
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 12px;
+    /* Hugged, but on EQUAL columns: a shrink-wrapped grid of 1fr tracks
+       sizes every column to the widest label, so the four read as one
+       measure and the caret's travel between them is even. */
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
   }
-  .links a { flex: 0 0 auto; }
   .ctas { margin-top: 40px; }
   .logotype { width: 152px; height: 32px; }
   .wheel .sign { width: 64%; top: 41.7%; }
