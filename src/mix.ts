@@ -39,7 +39,7 @@ const TEXT = {
   en: {
     stems: 'Stems', branches: 'Branches',
     rows: ['Yang stems', 'Yin stems', 'Yang branches', 'Yin branches'],
-    add: 'Add Yin-yang', mixing: 'Mixing', unmix: 'Unmix',
+    add: 'Add Yin-yang', mixing: 'Mapping', unmix: 'Start over',
   },
   cn: {
     stems: '天干', branches: '地支',

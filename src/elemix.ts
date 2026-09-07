@@ -30,7 +30,7 @@ const STEM_ELEMENT: Element[] = ['Wood', 'Wood', 'Fire', 'Fire', 'Earth', 'Earth
 const G = { CELL: 64, PITCH: 66, rows: [20, 162], capOffset: 80 };
 
 const TEXT = {
-  en: { rows: ['Yang stems', 'Yin stems'], mix: 'Mix elements', unmix: 'Unmix' },
+  en: { rows: ['Yang stems', 'Yin stems'], mix: 'Map to elements', unmix: 'Start over' },
   cn: { rows: ['阳干', '阴干'], mix: '融入五行', unmix: '还原' },
 };
 
