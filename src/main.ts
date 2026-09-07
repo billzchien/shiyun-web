@@ -672,7 +672,7 @@ const overlayUp = () =>
 
 function pullFromHome(delta: number) {
   if (pullLocked) {
-    holdPull(200); // still the same gesture: keep the page still
+    holdPull(300); // still the same gesture: keep the page still
     return;
   }
   if (current !== 'home' || overlayUp()) {
@@ -693,6 +693,19 @@ function pullFromHome(delta: number) {
 }
 
 window.addEventListener('wheel', (e) => pullFromHome(e.deltaY), { passive: true });
+/**
+ * A trackpad's momentum is latched to the page before the pull commits, and
+ * a scroller that is already moving does not always honour an overflow that
+ * turns hidden under it. So while the lock holds, the page is pinned back to
+ * the top on every scroll the browser still lets through.
+ */
+window.addEventListener(
+  'scroll',
+  () => {
+    if (pullLocked && window.scrollY !== 0) window.scrollTo(0, 0);
+  },
+  { passive: true }
+);
 
 let touchY = 0;
 window.addEventListener(
