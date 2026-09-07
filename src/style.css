@@ -1703,8 +1703,9 @@ body.at-doc .links {
   font-size: var(--bc-glyph);
   line-height: 1.2;
   letter-spacing: -0.14px;
-  /* Fainter than the big pillar's fifth: at this size a fifth still read. */
-  opacity: 0.12;
+  /* The neighbours are there only to be seen turning: at rest they are
+     invisible, and show themselves as they pass under the fade. */
+  opacity: 0;
   transition: transform 400ms var(--expressive), opacity 240ms var(--expressive);
 }
 .bc-char.current { opacity: 1; }
