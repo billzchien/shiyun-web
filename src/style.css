@@ -1500,7 +1500,12 @@ body.at-doc .links {
 /* Short English labels on the phone, the middle one on two lines. */
 .cal-short { display: none; }
 @media (max-width: 767px) {
-  .cal-figure { --spread: 56px !important; --spread-m: 9.333cqw !important; }
+  /* The drawing bleeds to the page margins: its circles sit 52 in from the
+     600 box's edges, so the stage is widened by 600/496 and centred, and
+     the circles land flush on the column. Their waiting spread shrinks to
+     what the page's own 20 of padding can hold. */
+  .cal-stage { width: 120.97%; margin-left: -10.48%; }
+  .cal-figure { --spread: 28px !important; --spread-m: 4.667cqw !important; }
   .cal-long { display: none; }
   .cal-short { display: inline; }
   .cal-label { white-space: normal; line-height: 15px; }

@@ -69,7 +69,7 @@ const stamp = ink(stampRaw);
 const TEXT = {
   en: {
     solar: 'Solar Calendar', lunar: 'Lunar Calendar', both: 'Chinese Calendar',
-    short: { solar: 'Solar', lunar: 'Lunar', both: 'Chinese<br>Calendar' },
+    short: { solar: 'Solar<br>Calendar', lunar: 'Lunar<br>Calendar', both: 'Chinese<br>Calendar' },
   },
   cn: { solar: '阳历', lunar: '阴历', both: '中国历法', short: null },
 };
