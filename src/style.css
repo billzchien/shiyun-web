@@ -1705,7 +1705,7 @@ body.at-doc .links {
   letter-spacing: -0.14px;
   /* The neighbours read in a warm tan at full opacity, rather than as a
      ghost of the ink: a cleaner edge against the fade. */
-  color: #b8a084;
+  color: var(--shape-low); /* #e2d8cc */
   transition: transform 400ms var(--expressive), color 240ms var(--expressive);
 }
 .bc-char.current { color: var(--text); }
