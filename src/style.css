@@ -51,10 +51,12 @@ html { height: 100%; background: var(--bg); }
    runs a few pixels past the edge must not open a horizontal scroll on the
    phone. `clip` keeps the viewport as the scroll container (so sticky and
    fixed chrome behave); `hidden` is the fallback where clip is unknown. */
-html, body { overflow-x: hidden; overflow-x: clip; }
-/* iOS pans a body that is merely `overflow-x: hidden`; anchoring it keeps
-   the clip honest there too. */
-body { position: relative; }
+/* On the BODY, not html: the body's overflow propagates to the viewport
+   only while html's stays `visible`, and that propagation is what lets
+   `body.pulling` / `body.at-home` hold the page still under a wheel. With
+   the clip on html, About arrived already scrolling. Anchoring the body
+   keeps the clip honest on iOS, which pans a merely-hidden body. */
+body { overflow-x: hidden; overflow-x: clip; position: relative; }
 /* THE PROVEN RECIPE (do not decompose — every variation of it failed):
    Safari's two toolbars settle dark only when the theme-color meta AND the
    document background AND the actually rendered pixels all go dark in the
