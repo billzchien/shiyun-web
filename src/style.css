@@ -6,6 +6,7 @@
   --text-inverse: #fffcf9;
   --shape-low: #e2d8cc;
   --shape-lowest: #f2ebdd;
+  --shape-medium: #c3b4a3;
   --accent: #001f90; /* set per current hour's element by JS */
 
   --expressive: cubic-bezier(0.4, 0, 0, 1);
@@ -1635,6 +1636,158 @@ body.at-doc .links {
 }
 @media (prefers-reduced-motion: reduce) {
   .se-cell, .se-label, .se-back { transition: none; }
+}
+
+/* ─── The Birth Chart's figures (see pillars.ts) ─────────────────────────── */
+/* Four small pillars in a row, each a wheel of its own; three people to
+   switch between. On the card, stage 600 × 396. */
+.bc-figure { --bc-w: 112px; --bc-h: 200px; --bc-glyph: 32px; --bc-pitch: 48px; }
+.bc-stage { display: block; }
+.bc-row {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: calc(var(--bc-w) * 4);
+  transform: translateX(-50%);
+  display: flex;
+}
+.bc-col { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; }
+.bc-label { margin: 21px 0 0 !important; height: 16px; line-height: 16px; }
+.bc-when { margin: 20px 0 0 !important; color: var(--text-secondary); height: 16px; line-height: 16px; position: relative; width: 100%; text-align: center; }
+/* Every person's value is written in; only the current one shows. */
+.bc-vals { display: grid; place-items: center; }
+.bc-val { grid-area: 1 / 1; white-space: nowrap; opacity: 0; transition: opacity 240ms var(--expressive); }
+.bc-val.on { opacity: 1; }
+.bc-pillar {
+  position: relative;
+  width: var(--bc-w);
+  height: var(--bc-h);
+  margin-top: 21px;
+  border-radius: calc(var(--bc-w) / 2);
+  background: var(--shape-lowest);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+/* The fade at each pillar's edge, as on the big one. */
+.bc-pillar::before, .bc-pillar::after {
+  content: '';
+  position: absolute;
+  top: 30px;
+  bottom: 30px;
+  width: 15px;
+  z-index: 1;
+  pointer-events: none;
+}
+.bc-pillar::before { left: 0; background: linear-gradient(90deg, var(--shape-lowest), transparent); }
+.bc-pillar::after { right: 0; background: linear-gradient(270deg, var(--shape-lowest), transparent); }
+/* A wheel: its signs in a row, the current one centred, neighbours faint. */
+.bc-wheel {
+  position: relative;
+  width: 100%;
+  height: calc(var(--bc-glyph) * 1.2);
+  display: block;
+}
+.bc-char {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: var(--bc-glyph);
+  margin-left: calc(var(--bc-glyph) / -2);
+  text-align: center;
+  font-family: 'OPPO Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: var(--bc-glyph);
+  line-height: 1.2;
+  letter-spacing: -0.14px;
+  opacity: 0.2;
+  transition: transform 400ms var(--expressive), opacity 240ms var(--expressive);
+}
+.bc-char.current { opacity: 1; }
+.bc-wheel .bc-char:nth-child(1)  { transform: translateX(calc((0 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(2)  { transform: translateX(calc((1 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(3)  { transform: translateX(calc((2 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(4)  { transform: translateX(calc((3 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(5)  { transform: translateX(calc((4 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(6)  { transform: translateX(calc((5 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(7)  { transform: translateX(calc((6 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(8)  { transform: translateX(calc((7 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(9)  { transform: translateX(calc((8 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(10) { transform: translateX(calc((9 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(11) { transform: translateX(calc((10 - var(--cur)) * var(--bc-pitch))); }
+.bc-wheel .bc-char:nth-child(12) { transform: translateX(calc((11 - var(--cur)) * var(--bc-pitch))); }
+/* The people: the current one in ink, the others outlined. */
+.bc-people { display: flex; gap: 8px; flex: 0 0 auto; }
+.bc-person {
+  all: unset;
+  height: 40px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 100px;
+  border: 1px solid var(--shape-medium);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  font-variation-settings: 'opsz' 14, 'wdth' 100;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1), background 240ms var(--expressive),
+    color 240ms var(--expressive), border-color 240ms var(--expressive);
+}
+.bc-person.on { background: var(--text); border-color: var(--text); color: var(--text-inverse); }
+@media (hover: hover) { .bc-person:hover { transform: scale(1.05); } }
+.bc-person:active { transform: scale(0.9); transition-duration: 150ms; transition-timing-function: ease-out; }
+/* ── Day master: stacked layers, crossfaded; each sign with its mark ── */
+.bc-master-fig { padding-top: 24px; }
+.bc-master-fig .bc-stage { position: relative; }
+.bc-layer { position: absolute; inset: 0; opacity: 0; transition: opacity 240ms var(--expressive); pointer-events: none; }
+.bc-layer.on { opacity: 1; }
+.bc-master {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 12px;
+  margin: 0 !important;
+  text-align: center;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  font-variation-settings: 'opsz' 14, 'wdth' 100;
+}
+.bc-layer .bc-pillar { margin-top: 90px; }
+.bc-whens { top: 310px; }
+.bc-whens .bc-when { margin-top: 0 !important; }
+.bc-sign { display: flex; align-items: center; height: 36px; }
+.bc-glyph {
+  width: 24px;
+  text-align: center;
+  font-family: 'OPPO Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.14px;
+}
+.bc-mark { width: 32px; height: 32px; display: block; }
+.bc-mark svg { display: block; width: 100%; height: 100%; }
+@media (max-width: 767px) {
+  .bc-figure { height: 540px; --bc-w: 71px; --bc-h: 160px; --bc-glyph: 22px; --bc-pitch: 34px; }
+  .bc-row { width: calc(var(--bc-w) * 4); }
+  .bc-pillar::before, .bc-pillar::after { width: 10px; }
+  .bc-glyph { font-size: 18px; width: 18px; }
+  .bc-mark { width: 22px; height: 22px; }
+  .bc-person { padding: 0 14px; font-size: 14px; }
+  .bc-when { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bc-char, .bc-val, .bc-layer { transition: none; }
 }
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {

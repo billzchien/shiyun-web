@@ -187,7 +187,7 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
  * A block is one of: paragraph (`\n` renders as <br>), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
-export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' | 'elemix' | 'seasons' | 'lucky' };
+export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' | 'elemix' | 'seasons' | 'lucky' | 'pillars' | 'daymaster' };
 
 export const learnIntro = {
   sentenceEn: 'Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization.',
@@ -391,20 +391,26 @@ export const learnSections: {
     titleCn: '生辰八字',
     en: [
       { sub: 'Four Pillars' },
-      { p: 'The stems and branches began with the days. In time, the same wheels spread to the years, the months, and the hours, four scales turning independently, side by side. Your zodiac animal comes from here: it is simply the animal of your birth year’s branch. Any moment can be read as four stem-branch pairs at once.' },
+      { p: 'The stems and branches began with the days. In time, the same wheels spread to the years, the months, and the hours, until every scale of time carried its own stem-branch pair. Your zodiac animal comes from here: it is simply the animal of your birth year’s branch. Any moment can be read as four stem-branch pairs at once.' },
+      { fig: 'pillars' },
       { p: 'At the moment you were born, each wheel stood on a pair. Year, month, day, and hour: four pillars, eight characters in all. Nobody assigned them to you. They are simply the reading of the four wheels at that moment, and you happened to arrive then.' },
+      { p: 'The four pillars are not fully independent. The month and hour branches are fixed by the season and the clock, and their stems are derived from the year and day stems by old lookup rules.' },
       { sub: 'The Day Master' },
       { p: 'Among the eight, the stem of your day pillar stands for you. It is one of the ten stems, and it carries that stem’s element and charge. The other seven characters arrange themselves around it, each relating to your element in its own way. Together they make up the shape of your chart.' },
+      { fig: 'daymaster' },
       { p: 'Reading a person through these four pillars was refined and settled in the Tang and Song dynasties, and every almanac tradition since has been built on it. If you’ve read this far, you now know every part of the machine.' },
     ],
     cn: [
       { sub: '四柱' },
       { p: '前面说过，干支最早是用来纪日的。' },
-      { p: '后来这套轮子越铺越广：纪年、纪月、纪时，四个时间尺度各转各的，互不干扰。你的属相，就来自出生年份的地支：那一年的地支是什么，对应的生肖动物就是你的属相。' },
+      { p: '后来这套轮子越铺越广：纪年、纪月、纪时，四个时间尺度各有一套干支。你的属相，就来自出生年份的地支：那一年的地支是什么，对应的生肖动物就是你的属相。' },
       { p: '世间任何一个具体时刻，都能同时读出四对干支。' },
+      { fig: 'pillars' },
       { p: '你出生的那一刻，四个轮子刚好各自停在一对干支上。年柱、月柱、日柱、时柱，一共四柱，加起来八个字，这就是大家常说的「生辰八字」。它不是谁特意分配给你的，只是那个特定时刻的四轮读数，而你恰好在那时到来。' },
+      { p: '不过，四柱之间并非各自独立。\n月柱地支由节气锁定：正月固定为寅月，二月固定为卯月。\n时柱地支由钟点锁定：夜里十一点起即为子时。\n月柱天干，由年柱天干推出；时柱天干，由日柱天干推出。\n古人给这两套推法起了名字：正月建寅，寅属虎，推月干的口诀叫「五虎遁」；时辰起始于子，子属鼠，推时干的口诀叫「五鼠遁」。\n所以八字的八个字里，真正独立的信息只有四项：年柱、月支、日柱、时支，月干与时干都是推出来的。\n既然如此，为什么还要把推出来的天干一并写明？因为四柱之间的生克比对，全部以干支为统一单位开展。日主本身是一个天干，只有把月干、时干补齐，五行生克才有对象，命局格局才能成形。' },
       { sub: '日主' },
       { p: '这八个字里，日柱的天干直接代表你自己，被称为「日主」。你的日主是十天干中的某一个，自然就带着这一干对应的五行与阴阳。剩下的七个字，围绕日主排布，各自与你的日主发生生克，构成属于你的格局。' },
+      { fig: 'daymaster' },
       { p: '以日主为核心解读命盘的方法，在唐宋之间逐步定型。之后的上千年里，黄历择日、命理推演，全部都建立在这套四柱体系的基础之上。读到这里，你已经认识了它全部的零件。' },
     ],
   },
