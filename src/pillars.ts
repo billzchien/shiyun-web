@@ -57,11 +57,11 @@ function chart(y: number, m: number, d: number, h: number): Chart {
 const HOUR_EN = ['11 PM – 1 AM', '1 – 3 AM', '3 – 5 AM', '5 – 7 AM', '7 – 9 AM', '9 – 11 AM', '11 AM – 1 PM', '1 – 3 PM', '3 – 5 PM', '5 – 7 PM', '7 – 9 PM', '9 – 11 PM'];
 const MONTH_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-/** Three birth moments, chosen so the three day masters differ: 庚 Metal,
- *  癸 Water, 丁 Fire. */
+/** Three birth moments, chosen so the three day masters differ: 癸 Water,
+ *  庚 Metal, 丁 Fire. */
 const PEOPLE = [
-  { y: 1995, m: 2, d: 8, h: 5 },
   { y: 1988, m: 6, d: 17, h: 7 },
+  { y: 1994, m: 3, d: 15, h: 5 },
   { y: 2003, m: 10, d: 21, h: 21 },
 ].map((p) => ({ ...p, chart: chart(p.y, p.m, p.d, p.h) }));
 
