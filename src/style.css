@@ -1485,7 +1485,9 @@ body.at-doc .links {
   color: var(--text);
 }
 .cal-icon { position: absolute; left: 50%; translate: -50% 0; aspect-ratio: 1; }
-.cal-icon svg { display: block; width: 100%; height: 100%; }
+/* The icons may spill their box by a hair: at the phone's fractional sizes
+   WebKit clipped the sun's right edge on a half pixel. */
+.cal-icon svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .cal-label {
   display: block;
   font-size: 13px;
