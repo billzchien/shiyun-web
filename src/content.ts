@@ -150,9 +150,18 @@ export const aboutSections: {
  *  the closing line has no head and carries the mailto. */
 export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
   en: [
+    { text: 'Here are the questions we hear most often. If yours isn’t among them, email us at hello@myshiyun.com and we’ll get back to you soon.' },
+    {
+      head: 'Why is my reading different from someone else’s?',
+      text: 'Every reading is computed against your own birth chart. The same day can sit well with one chart and poorly with another, so no two people should expect the same page.',
+    },
     {
       head: 'I didn’t enter my birth hour. Does that matter?',
       text: 'It does. Without the hour, Shiyun calculates from three pillars instead of four. The results still hold, just with less precision. You can add your hour anytime on your profile page.',
+    },
+    {
+      head: 'Does my birth place matter?',
+      text: 'No need to worry about it. Your chart is calculated from your birth date and hour, the time as it appears on your birth certificate, and that’s how almanacs have been read for everyday use. Shiyun doesn’t ask for your birth place, and your reading is complete without it.',
     },
     {
       head: 'Is my birth information safe?',
@@ -162,22 +171,29 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
       head: 'How do I change my birth information?',
       text: 'Open your profile page and tap Birthday in the menu.',
     },
-    { text: 'For anything else, email us at hello@myshiyun.com and we’ll get back to you soon.' },
   ],
   cn: [
+    { text: '这里是大家最常问的问题。如果没有你想问的，欢迎发邮件至 hello@myshiyun.com，我们会尽快回复。' },
     {
-      head: '没填出生时辰会影响结果吗?',
-      text: '会的哦。未填时辰时，时运以三柱推算，结果依然有效，但精度不及四柱完整。你可以随时在个人页补填。',
+      head: '为什么我的运势和别人不一样？',
+      text: '时运的推算以你的生辰八字为准。同一天，与不同命盘的生克关系各不相同，结果自然因人而异。',
     },
     {
-      head: '我的出生信息安全吗?',
-      text: '非常安全。你的出生信息只保存在本机，不上传、不联网。卸载应用即完全清除，无法恢复。',
+      head: '没有填出生时辰，会影响结果吗？',
+      text: '会。未填时辰时，时运以三柱推算，结果依然有效，但精度不及四柱完整。你可以随时在个人页补填。',
     },
     {
-      head: '如何修改出生信息?',
-      text: '进入我的Profile，在菜单里选择「生日」即可。',
+      head: '出生地点会影响我的运势结果吗？',
+      text: '不会。时运的排盘只依据你的出生日期与时辰，以出生证或家人记得的时间为准，这也是黄历日常使用的通行做法。无需填写出生地点，你的命盘和运势都是完整的。',
     },
-    { text: '其他问题或建议，请发邮件至时运邮箱 hello@myshiyun.com，我们会尽快回复。' },
+    {
+      head: '如何修改出生信息？',
+      text: '进入个人页，在菜单中点击「生日」即可重新填写。',
+    },
+    {
+      head: '我的出生信息安全吗？',
+      text: '你的出生信息只保存在本机，不上传、不联网。卸载应用即完全清除，无法恢复。',
+    },
   ],
 };
 
