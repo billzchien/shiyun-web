@@ -83,7 +83,7 @@ const aboutBlock = (b: AboutBlock, lang: 'en' | 'cn' = 'en') => {
     <figure class="doc-figure">
       ${curled(
         `<img src="${import.meta.env.BASE_URL}assets/about/almanac.jpg" alt="${esc(almanacCaption[lang])}" draggable="false" />`,
-        '1200/675'
+        '1400/1000' // the photo's own frame, uncropped
       )}
       <figcaption>${esc(almanacCaption[lang])}</figcaption>
     </figure>`;
