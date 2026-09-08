@@ -53,7 +53,12 @@ export const navLabels: Record<'en' | 'cn', Record<string, string>> = {
 };
 
 /** About page — four sections; a block with a `head` renders as 小标题 + body. */
-export type AboutBlock = { head?: string; text: string };
+/** A block of About/Support copy: a paragraph with an optional small title,
+ *  or a figure by name ('almanac' — the old almanac photo in Our Story). */
+export type AboutBlock = { head?: string; text?: string; fig?: 'almanac' };
+
+/** The almanac photo's caption and alt text, per language. */
+export const almanacCaption = { en: 'Traditional Chinese almanac', cn: '传统黄历' };
 
 export const aboutSections: {
   id: string;
@@ -97,12 +102,14 @@ export const aboutSections: {
     titleEn: 'Our Story',
     en: [
       { text: 'For over a thousand years, the Chinese almanac has given time its texture. When to build, when to marry, when to begin a journey.' },
+      { fig: 'almanac' },
       { text: 'But for centuries, the almanac on the wall came in one version. One book, one verdict, written for everyone and no one in particular. In the original system, a day’s character was never absolute. It always depended on who was asking.' },
       { text: 'Shiyun restores that lost half of the tradition. Enter your birth moment once, and the almanac recalculates around you. The same date can read Clear for one person and Turbulent for another. This is how it was always meant to work.' },
       { text: 'Whether you grew up with an almanac in the house or are just now discovering the system, Shiyun reads it for you, in both languages, side by side.' },
     ],
     cn: [
       { text: '老墙上的黄历，一页页撕了上千年。盖房要选动土日，成亲要挑嫁娶期，出远门前总要先翻一翻——中国人的日子，早就在这一页页黄历里，分出了轻重缓急。' },
+      { fig: 'almanac' },
       { text: '可千年来，家家户户贴的黄历，永远是同一本。同样的宜忌，贴在每一面墙上，说给每一个人听。但老祖宗传下来的道理里，日子的吉凶从来就不是死的：同一个日子，落在不同的人身上，本就该有不同的注解。' },
       { text: '时运把这失落了太久的一半传统找了回来：输入你的生辰，整本黄历就会围着你的专属八字重新推演。同一天，有人宜出行开张，有人宜安身静守，有人遇吉，有人避凶，这才是传统最原本的样子。' },
       { text: '不管你是从小跟着长辈翻黄历长大，还是第一次对这套东方时间智慧生出兴趣，时运都会把独属于你的那份时间答案，好好算给你看。' },

@@ -12,7 +12,7 @@ import { HourWheel } from './wheel';
 import { initPreview } from './preview';
 import { initGetApp } from './getapp';
 import { initCylinder } from './cylinder';
-import { aboutSections, creditLinks, learnIntro, learnSections, navLabels, privacyCn, privacyEn, privacyUpdated, privacyUpdatedCn, supportFaq, taijiCaption, type AboutBlock, type LearnBlock } from './content';
+import { aboutSections, almanacCaption, creditLinks, learnIntro, learnSections, navLabels, privacyCn, privacyEn, privacyUpdated, privacyUpdatedCn, supportFaq, taijiCaption, type AboutBlock, type LearnBlock } from './content';
 import { curled, elementsGraph } from './learn';
 import { initStems, stemsFigure } from './stems';
 import { initZodiac, zodiacFigure } from './zodiac';
@@ -77,8 +77,17 @@ const bullets = (list: string[]) => `<ul>${list.map((b) => `<li>${set(b)}</li>`)
 
 /** About/Support blocks: an optional small display title (the Learn 小标题
  *  voice) above the body, [Name] becomes a link. */
-const aboutBlock = (b: AboutBlock) => {
-  const body = set(b.text).replace(/\[([^\]]+)\]/g, (_, name: string) => {
+const aboutBlock = (b: AboutBlock, lang: 'en' | 'cn' = 'en') => {
+  if (b.fig === 'almanac')
+    return `
+    <figure class="doc-figure">
+      ${curled(
+        `<img src="${import.meta.env.BASE_URL}assets/about/almanac.jpg" alt="${esc(almanacCaption[lang])}" draggable="false" />`,
+        '1200/675'
+      )}
+      <figcaption>${esc(almanacCaption[lang])}</figcaption>
+    </figure>`;
+  const body = set(b.text ?? '').replace(/\[([^\]]+)\]/g, (_, name: string) => {
     return `<a class="doc-link" href="${creditLinks[name] ?? '#'}" target="_blank" rel="noopener">${name}</a>`;
   });
   return `${b.head ? `<p class="learn-sub">${set(b.head)}</p>` : ''}<p>${body}</p>`;
@@ -92,8 +101,8 @@ const ABOUT_HTML = aboutSections
         <span class="cn">${esc(s.titleCn)}</span>
         <span class="en">${esc(s.titleEn)}</span>
       </header>
-      <div class="doc-en en">${s.en.map(aboutBlock).join('')}</div>
-      <div class="doc-cn">${s.cn.map(aboutBlock).join('')}</div>
+      <div class="doc-en en">${s.en.map((b) => aboutBlock(b, 'en')).join('')}</div>
+      <div class="doc-cn">${s.cn.map((b) => aboutBlock(b, 'cn')).join('')}</div>
     </section>`
   )
   .join('');
@@ -104,8 +113,8 @@ const SUPPORT_HTML = `
       <span class="cn">常见问题</span>
       <span class="en">Frequently Asked Questions</span>
     </header>
-    <div class="doc-en en">${supportFaq.en.map(aboutBlock).join('')}</div>
-    <div class="doc-cn">${supportFaq.cn.map(aboutBlock).join('')}</div>`.replace(
+    <div class="doc-en en">${supportFaq.en.map((b) => aboutBlock(b, 'en')).join('')}</div>
+    <div class="doc-cn">${supportFaq.cn.map((b) => aboutBlock(b, 'cn')).join('')}</div>`.replace(
   /<span class="selectable">hello@myshiyun\.com<\/span>/g,
   '<a class="doc-link selectable" href="mailto:hello@myshiyun.com">hello@myshiyun.com</a>'
 );
