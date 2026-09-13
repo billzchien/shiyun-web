@@ -1,10 +1,10 @@
 你在时运里的每一条推算，都源自中华文明的积累。干支纪日始于商代，五行体系完善于战国，四柱之法定于唐宋。你看到的每一个吉凶档位、每一条宜忌，背后都是这几套传统体系层层咬合、共同推演的结果。
 
-这一页，我们把这些底层概念逐个讲清：从最基础的阴阳起步，依次理清五行、干支、历法，最终落到专属于你的个人四柱。不必一次读完，按自己的节奏，慢慢品味。
+这一页，我们把这些底层概念逐个讲清：从最基础的阴阳起步，依次理清五行与干支，落到专属于你的个人四柱，最后回望黄历本身的传统。不必一次读完，按自己的节奏，慢慢品味。
 
-Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization. Day counting by stems and branches goes back to the Shang dynasty. The Five Elements were systematized in the Warring States period. The Four Pillars method was codified in the Tang and Song. Every tier and every reading you see is these systems interlocking, computed the way they have been for centuries.
+Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization. Day counting by stems and branches goes back to the Shang dynasty. The Five Elements were systematized in the Warring States period. The Four Pillars method was codified in the Tang and Song dynasties. Every tier and every reading you see is these systems interlocking, computed the way they have been for centuries.
 
-This page takes the concepts one at a time: yin and yang first, then the Five Elements, the stems and branches, the calendar itself, and finally the Four Pillars that belong to you alone. There’s no rush. Take it at your own pace.
+This page takes the concepts one at a time: yin and yang first, then the Five Elements and the stems and branches, on to the Four Pillars that belong to you alone, and finally the almanac tradition itself. There’s no rush. Take it at your own pace.
 
 ## 阴阳 / Yin & Yang
 
@@ -56,7 +56,7 @@ How the five join with time itself comes later, when the systems combine.
 
 十和十二的最小公倍数，刚好就是六十。从甲子排到癸亥，六十对完全不重复，转完就从头再来，这就是大家熟悉的「六十甲子」。商代人纪日用的正是这套规则，一天一对，六十天一轮。
 
-Two sets of counting signs, invented in ancient China to mark time. Their earliest traces are on Shang dynasty oracle bones, over three thousand years old, where they were used to count the days. The count has never stopped.
+Two sets of counting signs, invented in ancient China to mark time. Like Roman numerals, each is simply a written sequence for counting. Unlike Roman numerals, there are two sets, and they work by pairing up. Their earliest traces are on Shang dynasty oracle bones, over three thousand years old, where they were used to count the days. The count has never stopped.
 
 There are ten Heavenly Stems and twelve Earthly Branches.
 
@@ -93,24 +93,6 @@ At first, each stretch carried a name drawn from sky and daily routine: Midnight
 Under the Han dynasty, the system was fixed: the day splits into twelve equal parts, counted by the Earthly Branches, starting at 11 p.m. and changing every two hours. The two sets of names have run side by side ever since.
 
 Twelve hours, end to end, around and around.
-
-## 中国历法 / The Chinese Calendar
-
-中国传统历法是一部阴阳合历：月随月亮，年随太阳，两套节律并行，缺一不可。
-
-月亮圆缺一轮约二十九天半，所以历法里的月，大月三十天，小月二十九天，初一必为朔日，十五前后必为望日。十二个月加起来约三百五十四天，比太阳年少十一天。如果放任这个差值累积，年年叠加之后，新年会一路偏移到夏天。古人的解决办法叫「置闰」：每两三年补进一个闰月，那一年便有十三个月。月份随月亮节律走，年岁随太阳节律走，始终把误差拉回可控范围。
-
-太阳的节律，则交给二十四节气：太阳在黄道上每走十五度就设一个节气，立春、夏至、霜降、冬至，全是太阳的脚步，和月亮完全无关。农事只看节气，不看月份，因为播种收割认的是太阳的冷暖节奏。
-
-这套历法从商代甲骨历起步，历代不断修订精化，一直沿用至今。
-
-You’ll often hear it called the “Chinese lunar calendar.” That name is wrong, and the error hides the system’s real elegance. The Chinese calendar is lunisolar: months follow the moon, years follow the sun, and the whole design is a negotiation between the two.
-
-One lunar cycle, new moon to new moon, takes about 29.5 days. So calendar months alternate between 29 and 30 days, and every month begins on a new moon, with the full moon landing mid-month. Twelve such months add up to about 354 days, 11 days short of the solar year. Left alone, the drift would compound and New Year would wander into summer. The ancient solution is the leap month: every two or three years, one extra month is inserted, giving that year thirteen. The moon keeps the months, the sun keeps the years, and the leap month keeps the peace.
-
-The sun’s own rhythm is marked by the 24 solar terms, one for every 15 degrees the sun travels along its path: Start of Spring, Summer Solstice, Frost’s Descent, Winter Solstice. Farmers worked by these, not by the months, because planting answers to the sun.
-
-The system has been refined dynasty after dynasty since the Shang, and it has never stopped running.
 
 ## 系统融合 / System Convergence
 
@@ -185,22 +167,88 @@ One question remains: what do they have to do with you?
 
 前面说过，干支最早是用来纪日的。
 
-后来这套轮子越铺越广：纪年、纪月、纪时，四个时间尺度各转各的，互不干扰。你的属相，就来自出生年份的地支：那一年的地支是什么，对应的生肖动物就是你的属相。
+后来这套轮子越铺越广：纪年、纪月、纪时，四个时间尺度各有一套干支。你的属相，就来自出生年份的地支：那一年的地支是什么，对应的生肖动物就是你的属相。
 
 世间任何一个具体时刻，都能同时读出四对干支。
 
 你出生的那一刻，四个轮子刚好各自停在一对干支上。年柱、月柱、日柱、时柱，一共四柱，加起来八个字，这就是大家常说的「生辰八字」。它不是谁特意分配给你的，只是那个特定时刻的四轮读数，而你恰好在那时到来。
 
-The stems and branches began with the days. In time, the same wheels spread to the years, the months, and the hours, four scales turning independently, side by side. Your zodiac animal comes from here: it is simply the animal of your birth year’s branch. Any moment can be read as four stem-branch pairs at once.
+不过，四柱之间并非各自独立。
+月柱地支由节气锁定：正月固定为寅月，二月固定为卯月。
+时柱地支由钟点锁定：夜里十一点起即为子时。
+月柱天干，由年柱天干推出；时柱天干，由日柱天干推出。
+古人给这两套推法起了名字：正月建寅，寅属虎，推月干的口诀叫「五虎遁」；时辰起始于子，子属鼠，推时干的口诀叫「五鼠遁」。
+所以八字的八个字里，真正独立的信息只有四项：年柱、月支、日柱、时支，月干与时干都是推出来的。
+既然如此，为什么还要把推出来的天干一并写明？因为四柱之间的生克比对，全部以干支为统一单位开展。日主本身是一个天干，只有把月干、时干补齐，五行生克才有对象，命局格局才能成形。
+
+The stems and branches began with the days. In time, the same wheels spread to the years, the months, and the hours, until every scale of time carried its own stem-branch pair. Your zodiac animal comes from here: it is simply the animal of your birth year’s branch. Any moment can be read as four stem-branch pairs at once.
 
 At the moment you were born, each wheel stood on a pair. Year, month, day, and hour: four pillars, eight characters in all. Nobody assigned them to you. They are simply the reading of the four wheels at that moment, and you happened to arrive then.
+
+The four pillars are not fully independent. The month and hour branches are fixed by the season and the clock, and their stems are derived from the year and day stems by old lookup rules.
 
 ### 日主 / The Day Master
 
 这八个字里，日柱的天干直接代表你自己，被称为「日主」。你的日主是十天干中的某一个，自然就带着这一干对应的五行与阴阳。剩下的七个字，围绕日主排布，各自与你的日主发生生克，构成属于你的格局。
 
-以日主为核心解读命盘的方法，在唐宋之间逐步定型。之后的上千年里，黄历择日、命理推演，全部都建立在这套四柱体系的基础之上。读到这里，你已经认识了它全部的零件。
+以日主为核心解读命盘的方法，在唐宋之间逐步定型。之后的上千年里，黄历择日、命理推演，全部都建立在这套四柱体系的基础之上。
 
 Among the eight, the stem of your day pillar stands for you. It is one of the ten stems, and it carries that stem’s element and charge. The other seven characters arrange themselves around it, each relating to your element in its own way. Together they make up the shape of your chart.
 
-Reading a person through these four pillars was refined and settled in the Tang and Song dynasties, and every almanac tradition since has been built on it. If you’ve read this far, you now know every part of the machine.
+Reading a person through these four pillars was refined and settled in the Tang and Song dynasties, and every almanac tradition since has been built on it.
+
+## 中国历法 / The Chinese Calendar
+
+中国传统历法是一部阴阳合历：月随月亮，年随太阳，两套节律并行，缺一不可。
+
+月亮圆缺一轮约二十九天半，所以历法里的月，大月三十天，小月二十九天，初一必为朔日，十五前后必为望日。十二个月加起来约三百五十四天，比太阳年少十一天。如果放任这个差值累积，年年叠加之后，新年会一路偏移到夏天。古人的解决办法叫「置闰」：每两三年补进一个闰月，那一年便有十三个月。月份随月亮节律走，年岁随太阳节律走，始终把误差拉回可控范围。
+
+太阳的节律，则交给二十四节气：太阳在黄道上每走十五度就设一个节气，立春、夏至、霜降、冬至，全是太阳的脚步，和月亮完全无关。农事只看节气，不看月份，因为播种收割认的是太阳的冷暖节奏。
+
+这套历法从商代甲骨历起步，历代不断修订精化，一直沿用至今。
+
+You’ll often hear it called the “Chinese lunar calendar.” That name is wrong, and the error hides the system’s real elegance. The Chinese calendar is lunisolar: months follow the moon, years follow the sun, and the whole design is a negotiation between the two.
+
+One lunar cycle, new moon to new moon, takes about 29.5 days. So calendar months alternate between 29 and 30 days, and every month begins on a new moon, with the full moon landing mid-month. Twelve such months add up to about 354 days, 11 days short of the solar year. Left alone, the drift would compound and New Year would wander into summer. The ancient solution is the leap month: every two or three years, one extra month is inserted, giving that year thirteen. The moon keeps the months, the sun keeps the years, and the leap month keeps the peace.
+
+The sun’s own rhythm is marked by the 24 solar terms, one for every 15 degrees the sun travels along its path: Start of Spring, Summer Solstice, Frost’s Descent, Winter Solstice. Farmers worked by these, not by the months, because planting answers to the sun.
+
+The system has been refined dynasty after dynasty since the Shang, and it has never stopped running.
+
+## 二十四节气 / The Twenty-Four Solar Terms
+
+二十四节气，是太阳节律的完整刻度。
+
+它的骨架先于全表出现：春秋时期，古人通过圭表测量日影，先定下冬至与夏至；到战国后期的《吕氏春秋》，立春、春分、立夏、夏至、立秋、秋分、立冬、冬至八个名字已经齐备，四季的框架就此立定。此后逐步细分，到西汉《太初历》，二十四节气正式编入历法，沿用至今。
+
+二十四个名字里，藏着一层区分：单数位的立春、惊蛰、清明等十二个叫「节」，双数位的雨水、春分、谷雨等十二个叫「气」，节与气交替排布，每段大致十五天。日常语境里两者早已混称，但在命理体系中，「节」的身份特殊：它是换月的界碑。
+
+排八字所用的「月」，不是初一到月末的朔望月，而是以节为界的节气月：立春交节，进寅月；惊蛰交节，进卯月，依次轮转。年柱同理，以立春为界，立春一过才算新的干支年。民俗过年看春节，命理换岁看立春，两套并行，各管各的。
+
+The solar terms are the sun’s full calendar, twenty-four marks around the year.
+
+The skeleton came first. Early astronomers, measuring the sun’s shadow with a simple pole, fixed the two solstices first; by the late Warring States period, eight terms were in place, the solstices, the equinoxes, and the four “beginnings” of the seasons. The rest filled in between, and in the Han dynasty the full set of twenty-four was written into the official calendar. It has run ever since.
+
+The terms matter beyond farming. In the almanac tradition, they are boundary stones: the calendar months of a birth chart begin and end not on new moons, but at the solar terms. The year of a chart turns at the Beginning of Spring, not at Chinese New Year. Folk celebration follows the moon; the chart follows the sun. Two systems, side by side, each minding its own.
+
+## 宜忌 / Do & Avoid
+
+翻开任意一本老黄历，每天都印着两行字：宜什么，忌什么。
+
+这是黄历最深入人心的传统。旧时家家户户案头一本通书，动土、嫁娶、出行、开市，先翻宜忌再定日子，择日而行，是绵延千年的生活习惯。
+
+宜忌从哪来？历代形成了不止一套推法。《史记》里记过一桩事：汉武帝召集各派占家，问某日可否娶亲，七家给出七个答案，从大吉到大凶都有，吵到最后不了了之。到了清代，朝廷官修《协纪辨方书》，把历代神煞做了一次大清理，此后各家黄历大都以它为本。
+
+但统一底本之下，神煞取哪些、吉凶怎么权衡，各家至今仍各有做法，所以不同黄历对同一天的宜忌，常常并不一致。宜忌从来没有唯一的标准答案，它是一套参照，不是一纸判决。
+
+时运的宜忌，同样承自《协纪辨方书》一系的传统条目，再多走一步：先按当日筛出传统宜忌，再对照你的命盘取舍。所以你看到的宜忌，和别人看到的不同，和别家黄历印的也不同，它是你的那一份。读到这里，你已经认识了黄历全部的零件。
+
+Open any traditional almanac and every day carries two short lists: what to do, and what to avoid.
+
+This is the almanac’s oldest habit. For centuries, households kept one at hand and checked it before the big moves: breaking ground, getting married, setting out, opening shop. Picking the day was part of doing the thing.
+
+Where do the lists come from? Tradition developed more than one method, and they never fully agreed. A famous Han dynasty record describes an emperor polling seven schools of diviners about one wedding date: the answers ran from very auspicious to disastrous, and the debate ended without a verdict. Centuries later, the Qing court compiled an official compendium to sort out the systems, and most almanacs have leaned on it since.
+
+But which rules to keep and how to weigh them still varies from house to house, so two almanacs often disagree about the same day. The lists have always been a reference, not a verdict.
+
+Shiyun’s lists are drawn from that same compendium’s tradition, with one more step: the day’s entries are filtered against your own chart. What you see is not what everyone sees. It is your copy. And if you’ve read this far, you now know every part of the machine.
