@@ -210,7 +210,7 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
  * A block is one of: paragraph (`\n` renders as <br>), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
-export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' | 'elemix' | 'seasons' | 'lucky' | 'pillars' | 'daymaster' };
+export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' | 'elemix' | 'seasons' | 'lucky' | 'pillars' | 'daymaster' | 'terms' };
 
 export const learnIntro = {
   sentenceEn: 'Every reading in Shiyun draws on systems formed over three thousand years of Chinese civilization.',
@@ -446,11 +446,13 @@ export const learnSections: {
     titleCn: '二十四节气',
     en: [
       { p: 'The solar terms are the sun’s full calendar, twenty-four marks around the year.' },
+      { fig: 'terms' },
       { p: 'The skeleton came first. Early astronomers, measuring the sun’s shadow with a simple pole, fixed the two solstices first; by the late Warring States period, eight terms were in place, the solstices, the equinoxes, and the four “beginnings” of the seasons. The rest filled in between, and in the Han dynasty the full set of twenty-four was written into the official calendar. It has run ever since.' },
       { p: 'The terms matter beyond farming. In the almanac tradition, they are boundary stones: the calendar months of a birth chart begin and end not on new moons, but at the solar terms. The year of a chart turns at the Beginning of Spring, not at Chinese New Year. Folk celebration follows the moon; the chart follows the sun. Two systems, side by side, each minding its own.' },
     ],
     cn: [
       { p: '二十四节气，是太阳节律的完整刻度。' },
+      { fig: 'terms' },
       { p: '它的骨架先于全表出现：春秋时期，古人通过圭表测量日影，先定下冬至与夏至；到战国后期的《吕氏春秋》，立春、春分、立夏、夏至、立秋、秋分、立冬、冬至八个名字已经齐备，四季的框架就此立定。此后逐步细分，到西汉《太初历》，二十四节气正式编入历法，沿用至今。' },
       { p: '二十四个名字里，藏着一层区分：单数位的立春、惊蛰、清明等十二个叫「节」，双数位的雨水、春分、谷雨等十二个叫「气」，节与气交替排布，每段大致十五天。日常语境里两者早已混称，但在命理体系中，「节」的身份特殊：它是换月的界碑。' },
       { p: '排八字所用的「月」，不是初一到月末的朔望月，而是以节为界的节气月：立春交节，进寅月；惊蛰交节，进卯月，依次轮转。年柱同理，以立春为界，立春一过才算新的干支年。民俗过年看春节，命理换岁看立春，两套并行，各管各的。' },

@@ -1883,6 +1883,22 @@ body.at-doc .links {
 @media (prefers-reduced-motion: reduce) {
   .bc-char, .bc-val, .bc-layer { transition: none; }
 }
+
+/* ─── The twenty-four solar terms (see terms.ts) ──────────────────────────── */
+/* Six badges to a row, one season a row: 84 × 60 at 20 in the 600 column,
+   scaling with it. Sizing and spacing are these two numbers. */
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+}
+.term { display: block; color: var(--text); }
+.term svg { display: block; width: 100%; height: auto; }
+/* The phone reads four across: six left the characters near 12px. The
+   seasons no longer sit one to a row there, but the badges stay legible. */
+@media (max-width: 767px) {
+  .terms-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+}
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {
   /* The CN rule above carries a class more, so the phone restates it. */

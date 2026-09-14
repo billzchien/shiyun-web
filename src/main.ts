@@ -22,6 +22,7 @@ import { initMix, mixFigure } from './mix';
 import { elemixFigure, initElemix } from './elemix';
 import { initSeasons, seasonsFigure } from './seasons';
 import { dayMasterFigure, fourPillarsFigure, initPillars } from './pillars';
+import { termsFigure } from './terms';
 import { noWidow } from './typeset';
 
 type Route = 'home' | 'about' | 'learn' | 'support' | 'privacy';
@@ -152,6 +153,7 @@ function learnBlock(b: LearnBlock, lang: 'en' | 'cn'): string {
   if (b.fig === 'seasons') return seasonsFigure(lang);
   if (b.fig === 'pillars') return fourPillarsFigure(lang);
   if (b.fig === 'daymaster') return dayMasterFigure(lang);
+  if (b.fig === 'terms') return termsFigure();
   if (b.sub !== undefined) return `<p class="learn-sub">${esc(b.sub)}</p>`;
   return `<p>${set(b.p!).replace(/\n/g, '<br />')}</p>`;
 }
