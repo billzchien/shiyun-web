@@ -245,7 +245,16 @@ function applyLang() {
   body.classList.toggle('lang-en', lang === 'en');
   body.classList.toggle('lang-cn', lang === 'cn');
   links.querySelectorAll('a[data-route]').forEach((a) => {
-    a.textContent = navLabels[lang][a.getAttribute('data-route')!];
+    const label = navLabels[lang][a.getAttribute('data-route')!];
+    // English LEARN is set a letter at a time, so home can make it hop (see
+    // .hop in style.css). Chinese keeps its two characters whole.
+    if (lang === 'en' && a.getAttribute('data-route') === 'learn') {
+      a.innerHTML = [...label].map((ch, i) => `<span class="hop" style="--i:${i}">${ch}</span>`).join('');
+      a.setAttribute('aria-label', label);
+    } else {
+      a.textContent = label;
+      a.removeAttribute('aria-label');
+    }
   });
   // The toggle names the OTHER language, in that language's own face.
   langToggle.textContent = lang === 'en' ? '中' : 'EN';
