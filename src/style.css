@@ -2155,6 +2155,11 @@ body.cyl .dof-bottom { opacity: 0; }
    (body.at-doc .links) outranks a bare .links.traveling and, carrying no
    transform, would snap the row's flip on the way UP. */
 body.at-doc .links.traveling,
+body.at-home .links.traveling,
+.subnav-rule.traveling,
+.caret.traveling,
+.doc.traveling { transition: transform var(--travel) var(--expressive); }
+
 /* ─── LEARN hops on home ──────────────────────────────────────────────────── */
 /* An invitation: on home, English only, each letter of LEARN hops 10 up and
    back, left to right, 50ms apart, once every four seconds. The letters are
@@ -2175,10 +2180,6 @@ body.learned .hop { animation: none !important; } /* outranks the home rule abov
 @media (prefers-reduced-motion: reduce) {
   .hop { animation: none !important; }
 }
-body.at-home .links.traveling,
-.subnav-rule.traveling,
-.caret.traveling,
-.doc.traveling { transition: transform var(--travel) var(--expressive); }
 /* Leaving, the hairline drops out ahead of the row — down and gone before the
    eye can follow it across the page. Arriving it still rides in step. */
 .subnav-rule.traveling.leaving,
