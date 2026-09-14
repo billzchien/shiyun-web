@@ -8,7 +8,7 @@
  *            and the hairline between the blocks grows to fill their place.
  *   .mixed — every cell travels to its new row: yang stems, yin stems, yang
  *            branches, yin branches, and the four new captions come in.
- * UNMIX strips them in reverse.
+ * START OVER drops both at once.
  *
  * Every cell is placed absolutely from ONE geometry table (below), with both
  * of its homes written as CSS variables, so the travel is a single transform
@@ -101,26 +101,18 @@ export function mixFigure(lang: 'en' | 'cn'): string {
 
 /** The tint beat runs this long before the cells set off. */
 const TINT = 420;
-/** Unmix: the cells are home this long after they set off; then the tint lifts. */
-const TRAVEL = 560;
 
 function toggle(fig: HTMLElement) {
   const timer = Number(fig.dataset.timer || 0);
   if (timer) window.clearTimeout(timer);
   const btn = fig.querySelector<HTMLButtonElement>('.mx-toggle')!;
   if (fig.classList.contains('tint')) {
-    fig.classList.remove('mixed');
-    fig.classList.add('mixing');
-    showLabel(fig, 'mx-l-mixing');
-    btn.disabled = true;
-    fig.dataset.timer = String(
-      window.setTimeout(() => {
-        fig.classList.remove('tint', 'mixing');
-        showLabel(fig, 'mx-l-add');
-        btn.disabled = false;
-        fig.dataset.timer = '';
-      }, TRAVEL)
-    );
+    // Start over is one move: the cells walk home, the tint lifts and the
+    // captions return together — no Mapping beat on the way back.
+    fig.classList.remove('mixed', 'tint', 'mixing');
+    showLabel(fig, 'mx-l-add');
+    btn.disabled = false;
+    fig.dataset.timer = '';
   } else {
     fig.classList.add('tint', 'mixing');
     showLabel(fig, 'mx-l-mixing');

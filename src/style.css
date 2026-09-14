@@ -781,6 +781,13 @@ body.at-doc .links {
   padding-top: var(--subnav-bottom);
   min-height: 100svh;
 }
+/* On the phone the doc clips sideways itself: a figure that bleeds past the
+   viewport (the calendar's circles) still let iOS pan the page, body clip or
+   not, so nothing under it may be wider than the screen. Phone only — on
+   the desktop the cylinder's curl spreads blocks past the edges by design. */
+@media (max-width: 767px) {
+  .doc { overflow-x: clip; }
+}
 .doc-body {
   /* Long enough that the curl, applied before the reveal, arrives with it. */
   transition: opacity var(--fade) var(--expressive);
