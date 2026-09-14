@@ -31,7 +31,7 @@ const badge = (key: string) => {
  * pa-pa-pa-pa-pa-pa · pa-pa-pa-pa-pa-pa · … Each badge carries its own delay.
  */
 const BEAT = 70;
-const BREATH = 50;
+const BREATH = 400;
 const delay = (i: number) => Math.floor(i / 6) * (6 * BEAT + BREATH) + (i % 6) * BEAT;
 
 export function termsFigure(): string {
