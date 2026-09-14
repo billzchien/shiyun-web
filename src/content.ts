@@ -207,7 +207,8 @@ export const supportFaq: { en: AboutBlock[]; cn: AboutBlock[] } = {
 /**
  * Learn page — text canon lives in MDs/shiyun_learn_concepts.md; the block
  * layout (what sits before or after a figure) follows the Figma frames.
- * A block is one of: paragraph (`\n` renders as <br>), small display title,
+ * A block is one of: paragraph (`\n` renders as <br>; `[text](https://…)`
+ * renders as a reference link), small display title,
  * or a figure by name ('taiji' — the photo; 'elements' — the coded graph).
  */
 export type LearnBlock = { p?: string; sub?: string; fig?: 'taiji' | 'elements' | 'stems' | 'zodiac' | 'hours' | 'calendar' | 'mix' | 'elemix' | 'seasons' | 'lucky' | 'pillars' | 'daymaster' | 'terms' };
@@ -243,7 +244,7 @@ export const learnSections: {
     en: [
       { p: 'One of the oldest ideas in Chinese philosophy, drawn from watching nature: sun and moon, day and night, motion and stillness. The characters themselves began as landscape. Yin is the shaded side of a hill, yang the sunlit side.' },
       { fig: 'taiji' },
-      { p: 'The idea was worked out in the commentaries to the I Ching, the Book of Changes. Its insight is simple: everything has two opposing sides, yet yin and yang are not enemies but partners, each depending on the other, each turning into the other in an endless cycle. Day rolls into night, night into day. Neither exists alone.' },
+      { p: 'The idea was worked out in the commentaries to the [I Ching](https://ctext.org/book-of-changes), the Book of Changes. Its insight is simple: everything has two opposing sides, yet yin and yang are not enemies but partners, each depending on the other, each turning into the other in an endless cycle. Day rolls into night, night into day. Neither exists alone.' },
       { p: 'In the Chinese calendar, yin and yang are the ground floor. Every heavenly stem, every earthly branch, every element carries a yin or yang charge. Everything that follows builds on this pair.' },
     ],
     cn: [
@@ -261,9 +262,9 @@ export const learnSections: {
     titleEn: 'The Five Elements',
     titleCn: '五行',
     en: [
-      { p: 'Wood, Fire, Earth, Metal, Water. Despite the name, these are not building blocks like the Greek four elements. The earliest definition, in the Book of Documents some three thousand years ago, describes them as behaviors: water soaks downward, fire flares upward, wood bends and straightens, metal yields and reshapes, earth takes seed and gives harvest. Think verbs, not substances.' },
+      { p: 'Wood, Fire, Earth, Metal, Water. Despite the name, these are not building blocks like the Greek four elements. The earliest definition, in the [Book of Documents](https://ctext.org/shang-shu/great-plan) some three thousand years ago, describes them as behaviors: water soaks downward, fire flares upward, wood bends and straightens, metal yields and reshapes, earth takes seed and gives harvest. Think verbs, not substances.' },
       { fig: 'elements' },
-      { p: 'In the Warring States period, the philosopher Zou Yan used their cycle of conquest to explain the rise and fall of dynasties. By the Han dynasty, the five ran through everything: medicine, music, and the calendar itself.' },
+      { p: 'In the Warring States period, the philosopher [Zou Yan](https://en.wikipedia.org/wiki/Zou_Yan) used their cycle of conquest to explain the rise and fall of dynasties. By the Han dynasty, the five ran through everything: medicine, music, and the calendar itself.' },
       { p: 'They relate in two cycles. In the generating cycle, each feeds the next: Wood fuels Fire, Fire makes Earth, Earth bears Metal, Metal carries Water, Water nourishes Wood. In the overcoming cycle, each keeps another in check: Water quenches Fire, Fire melts Metal, Metal cuts Wood, Wood breaks Earth, Earth dams Water. Overcoming is not destruction. It is restraint, and a healthy system needs both.' },
     ],
     cn: [
@@ -281,10 +282,10 @@ export const learnSections: {
     titleEn: 'Heavenly Stems & Earthly Branches',
     titleCn: '天干地支',
     en: [
-      { p: 'Two sets of counting signs, invented in ancient China to mark time. Like Roman numerals, each is simply a written sequence for counting. Unlike Roman numerals, there are two sets, and they work by pairing up. Their earliest traces are on Shang dynasty oracle bones, over three thousand years old, where they were used to count the days. The count has never stopped.' },
+      { p: 'Two sets of counting signs, invented in ancient China to mark time. Like Roman numerals, each is simply a written sequence for counting. Unlike Roman numerals, there are two sets, and they work by pairing up. Their earliest traces are on Shang dynasty [oracle bones](https://en.wikipedia.org/wiki/Oracle_bone), over three thousand years old, where they were used to count the days. The count has never stopped.' },
       { p: 'There are ten Heavenly Stems and twelve Earthly Branches.' },
       { fig: 'stems' },
-      { p: 'They pair by turning in step, like two wheels: first stem with first branch, second with second, and on they roll. The stems run out at ten and start over; the branches reset at twelve. The wheels only return to their starting point together after sixty pairs, the least common multiple of ten and twelve. Sixty pairs, no repeats, then round again: the sixty-pair cycle. These are the day names the Shang carved into bone, one pair per day, sixty days per round.' },
+      { p: 'They pair by turning in step, like two wheels: first stem with first branch, second with second, and on they roll. The stems run out at ten and start over; the branches reset at twelve. The wheels only return to their starting point together after sixty pairs, the least common multiple of ten and twelve. Sixty pairs, no repeats, then round again: the [sixty-pair cycle](https://en.wikipedia.org/wiki/Sexagenary_cycle). These are the day names the Shang carved into bone, one pair per day, sixty days per round.' },
     ],
     cn: [
       { p: '天干地支，是中国古人发明的一套计时符号，两组互相配合，构成了中华文明的时间坐标。' },
@@ -305,7 +306,7 @@ export const learnSections: {
       { p: 'Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig.' },
       { fig: 'zodiac' },
       { p: 'The twelve animals are the faces of the twelve Earthly Branches: one animal per branch. The pairing gave abstract signs something anyone could remember. You may forget the third branch; you won’t forget the Tiger.' },
-      { p: 'The earliest record of the pairing is on bamboo slips from the late Warring States period. By the Han dynasty the set had settled into today’s twelve, and it hasn’t changed in two thousand years.' },
+      { p: 'The earliest record of the pairing is on [bamboo slips](https://en.wikipedia.org/wiki/Shuihudi_Qin_bamboo_texts) from the late Warring States period. By the Han dynasty the set had settled into today’s twelve, and it hasn’t changed in two thousand years.' },
     ],
     cn: [
       { p: '就是鼠、牛、虎、兔、龙、蛇、马、羊、猴、鸡、狗、猪。' },
@@ -445,9 +446,9 @@ export const learnSections: {
     titleEn: 'The Twenty-Four Solar Terms',
     titleCn: '二十四节气',
     en: [
-      { p: 'The solar terms are the sun’s full calendar, twenty-four marks around the year.' },
+      { p: 'The [solar terms](https://ich.unesco.org/en/RL/the-twenty-four-solar-terms-knowledge-in-china-of-time-and-practices-developed-through-observation-of-the-sun-s-annual-motion-00647) are the sun’s full calendar, twenty-four marks around the year.' },
       { fig: 'terms' },
-      { p: 'The skeleton came first. Early astronomers, measuring the sun’s shadow with a simple pole, fixed the two solstices first; by the late Warring States period, eight terms were in place, the solstices, the equinoxes, and the four “beginnings” of the seasons. The rest filled in between, and in the Han dynasty the full set of twenty-four was written into the official calendar. It has run ever since.' },
+      { p: 'The skeleton came first. Early astronomers, measuring the sun’s shadow with a simple pole, fixed the two solstices first; by the late Warring States period, eight terms were in place, the solstices, the equinoxes, and the four “beginnings” of the seasons. The rest filled in between, and in the Han dynasty the full set of twenty-four was written into the [official calendar](https://en.wikipedia.org/wiki/Taichu_calendar). It has run ever since.' },
       { p: 'The terms matter beyond farming. In the almanac tradition, they are boundary stones: the calendar months of a birth chart begin and end not on new moons, but at the solar terms. The year of a chart turns at the Beginning of Spring, not at Chinese New Year. Folk celebration follows the moon; the chart follows the sun. Two systems, side by side, each minding its own.' },
     ],
     cn: [
@@ -467,7 +468,7 @@ export const learnSections: {
     en: [
       { p: 'Open any traditional almanac and every day carries two short lists: what to do, and what to avoid.' },
       { p: 'This is the almanac’s oldest habit. For centuries, households kept one at hand and checked it before the big moves: breaking ground, getting married, setting out, opening shop. Picking the day was part of doing the thing.' },
-      { p: 'Where do the lists come from? Tradition developed more than one method, and they never fully agreed. A famous Han dynasty record describes an emperor polling seven schools of diviners about one wedding date: the answers ran from very auspicious to disastrous, and the debate ended without a verdict. Centuries later, the Qing court compiled an official compendium to sort out the systems, and most almanacs have leaned on it since.' },
+      { p: 'Where do the lists come from? Tradition developed more than one method, and they never fully agreed. A famous [Han dynasty record](https://ctext.org/shiji/ri-zhe-lie-zhuan) describes an emperor polling seven schools of diviners about one wedding date: the answers ran from very auspicious to disastrous, and the debate ended without a verdict. Centuries later, the Qing court compiled an [official compendium](http://www.chinaknowledge.de/Literature/Daoists/xiejibianfangshu.html) to sort out the systems, and most almanacs have leaned on it since.' },
       { p: 'But which rules to keep and how to weigh them still varies from house to house, so two almanacs often disagree about the same day. The lists have always been a reference, not a verdict.' },
       { p: 'Shiyun’s lists are drawn from that same compendium’s tradition, with one more step: the day’s entries are filtered against your own chart. What you see is not what everyone sees. It is your copy. And if you’ve read this far, you now know every part of the machine.' },
     ],

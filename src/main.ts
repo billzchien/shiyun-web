@@ -155,8 +155,22 @@ function learnBlock(b: LearnBlock, lang: 'en' | 'cn'): string {
   if (b.fig === 'daymaster') return dayMasterFigure(lang);
   if (b.fig === 'terms') return termsFigure(lang);
   if (b.sub !== undefined) return `<p class="learn-sub">${esc(b.sub)}</p>`;
-  return `<p>${set(b.p!).replace(/\n/g, '<br />')}</p>`;
+  return `<p>${learnP(b.p!)}</p>`;
 }
+
+/**
+ * Learn's paragraphs carry references — the classics, the finds, the
+ * compendium — written inline as `[text](https://…)`. They are turned into
+ * links AFTER escaping and typesetting: the URL has no spaces for the widow
+ * rule to bind on, and escaping leaves the brackets alone.
+ */
+const learnP = (p: string) =>
+  set(p)
+    .replace(
+      /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+      '<a class="doc-link" href="$2" target="_blank" rel="noopener">$1</a>'
+    )
+    .replace(/\n/g, '<br />');
 
 const learnHtml = () => `
     <section class="doc-section learn">
@@ -663,10 +677,8 @@ function syncSectionNav(route: Route, defer = false) {
   if (!RAILS[route]) hideSectionNav();
   else if (!defer) showSectionNav();
   body.classList.remove('chrome-away', 'chrome-compact'); // a new page opens full
-  // The cylinder belongs to the long reads; Learn is a single centred line.
-  if (route === 'about' || route === 'learn' || route === 'support' || route === 'privacy')
-    cylinder.enable();
-  else cylinder.disable();
+  // The cylinder curl is retired: the doc pages scroll flat.
+  cylinder.disable();
 }
 
 links.addEventListener('click', (e) => {
