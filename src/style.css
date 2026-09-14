@@ -1894,10 +1894,14 @@ body.at-doc .links {
 }
 .term { display: block; color: var(--text); }
 .term svg { display: block; width: 100%; height: auto; }
-/* The phone reads four across: six left the characters near 12px. The
-   seasons no longer sit one to a row there, but the badges stay legible. */
+/* Keyed to the COLUMN, not the phone breakpoint: a wide tablet still has a
+   near-600 column and keeps six across on a tighter gap. Only a narrow
+   phone drops to four, where six left the characters near 12px. */
 @media (max-width: 767px) {
-  .terms-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .terms-grid { gap: 12px; }
+}
+@media (max-width: 479px) {
+  .terms-grid { grid-template-columns: repeat(4, 1fr); }
 }
 /* Mobile reads the same page a size down. */
 @media (max-width: 767px) {
