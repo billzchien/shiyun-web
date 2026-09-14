@@ -1850,7 +1850,9 @@ body.at-doc .links {
 /* The dates sit 20 under the pillars, wherever the pillars end. */
 .bc-whens { top: calc(var(--bc-top) + var(--bc-h) + 20px); }
 .bc-whens .bc-when { margin-top: 0 !important; }
-.bc-sign { display: flex; align-items: center; height: 36px; }
+/* The two signs sit as close as the four-pillars wheels' rows do: 32 on
+   the desktop (the frame's own), and the phone's row pitch below. */
+.bc-sign { display: flex; align-items: center; height: var(--bc-sign-h, 32px); }
 .bc-glyph {
   width: 24px;
   text-align: center;
@@ -1865,7 +1867,9 @@ body.at-doc .links {
 @media (max-width: 767px) {
   /* Shorter pillars, and a shorter card to match: the content ends at 286
      of stage, and nothing should float above the people. */
-  .bc-figure { height: 420px; --bc-w: 71px; --bc-h: 160px; --bc-glyph: 22px; --bc-pitch: 34px; }
+  /* Thicker pillars: the row runs into the card's padding (335 across, not
+     the 287 stage), and the signs stack at the wheels' 26 pitch. */
+  .bc-figure { height: 420px; --bc-w: 82px; --bc-h: 160px; --bc-glyph: 22px; --bc-pitch: 34px; --bc-sign-h: 26px; }
   /* 24 + 74 = 98: the day-master pillars land where the four-pillars' do,
      so the two cards' dates and people line up exactly. */
   .bc-master-fig { --bc-top: 62px; }
