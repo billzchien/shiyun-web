@@ -22,7 +22,7 @@ import { initMix, mixFigure } from './mix';
 import { elemixFigure, initElemix } from './elemix';
 import { initSeasons, seasonsFigure } from './seasons';
 import { dayMasterFigure, fourPillarsFigure, initPillars } from './pillars';
-import { termsFigure } from './terms';
+import { mountTerms, termsFigure } from './terms';
 import { noWidow } from './typeset';
 
 type Route = 'home' | 'about' | 'learn' | 'support' | 'privacy';
@@ -211,6 +211,7 @@ const docHtml = (route: Exclude<Route, 'home'>) =>
 function writeDoc(route: Exclude<Route, 'home'>) {
   docBody.innerHTML = docHtml(route);
   mountCalendar(docBody);
+  mountTerms(docBody);
 }
 
 const TITLES: Record<Route, string> = {

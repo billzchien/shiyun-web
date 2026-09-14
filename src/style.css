@@ -1892,13 +1892,27 @@ body.at-doc .links {
   grid-template-columns: repeat(6, 1fr);
   gap: 20px;
 }
-.term { display: block; color: var(--text); }
+/* Each badge pops in on its own beat (--d, set in terms.ts): a small,
+   faint start, then a spring past full size and back. */
+.term {
+  display: block;
+  color: var(--text);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 200ms var(--expressive) var(--d, 0ms), transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1) var(--d, 0ms);
+}
+.terms-figure.in .term { opacity: 1; transform: none; }
+/* Leaving, they all go at once, ready to pop again. */
+.terms-figure:not(.in) .term { transition-delay: 0ms; transition-duration: 120ms; }
 .term svg { display: block; width: 100%; height: auto; }
 /* Keyed to the COLUMN, not the phone breakpoint: a wide tablet still has a
    near-600 column and keeps six across on a tighter gap. Only a narrow
    phone drops to four, where six left the characters near 12px. */
 @media (max-width: 767px) {
   .terms-grid { gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .term { transition: none; }
 }
 @media (max-width: 479px) {
   .terms-grid { grid-template-columns: repeat(4, 1fr); }

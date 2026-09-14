@@ -26,9 +26,40 @@ const badge = (key: string) => {
   return raw.replace(/bgClip/g, `bgClip-${key}`);
 };
 
+/**
+ * The pop's rhythm: six quick beats to a season, a breath between seasons —
+ * pa-pa-pa-pa-pa-pa · pa-pa-pa-pa-pa-pa · … Each badge carries its own delay.
+ */
+const BEAT = 70;
+const BREATH = 50;
+const delay = (i: number) => Math.floor(i / 6) * (6 * BEAT + BREATH) + (i % 6) * BEAT;
+
 export function termsFigure(): string {
   return `
     <figure class="doc-figure terms-figure">
-      <div class="terms-grid">${ORDER.map((k) => `<span class="term">${badge(k)}</span>`).join('')}</div>
+      <div class="terms-grid">${ORDER.map((k, i) => `<span class="term" style="--d:${delay(i)}ms">${badge(k)}</span>`).join('')}</div>
     </figure>`;
+}
+
+/**
+ * The badges pop in as the figure is scrolled to, and reset when it is left,
+ * so the rhythm plays again on the way back. Runs after every render of the
+ * doc body (see writeDoc in main.ts) and arms each figure once.
+ */
+export function mountTerms(root: HTMLElement) {
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  for (const fig of root.querySelectorAll<HTMLElement>('.terms-figure:not([data-armed])')) {
+    fig.dataset.armed = '1';
+    if (still.matches) {
+      fig.classList.add('in');
+      continue;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.target.classList.toggle('in', e.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(fig);
+  }
 }
