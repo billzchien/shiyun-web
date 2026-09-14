@@ -145,7 +145,7 @@ export const aboutSections: {
     titleCn: '幕后名录',
     titleEn: 'Credit',
     en: [
-      { text: 'Shiyun is designed and built by designer Zheng Jian, who goes by Bill Chien. The calendar numerals are set in Brice Black, a typeface by Indonesian graphic designer Cahya Sofyan, who generously let me use it in Shiyun.' },
+      { text: 'Shiyun is designed and built by designer Zheng Jian, who goes by [Bill Chien]. The calendar numerals are set in Brice Black, a typeface by Indonesian graphic designer [Cahya Sofyan], who generously let me use it in Shiyun.' },
     ],
     cn: [
       { text: '时运由设计师 [Bill Chien] 一人设计与开发。日历上的大数字使用 Brice Black，由印度尼西亚平面设计师 [Cahya Sofyan] 设计。感谢他慷慨允许时运使用这套字体。' },
