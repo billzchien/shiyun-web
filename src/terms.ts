@@ -18,12 +18,14 @@ const ORDER = [
   'lidong', 'xiaoxue', 'daxue', 'dongzhi', 'xiaohan', 'dahan',
 ];
 
-const badge = (key: string) => {
+const badge = (key: string, lang: string) => {
   const raw = RAW[`../assets/learn/terms/${key}.svg`];
   if (!raw) throw new Error(`solar term badge missing: ${key}`);
-  // Every badge ships the same clip id; inlined side by side they would all
-  // resolve to the first one's outline, so each gets its own.
-  return raw.replace(/bgClip/g, `bgClip-${key}`);
+  // Every badge ships the same clip id. Inlined side by side they would all
+  // resolve to the first one's outline — and the figure lives TWICE, once
+  // per language column, so the id carries the language too: a clip that
+  // resolves into the hidden column draws thick and cropped in Safari.
+  return raw.replace(/bgClip/g, `bgClip-${lang}-${key}`);
 };
 
 /**
@@ -34,10 +36,10 @@ const BEAT = 70;
 const BREATH = 400;
 const delay = (i: number) => Math.floor(i / 6) * (6 * BEAT + BREATH) + (i % 6) * BEAT;
 
-export function termsFigure(): string {
+export function termsFigure(lang: 'en' | 'cn'): string {
   return `
     <figure class="doc-figure terms-figure">
-      <div class="terms-grid">${ORDER.map((k, i) => `<span class="term" style="--d:${delay(i)}ms">${badge(k)}</span>`).join('')}</div>
+      <div class="terms-grid">${ORDER.map((k, i) => `<span class="term" style="--d:${delay(i)}ms">${badge(k, lang)}</span>`).join('')}</div>
     </figure>`;
 }
 
