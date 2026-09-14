@@ -448,7 +448,28 @@ function swapDoc(route: Exclude<Route, 'home'>) {
   }, FADE);
 }
 
+/**
+ * The hop on LEARN is an invitation, and once it has been taken up it stops:
+ * a visitor who has opened Learn has learned. Remembered across visits.
+ */
+const LEARNED_KEY = 'shiyun.learned';
+function markLearned() {
+  if (body.classList.contains('learned')) return;
+  body.classList.add('learned');
+  try {
+    localStorage.setItem(LEARNED_KEY, '1');
+  } catch {
+    /* private mode: the hop simply returns next visit */
+  }
+}
+try {
+  if (localStorage.getItem(LEARNED_KEY)) body.classList.add('learned');
+} catch {
+  /* no storage: the hop plays */
+}
+
 function navigate(route: Route, push: boolean) {
+  if (route === 'learn') markLearned();
   if (route === current) return;
   const swapping = current !== 'home' && route !== 'home';
   if (current === 'home') enterDoc(route as Exclude<Route, 'home'>);
@@ -812,3 +833,4 @@ wideGraph.addEventListener('change', () => {
 
 applyLang();
 applyInstant(routeFromLocation());
+if (routeFromLocation() === 'learn') markLearned(); // arriving straight on Learn counts too

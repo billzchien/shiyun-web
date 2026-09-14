@@ -2170,6 +2170,8 @@ body.at-home.lang-en .links a[data-route='learn'] .hop {
   7.5% { transform: translateY(-10px); }
   100% { transform: none; }
 }
+/* Taken up: once Learn has been opened, the invitation rests. */
+body.learned .hop { animation: none !important; } /* outranks the home rule above */
 @media (prefers-reduced-motion: reduce) {
   .hop { animation: none !important; }
 }
