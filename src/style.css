@@ -2096,9 +2096,14 @@ body.cyl .dof-bottom { opacity: 0; }
 @media (hover: hover) { .section-nav a:hover { font-weight: 500; color: var(--text); } }
 .section-nav a.active { font-weight: 700; color: var(--text); }
 @media (max-width: 1199px) {
+  /* FIXED, not sticky. Sticky is re-seated by the scroll on every frame, and
+     under a real finger on iOS that seat lags the compositor the fixed
+     header rides on — the bar shook against it. Fixed puts both on the same
+     path. It leaves the flow, so .doc below gives its 60 back as padding. */
   .section-nav {
-    position: sticky;
-    left: auto;
+    position: fixed;
+    left: 0;
+    right: 0;
     top: var(--chrome-h);
     height: 60px;
     display: flex;
@@ -2124,6 +2129,10 @@ body.cyl .dof-bottom { opacity: 0; }
   /* Clear the WHOLE band (100), not just the labels — landing at 60 dropped
      the title into the blur. The extra 20 is air below the fade. */
   .doc-section { scroll-margin-top: calc(var(--subnav-bottom) + 120px); }
+  /* The band behind the bar goes the same way, for the same reason. */
+  .section-veil { position: fixed; left: 0; right: 0; margin-bottom: 0; }
+  /* The bar's 60 of flow, kept. */
+  .doc { padding-top: calc(var(--subnav-bottom) + 60px); }
 }
 /* Mobile: reading on slides the whole main chrome away; the section bar takes
    the top edge. Scrolling up brings the chrome back down over it. */
