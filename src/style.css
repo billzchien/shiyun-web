@@ -1036,6 +1036,11 @@ body.at-doc .links {
   --sb-rows: 18px; /* between the stem row and the branch row */
   --sb-side: 32px; /* captions to the pillar */
   position: relative;
+  /* The figure's 24 of top clearance is padding, which on a card is INSIDE
+     the cream: the card would sit 16 under its paragraph and 40 over the
+     next. Carried as margin instead — 40, collapsing over the paragraph's
+     16 — so the air reads 40 both ways. */
+  margin-top: 40px;
   /* 540 tall with 40 above the stage (Figma redraw): the extra air on top
      balances the block against the button below. */
   height: 540px;
