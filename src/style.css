@@ -1583,10 +1583,8 @@ body.at-doc .links {
 /* ─── The Five Elements × stems (see elemix.ts) ───────────────────────────── */
 /* Two rows of ten stems on the Stems & Branches card; each cell turns over
    to its element, in the element's own color, left to right. */
-/* Shorter than its siblings: two rows, not four. The card's 40 of top air
-   balanced a taller block; here the rows sit 24 in, the same as the button's
-   clearance below, so the pair reads centred: 24 + 256 stage + 40 + 40 + 24. */
-.ex-figure { height: 384px; padding-top: 24px; }
+/* Shorter than its siblings: two rows, not four, so 420 rather than 540. */
+.ex-figure { height: 420px; }
 .ex-row { position: absolute; left: 0; right: 0; }
 .ex-cells { display: flex; justify-content: center; gap: 2px; }
 .ex-cap { position: absolute; left: 0; right: 0; text-align: center; }
@@ -1608,7 +1606,7 @@ body.at-doc .links {
 .ex-cell .z-back svg { display: block; width: 62.5%; height: 62.5%; }
 @media (max-width: 767px) {
   /* Five of 64 are 328 wide; the phone's stage is 287. */
-  .ex-figure { height: 384px; }
+  .ex-figure { height: 420px; }
   .ex-cell { width: 52px; height: 52px; }
   .ex-cell .z-front { font-size: 20px; }
 }
