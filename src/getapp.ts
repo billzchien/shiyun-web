@@ -29,7 +29,7 @@ export function initGetApp(button: HTMLElement, wheel: HTMLElement): { open: () 
         <img src="${import.meta.env.BASE_URL}assets/beta-link.svg" alt="时运测试版 Shiyun beta on TestFlight" draggable="false" />
       </div>
     </div>
-    <p class="qr-note en">Beta version in Testflight</p>
+    <p class="qr-note en">Currently open beta on TestFlight</p>
     <button class="qr-close" type="button" aria-label="关闭 Close">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" />
