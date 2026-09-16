@@ -59,7 +59,17 @@ if (APP_LIVE) {
 initPreview(document.querySelector<HTMLElement>('.cta.preview')!, wheelEl, openGetApp);
 
 // The doc pages' header pill: come home, then raise the QR.
-document.getElementById('getAppPill')!.addEventListener('click', (e) => {
+/** The language toggle sits a fixed 8px left of the pill, whatever the pill's
+ *  copy measures — read once the fonts are in, and again on resize. */
+const getAppPill = document.getElementById('getAppPill')!;
+function placeToggle() {
+  body.style.setProperty('--pill-w', `${getAppPill.offsetWidth}px`);
+}
+placeToggle();
+document.fonts.ready.then(placeToggle);
+window.addEventListener('resize', placeToggle);
+
+getAppPill.addEventListener('click', (e) => {
   e.preventDefault();
   if (current !== 'home') navigate('home', true);
   openGetApp();

@@ -172,13 +172,14 @@ body.veiled .pill { opacity: 1; scale: 1; visibility: visible; transition-delay:
 @media (hover: hover) { .pill:hover { transform: scale(1.1); } }
 .pill:active { transform: scale(0.92); transition-duration: 150ms; }
 
-/* The language circle — the pill's quiet sibling, 9px to its left. It names
+/* The language circle — the pill's quiet sibling, 8px to its left. It names
    the OTHER language (中 / EN), so doc pages read in one language at a time.
-   Same enter/leave choreography as the pill. */
+   Same enter/leave choreography as the pill. The pill's width follows its
+   copy, so main.ts measures it into --pill-w once the fonts are in. */
 .lang-toggle {
   pointer-events: auto;
   position: absolute;
-  right: calc(var(--edge) + 108px); /* steps left of the pill */
+  right: calc(var(--edge) + var(--pill-w, 93px) + 8px); /* steps left of the pill */
   top: var(--chrome-top);
   width: var(--chrome-size);
   height: var(--chrome-size);
