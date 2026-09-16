@@ -2,15 +2,20 @@
  * The Get app flow (Figma "Get app" section, 1002:6437) — the Preview flow's
  * sibling, without a player. HOVER swaps the wheel for a circle in the hour's
  * element color holding a white QR card; PRESS expands it to cover the screen
- * (same 400ms expressive ride), the App Store badge and a glass close arrive
+ * (same 400ms expressive ride), a note on the beta and a glass close arrive
  * on the bottom rank, and the logotype above turns inverse. Close/Esc reverses
  * everything back to the wheel.
  */
 
 const TRAVEL = 400;
 const FADE = 300;
-/** The App Store page — placeholder until the app is live (user will supply). */
-const APP_STORE_URL = '#';
+/**
+ * Where the app lives for now: the TestFlight beta. The App Store listing is
+ * still pending; when it lands, point this there, swap the QR (public/assets/
+ * beta-link.svg) and the note under it, and turn 测试 Try out back into 下载
+ * Get app (index.html, preview.ts).
+ */
+const APP_STORE_URL = 'https://testflight.apple.com/join/4Mw7bsSu';
 
 type State = 'idle' | 'peek' | 'expanded';
 
@@ -21,12 +26,10 @@ export function initGetApp(button: HTMLElement, wheel: HTMLElement): { open: () 
   layer.innerHTML = `
     <div class="qr-circle">
       <div class="qr-card">
-        <img src="${import.meta.env.BASE_URL}assets/qr-placeholder.png" alt="下载时运 Download Shiyun" draggable="false" />
+        <img src="${import.meta.env.BASE_URL}assets/beta-link.svg" alt="时运测试版 Shiyun beta on TestFlight" draggable="false" />
       </div>
     </div>
-    <a class="qr-badge" href="${APP_STORE_URL}" aria-label="Download on the App Store">
-      <img src="${import.meta.env.BASE_URL}assets/app-store-badge.svg" alt="Download on the App Store" draggable="false" />
-    </a>
+    <p class="qr-note en">Beta version in Testflight</p>
     <button class="qr-close" type="button" aria-label="关闭 Close">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" />
@@ -106,12 +109,12 @@ export function initGetApp(button: HTMLElement, wheel: HTMLElement): { open: () 
 
   /**
    * The one entry every Get app button shares: a phone can't scan its own
-   * screen, so touch devices go straight to the App Store (once the link is
-   * live); everyone else gets the QR takeover.
+   * screen, so touch devices go straight to the link; everyone else gets the
+   * QR takeover.
    */
   function open() {
     if (!hoverable.matches) {
-      if (APP_STORE_URL !== '#') window.location.href = APP_STORE_URL;
+      window.location.href = APP_STORE_URL;
       return;
     }
     expand();

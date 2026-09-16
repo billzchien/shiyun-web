@@ -83,7 +83,7 @@ export function initPreview(button: HTMLElement, wheel: HTMLElement, onGetApp: (
       </button>
     </div>
     <div class="preview-chrome">
-      <a class="preview-pill en" href="#">Get app</a>
+      <a class="preview-pill en" href="#">Try out</a>
       <button class="preview-close" type="button" aria-label="关闭 Close">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" />

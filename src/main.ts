@@ -37,10 +37,11 @@ const docBody = document.getElementById('docBody')!;
 const caret = document.getElementById('caret')!;
 const subnavRule = document.getElementById('subnavRule')!;
 
-/** Not on the App Store yet. Flip to true when the link lands: restores the
- *  header pill, the QR flow, and the preview overlay's Get app — and turns
- *  the home CTA back into 下载 Get app (see body.app-soon in style.css). */
-const APP_LIVE = false;
+/** The app is offered as a TestFlight beta for now (see getapp.ts), so the
+ *  entries are up: the header pill, the QR flow, the preview overlay's pill,
+ *  and the home CTA as 测试 Try out. Flip to false to fold them all away
+ *  behind an inert 即将上架 Soon (see body.app-soon in style.css). */
+const APP_LIVE = true;
 
 const wheelEl = document.getElementById('wheel')!;
 const wheel = new HourWheel(wheelEl);
